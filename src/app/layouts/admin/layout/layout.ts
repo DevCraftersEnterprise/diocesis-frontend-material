@@ -104,6 +104,11 @@ export class Layout implements OnInit {
           to: '/dashboard/isma/faq',
           requiredModuleAccess: 'isma',
         },
+        {
+          label: 'Cursos y calendario',
+          to: '/dashboard/isma/cursos',
+          requiredModuleAccess: 'isma',
+        },
       ],
     },
   ];

@@ -5,6 +5,7 @@ import { Isma } from './isma';
 import { IsmaFaqService } from '../../admin/isma-faq/services/isma-faq';
 import { IsmaInformationService } from '../../admin/isma-information/services/isma-information';
 import { IsmaSpecialCasesService } from '../../admin/isma-special-cases/services/isma-special-cases';
+import { IsmaCursosService } from '../../admin/isma-cursos/services/isma-cursos';
 import { PreguntaFrecuente } from '../../core/models/isma-faq.model';
 import { IsmaInformacion } from '../../core/models/isma-information.model';
 import { CasoEspecial } from '../../core/models/isma-special-case.model';
@@ -60,6 +61,7 @@ describe('Isma (pagina publica)', () => {
   let serviceStub: jasmine.SpyObj<IsmaInformationService>;
   let specialCasesStub: jasmine.SpyObj<IsmaSpecialCasesService>;
   let faqStub: jasmine.SpyObj<IsmaFaqService>;
+  let cursosStub: jasmine.SpyObj<IsmaCursosService>;
 
   beforeEach(async () => {
     serviceStub = jasmine.createSpyObj<IsmaInformationService>('IsmaInformationService', [
@@ -81,6 +83,12 @@ describe('Isma (pagina publica)', () => {
       of({ count: 1, next: null, previous: null, results: [faq] }),
     );
 
+    cursosStub = jasmine.createSpyObj<IsmaCursosService>('IsmaCursosService', [
+      'getPublicCursos',
+    ]);
+    (cursosStub as { cursos: unknown }).cursos = signal([]);
+    cursosStub.getPublicCursos.and.returnValue(of([]) as never);
+
     await TestBed.configureTestingModule({
       imports: [Isma],
       providers: [
@@ -88,6 +96,7 @@ describe('Isma (pagina publica)', () => {
         { provide: IsmaInformationService, useValue: serviceStub },
         { provide: IsmaSpecialCasesService, useValue: specialCasesStub },
         { provide: IsmaFaqService, useValue: faqStub },
+        { provide: IsmaCursosService, useValue: cursosStub },
       ],
     }).compileComponents();
 

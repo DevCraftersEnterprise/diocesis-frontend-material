@@ -91,6 +91,7 @@ describe('Layout (admin) — filtro de moduleAccess en el sidebar', () => {
       'Información general',
       'Casos especiales',
       'Preguntas frecuentes',
+      'Cursos y calendario',
     ]);
   });
 
