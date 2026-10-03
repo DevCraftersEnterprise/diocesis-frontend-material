@@ -11,18 +11,45 @@
       </header>
 
       <nav class="min-h-0 flex-1 space-y-1 overflow-y-auto p-2 sm:p-3">
-        @for (item of items(); track item.to) {
-          <a
-            [routerLink]="item.to"
-            routerLinkActive="bg-black/10"
-            class="layout-button"
-            (click)="closeOnNavigate()"
-          >
-            <div class="flex items-start gap-3">
-              <lucide-icon [img]="item.icon" size="18" />
-              <span class="align-middle">{{ item.label }}</span>
-            </div>
-          </a>
+        @for (item of items(); track item.label) {
+          @if (item.children) {
+            <button
+              type="button"
+              class="layout-button flex w-full items-center justify-between"
+              (click)="toggleSubmenu(item.label)"
+            >
+              <div class="flex items-start gap-3">
+                <lucide-icon [img]="item.icon" size="18" />
+                <span class="align-middle">{{ item.label }}</span>
+              </div>
+            </button>
+            @if (isSubmenuOpen(item.label)) {
+              <div class="ml-6 space-y-1 border-l border-black/10 pl-2">
+                @for (child of item.children; track child.to) {
+                  <a
+                    [routerLink]="child.to"
+                    routerLinkActive="bg-black/10"
+                    class="layout-button"
+                    (click)="closeOnNavigate()"
+                  >
+                    <span class="align-middle">{{ child.label }}</span>
+                  </a>
+                }
+              </div>
+            }
+          } @else {
+            <a
+              [routerLink]="item.to"
+              routerLinkActive="bg-black/10"
+              class="layout-button"
+              (click)="closeOnNavigate()"
+            >
+              <div class="flex items-start gap-3">
+                <lucide-icon [img]="item.icon" size="18" />
+                <span class="align-middle">{{ item.label }}</span>
+              </div>
+            </a>
+          }
         }
       </nav>
 

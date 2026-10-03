@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { moduleAccessGuard } from './core/guards/module-access.guard';
 import { ReverendDetails } from './public/reverend-details/reverend-details';
 
 export const routes: Routes = [
@@ -52,6 +53,67 @@ export const routes: Routes = [
           import('./admin/documents/documents').then((m) => m.DocumentsComponent),
       },
       {
+        path: 'institute/information',
+        canActivate: [moduleAccessGuard('instituto-biblico')],
+        loadComponent: () =>
+          import('./admin/institute-information/institute-information').then(
+            (m) => m.InstituteInformationComponent,
+          ),
+      },
+      {
+        path: 'institute/trainings',
+        canActivate: [moduleAccessGuard('instituto-biblico')],
+        loadComponent: () =>
+          import('./admin/institute-trainings/institute-trainings').then(
+            (m) => m.InstituteTrainingsComponent,
+          ),
+      },
+      {
+        path: 'institute/courses',
+        canActivate: [moduleAccessGuard('instituto-biblico')],
+        loadComponent: () =>
+          import('./admin/institute-courses/institute-courses').then(
+            (m) => m.InstituteCoursesComponent,
+          ),
+      },
+      {
+        path: 'institute/venues',
+        canActivate: [moduleAccessGuard('instituto-biblico')],
+        loadComponent: () =>
+          import('./admin/institute-venues/institute-venues').then(
+            (m) => m.InstituteVenuesComponent,
+          ),
+      },
+      {
+        path: 'institute/events',
+        canActivate: [moduleAccessGuard('instituto-biblico')],
+        loadComponent: () =>
+          import('./admin/institute-events/institute-events').then(
+            (m) => m.InstituteEventsComponent,
+          ),
+      },
+      {
+        path: 'isma/information',
+        canActivate: [moduleAccessGuard('isma')],
+        loadComponent: () =>
+          import('./admin/isma-information/isma-information').then(
+            (m) => m.IsmaInformationComponent,
+          ),
+      },
+      {
+        path: 'isma/special-cases',
+        canActivate: [moduleAccessGuard('isma')],
+        loadComponent: () =>
+          import('./admin/isma-special-cases/isma-special-cases').then(
+            (m) => m.IsmaSpecialCasesComponent,
+          ),
+      },
+      {
+        path: 'isma/faq',
+        canActivate: [moduleAccessGuard('isma')],
+        loadComponent: () => import('./admin/isma-faq/isma-faq').then((m) => m.IsmaFaqComponent),
+      },
+      {
         path: '**',
         redirectTo: 'users',
       },
@@ -97,6 +159,14 @@ export const routes: Routes = [
       {
         path: 'noticias/:tag',
         loadComponent: () => import('./public/post-search/post-search').then((m) => m.PostSearch),
+      },
+      {
+        path: 'diocesis/instituto-biblico',
+        loadComponent: () => import('./public/institute/institute').then((m) => m.Institute),
+      },
+      {
+        path: 'diocesis/isma',
+        loadComponent: () => import('./public/isma/isma').then((m) => m.Isma),
       },
       {
         path: '**',

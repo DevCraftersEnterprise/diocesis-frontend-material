@@ -34,6 +34,12 @@ export class Layout {
           icon: this.iconsService.calendar1,
         },
         { label: 'Obituario', to: '/diocesis/obituario', icon: this.iconsService.heart },
+        {
+          label: 'Instituto Bíblico',
+          to: '/diocesis/instituto-biblico',
+          icon: this.iconsService.institute,
+        },
+        { label: 'ISMA', to: '/diocesis/isma', icon: this.iconsService.isma },
       ],
     },
     {
@@ -76,6 +82,11 @@ export class Layout {
         { label: 'Seminario', to: '/noticias/seminario', icon: this.iconsService.graduationCap },
         { label: 'Nacional', to: '/noticias/nacional', icon: this.iconsService.national },
         { label: 'Vaticano', to: '/noticias/vaticano', icon: this.iconsService.international },
+        {
+          label: 'Instituto Bíblico',
+          to: '/noticias/instituto-biblico',
+          icon: this.iconsService.institute,
+        },
       ],
     },
     { label: 'Seminario', to: '/seminario', icon: this.iconsService.graduationCap },

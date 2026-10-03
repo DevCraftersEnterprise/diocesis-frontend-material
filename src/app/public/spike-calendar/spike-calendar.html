@@ -1,0 +1,20 @@
+<div class="section-spacing">
+  <h1 class="text-2xl font-bold mb-4">SPIKE: @fullcalendar/angular (zoneless)</h1>
+
+  <p class="mb-2">
+    Evento clickeado (via signal, actualizado dentro del callback de FullCalendar):
+    <strong>{{ clickedEventTitle() ?? '(ninguno todavia)' }}</strong>
+  </p>
+
+  <button type="button" class="btn-primary mb-4" (click)="addExtraEvent()">
+    Agregar evento en runtime (prueba de reactividad zoneless)
+  </button>
+  @if (extraEventAdded()) {
+    <p class="mb-4 text-green-700">
+      Evento agregado al signal `calendarOptions` — si aparece abajo sin refrescar
+      la pagina, la deteccion de cambios zoneless funciona con esta libreria.
+    </p>
+  }
+
+  <full-calendar [options]="calendarOptions()" />
+</div>

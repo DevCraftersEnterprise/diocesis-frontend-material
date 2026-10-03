@@ -1,0 +1,245 @@
+<div class="section-spacing">
+  <div class="page-header">
+    <app-title title="Casos especiales" description="Administra los casos especiales de ISMA" />
+
+    <div class="actions-bar">
+      <button class="btn-primary btn-full" (click)="openCreateCase()">
+        <div class="flex items-center justify-center gap-2">
+          <lucide-icon [img]="iconsService.add" size="15" color="black" aria-hidden="true" />
+          <span>Crear Caso Especial</span>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <div class="flex items-center gap-2">
+      <label for="search-special-cases" class="sr-only">Buscar casos especiales por título</label>
+      <lucide-icon
+        [img]="iconsService.search"
+        size="15"
+        color="black"
+        aria-hidden="true"
+      ></lucide-icon>
+      <input
+        id="search-special-cases"
+        type="search"
+        placeholder="Buscar por título..."
+        [value]="search()"
+        (input)="updateSearch($event)"
+        class="input-search"
+        aria-label="Buscar casos especiales por título"
+      />
+    </div>
+
+    <select
+      id="filter-status"
+      [value]="activeFilterValue()"
+      (change)="updateFilterActive($event)"
+      class="select-full"
+      aria-label="Filtrar por estado"
+    >
+      <option class="font-bold" value="">Todos</option>
+      <option class="font-bold" value="true">Activos</option>
+      <option class="font-bold" value="false">Inactivos</option>
+    </select>
+  </div>
+
+  @if (specialCasesService.specialCases().length > 0) {
+    <div class="table-container">
+      <table class="min-w-200 table-fixed">
+        <thead class="bg-neutral-50 text-neutral-600">
+          <tr>
+            <th class="w-1/12 px-4 py-3 text-left font-bold">#</th>
+            <th class="w-1/3 px-4 py-3 text-left font-bold">Título</th>
+            <th class="w-1/4 px-4 py-3 text-left font-bold">Estado</th>
+            <th class="px-4 py-3 text-right font-bold">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of specialCasesService.specialCases(); track row.id) {
+            <tr
+              class="animate-fade-in animate-duration-300 hover:bg-custom-yellow/50 border-t border-black/5 transition-all"
+            >
+              <td class="w-1/12 px-4 py-3">{{ row.order }}</td>
+              <td class="w-1/3 truncate px-4 py-3" [title]="row.title">{{ row.title }}</td>
+              <td class="w-1/4 px-4 py-3">
+                <div
+                  class="inline-flex items-center gap-2 rounded-full border px-2 py-1 text-xs"
+                  [class]="
+                    row.isActive
+                      ? 'border-green-200 bg-green-100 text-green-800'
+                      : 'border-red-200 bg-red-100 text-red-800'
+                  "
+                >
+                  <lucide-icon
+                    [img]="row.isActive ? iconsService.active : iconsService.inactive"
+                    size="20"
+                    [color]="row.isActive ? 'green' : 'red'"
+                  ></lucide-icon>
+
+                  <span class="">
+                    {{ row.isActive ? 'Activo' : 'Inactivo' }}
+                  </span>
+                </div>
+              </td>
+              <td class="py3 px-4">
+                <div class="flex flex-wrap items-center justify-end gap-2">
+                  <button class="btn-table-warning" (click)="openEditCase(row)">
+                    <div class="flex items-center justify-center gap-1">
+                      <lucide-icon [img]="iconsService.edit" size="15" />
+                      <span class="hidden text-xs 2xl:inline"> Editar </span>
+                    </div>
+                  </button>
+                  <button
+                    class="btn-table"
+                    [class]="
+                      !row.isActive
+                        ? 'border-green-200 bg-green-100 text-green-800'
+                        : 'border-red-200 bg-red-100 text-red-800'
+                    "
+                    (click)="confirmToggleCase(row, row.isActive ? 'deactivate' : 'activate')"
+                    [attr.aria-label]="
+                      (row.isActive ? 'Desactivar' : 'Activar') + ' caso especial ' + row.title
+                    "
+                  >
+                    <div class="flex items-center justify-center gap-1">
+                      <lucide-icon
+                        [img]="row.isActive ? iconsService.disable : iconsService.active"
+                        size="15"
+                        [color]="row.isActive ? 'red' : 'green'"
+                      ></lucide-icon>
+                      <span class="hidden text-xs 2xl:inline">
+                        {{ row.isActive ? 'Desactivar' : 'Activar' }}
+                      </span>
+                    </div>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <app-pagination
+      [total]="specialCasesService.totalSpecialCases()"
+      [pageFrom]="pageFrom()"
+      [pageTo]="pageTo()"
+      [canPrev]="canPrev()"
+      [canNext]="canNext()"
+      [currentLimit]="pagination().limit"
+      (previousPage)="prevPage()"
+      (nextPage)="nextPage()"
+      (limitChange)="changeLimit($event)"
+    />
+  } @else {
+    <app-empty-state />
+  }
+
+  <app-modal
+    [isOpen]="mode() !== null"
+    [title]="modalTitle()"
+    [maxWidth]="'max-w-2xl'"
+    [showActions]="true"
+    [loading]="saving()"
+    [confirmDisabled]="!isCreateFormValid()"
+    [confirmText]="mode() === 'create' ? 'Crear' : 'Guardar'"
+    (close)="closeModal()"
+    (cancel)="closeModal()"
+    (confirm)="save()"
+  >
+    <form class="max-h-[80vh] space-y-4 overflow-y-auto" (submit)="$event.preventDefault()">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+        <div class="sm:col-span-3">
+          <label for="title" class="mb-2 block text-sm font-medium">Título</label>
+          <input
+            id="title"
+            type="text"
+            class="w-full rounded-xl border border-black/10 px-3 py-2"
+            [value]="createForm().title"
+            (input)="updateCreateFormField('title', $event)"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="order" class="mb-2 block text-sm font-medium">Orden</label>
+          <input
+            id="order"
+            type="number"
+            min="1"
+            class="w-full rounded-xl border border-black/10 px-3 py-2"
+            [value]="createForm().order"
+            (input)="updateCreateFormOrder($event)"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="requisitosAdicionales" class="mb-2 block text-sm font-medium">
+          Requisitos adicionales
+        </label>
+        <textarea
+          id="requisitosAdicionales"
+          rows="3"
+          class="w-full rounded-xl border border-black/10 px-3 py-2"
+          [value]="createForm().requisitosAdicionales"
+          (input)="updateCreateFormField('requisitosAdicionales', $event)"
+          required
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="documentosAdicionales" class="mb-2 block text-sm font-medium">
+          Documentos adicionales (opcional)
+        </label>
+        <textarea
+          id="documentosAdicionales"
+          rows="3"
+          class="w-full rounded-xl border border-black/10 px-3 py-2"
+          [value]="createForm().documentosAdicionales"
+          (input)="updateCreateFormField('documentosAdicionales', $event)"
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="excepciones" class="mb-2 block text-sm font-medium">
+          Excepciones (opcional)
+        </label>
+        <textarea
+          id="excepciones"
+          rows="3"
+          class="w-full rounded-xl border border-black/10 px-3 py-2"
+          [value]="createForm().excepciones"
+          (input)="updateCreateFormField('excepciones', $event)"
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="contacto" class="mb-2 block text-sm font-medium">Contacto (opcional)</label>
+        <textarea
+          id="contacto"
+          rows="2"
+          class="w-full rounded-xl border border-black/10 px-3 py-2"
+          [value]="createForm().contacto"
+          (input)="updateCreateFormField('contacto', $event)"
+        ></textarea>
+      </div>
+    </form>
+  </app-modal>
+
+  <app-modal
+    [isOpen]="confirmingToggle()"
+    [title]="toggleConfirmTitle()"
+    [maxWidth]="'max-w-md'"
+    [showActions]="true"
+    confirmText="Confirmar"
+    (close)="closeToggleConfirmation()"
+    (cancel)="closeToggleConfirmation()"
+    (confirm)="executeToggle()"
+  >
+    <p class="text-sm text-neutral-600">{{ toggleConfirmMessage() }}</p>
+  </app-modal>
+</div>

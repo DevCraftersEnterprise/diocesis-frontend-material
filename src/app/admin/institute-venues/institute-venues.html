@@ -1,0 +1,279 @@
+<div class="section-spacing">
+  <div class="page-header">
+    <app-title title="Sedes" description="Gestión de sedes del Instituto Bíblico" />
+
+    <div class="actions-bar">
+      <button class="btn-primary btn-full" (click)="openCreateVenue()">
+        <div class="flex items-center justify-center gap-2">
+          <lucide-icon
+            [img]="iconsService.addInformation"
+            size="15"
+            color="black"
+            aria-hidden="true"
+          />
+          <span>Crear Sede</span>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <div class="flex items-center gap-2">
+      <label for="search-venues" class="sr-only">Buscar sedes por nombre</label>
+      <lucide-icon
+        [img]="iconsService.search"
+        size="15"
+        color="black"
+        aria-hidden="true"
+      ></lucide-icon>
+      <input
+        id="search-venues"
+        type="search"
+        placeholder="Buscar por nombre..."
+        [value]="search()"
+        (input)="updateSearch($event)"
+        class="input-search"
+        aria-label="Buscar sedes por nombre"
+      />
+    </div>
+
+    <select
+      id="filter-status"
+      [value]="activeFilterValue()"
+      (change)="updateFilterActive($event)"
+      class="select-full"
+      aria-label="Filtrar por estado"
+    >
+      <option class="font-bold" value="">Todos</option>
+      <option class="font-bold" value="true">Activos</option>
+      <option class="font-bold" value="false">Inactivos</option>
+    </select>
+  </div>
+
+  @if (venuesService.venues().length > 0) {
+    <div class="table-container overflow-x-auto">
+      <table class="min-w-full table-auto">
+        <thead class="bg-neutral-50 text-neutral-600">
+          <tr>
+            <th class="w-1/6 border-b border-neutral-300 px-6 py-4 text-center font-bold">Foto</th>
+            <th class="w-1/4 border-b border-neutral-300 px-6 py-4 text-left font-bold">Nombre</th>
+            <th class="w-1/3 border-b border-neutral-300 px-6 py-4 text-left font-bold">
+              Dirección
+            </th>
+            <th class="w-1/6 border-b border-neutral-300 px-6 py-4 text-left font-bold">Estado</th>
+            <th class="w-1/6 border-b border-neutral-300 px-6 py-4 text-right font-bold">
+              Acciones
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of venuesService.venues(); track row.id) {
+            <tr class="hover:bg-neutral-100">
+              <td class="w-1/6 border-b border-neutral-300 px-6 py-4 text-center">
+                @if (row.picture) {
+                  <img
+                    [src]="row.picture | cleanUrl"
+                    alt="Foto de {{ row.name }}"
+                    class="mx-auto h-12 w-12 rounded-lg border border-neutral-300 object-cover"
+                  />
+                } @else {
+                  <lucide-icon
+                    [img]="iconsService.picture"
+                    size="40"
+                    color="gray"
+                    class="mx-auto rounded-lg border border-neutral-300"
+                    aria-hidden="true"
+                  />
+                }
+              </td>
+              <td class="w-1/4 truncate border-b border-neutral-300 px-6 py-4">
+                {{ row.name }}
+              </td>
+              <td class="w-1/3 border-b border-neutral-300 px-6 py-4">
+                <div class="flex items-center gap-2">
+                  <span class="truncate">{{ row.address }}</span>
+                  <a [href]="row.mapsUrl" target="_blank" rel="noopener" class="shrink-0 underline"
+                    >Ver mapa</a
+                  >
+                </div>
+              </td>
+              <td class="w-1/6 border-b border-neutral-300 px-6 py-4">
+                <div
+                  class="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm"
+                  [class]="
+                    row.isActive
+                      ? 'border-green-200 bg-green-100 text-green-800'
+                      : 'border-red-200 bg-red-100 text-red-800'
+                  "
+                >
+                  <lucide-icon
+                    [img]="row.isActive ? iconsService.active : iconsService.inactive"
+                    size="20"
+                    [color]="row.isActive ? 'green' : 'red'"
+                  ></lucide-icon>
+
+                  <span>
+                    {{ row.isActive ? 'Activo' : 'Inactivo' }}
+                  </span>
+                </div>
+              </td>
+              <td class="w-1/6 border-b border-neutral-300 px-6 py-4">
+                <div class="flex flex-wrap items-center justify-end gap-2">
+                  <button class="btn-table-warning" (click)="openEditVenue(row)">
+                    <div class="flex items-center justify-center gap-1">
+                      <lucide-icon [img]="iconsService.edit" size="15" />
+                      <span class="hidden text-xs 2xl:inline"> Editar </span>
+                    </div>
+                  </button>
+                  <button
+                    class="btn-table"
+                    [class]="
+                      !row.isActive
+                        ? 'border-green-200 bg-green-100 text-green-800'
+                        : 'border-red-200 bg-red-100 text-red-800'
+                    "
+                    (click)="confirmToggleVenue(row, row.isActive ? 'deactivate' : 'activate')"
+                    [attr.aria-label]="
+                      (row.isActive ? 'Desactivar' : 'Activar') + ' sede ' + row.name
+                    "
+                  >
+                    <div class="flex items-center justify-center gap-1">
+                      <lucide-icon
+                        [img]="row.isActive ? iconsService.disable : iconsService.active"
+                        size="15"
+                        [color]="row.isActive ? 'red' : 'green'"
+                      ></lucide-icon>
+                      <span class="hidden text-xs 2xl:inline">
+                        {{ row.isActive ? 'Desactivar' : 'Activar' }}
+                      </span>
+                    </div>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <app-pagination
+      [total]="venuesService.totalVenues()"
+      [pageFrom]="pageFrom()"
+      [pageTo]="pageTo()"
+      [canPrev]="canPrev()"
+      [canNext]="canNext()"
+      [currentLimit]="pagination().limit"
+      (previousPage)="prevPage()"
+      (nextPage)="nextPage()"
+      (limitChange)="changeLimit($event)"
+    />
+  } @else {
+    <app-empty-state />
+  }
+
+  <app-modal
+    [isOpen]="mode() !== null"
+    [title]="modalTitle()"
+    [maxWidth]="'max-w-4xl'"
+    [showActions]="true"
+    [loading]="saving()"
+    [confirmDisabled]="!isCreateFormValid()"
+    [confirmText]="mode() === 'create' ? 'Crear' : 'Guardar'"
+    (close)="closeModal()"
+    (cancel)="closeModal()"
+    (confirm)="save()"
+  >
+    <form class="max-h-[80vh] space-y-4 overflow-y-auto" (submit)="$event.preventDefault()">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <div class="mb-2">
+            <label for="name" class="mb-2 block text-sm font-medium">Nombre</label>
+            <input
+              id="name"
+              type="text"
+              class="w-full rounded-xl border border-black/10 px-3 py-2"
+              [value]="createForm().name"
+              (input)="updateCreateFormField('name', $event)"
+              required
+            />
+          </div>
+
+          <div class="mb-2">
+            <label for="address" class="mb-2 block text-sm font-medium">Dirección</label>
+            <textarea
+              id="address"
+              rows="3"
+              class="w-full rounded-xl border border-black/10 px-3 py-2"
+              [value]="createForm().address"
+              (input)="updateCreateFormField('address', $event)"
+              required
+            ></textarea>
+          </div>
+
+          <div class="mb-2">
+            <label for="mapsUrl" class="mb-2 block text-sm font-medium">Enlace a mapa</label>
+            <input
+              id="mapsUrl"
+              type="url"
+              placeholder="https://maps.google.com/..."
+              class="w-full rounded-xl border border-black/10 px-3 py-2"
+              [value]="createForm().mapsUrl"
+              (input)="updateCreateFormField('mapsUrl', $event)"
+              required
+            />
+          </div>
+
+          <div class="mb-2">
+            <label for="venue-photo" class="mb-2 block text-sm font-medium">Foto</label>
+            <input
+              #photoInput
+              id="venue-photo"
+              type="file"
+              class="hidden"
+              (change)="onPhotoUpload($event)"
+            />
+            <button
+              type="button"
+              class="w-full rounded-xl border border-black/10 bg-gray-200 px-3 py-2 hover:bg-gray-300"
+              (click)="photoInput.click()"
+            >
+              Seleccionar fotografía
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-center justify-center">
+          <div class="flex items-center justify-center">
+            @if (photoPreview() !== null) {
+              <img
+                [src]="photoPreview()"
+                alt="Vista previa de la foto"
+                class="h-auto w-auto max-w-xs rounded-lg border border-black/10"
+              />
+            } @else {
+              <lucide-icon
+                [img]="iconsService.picture"
+                size="256"
+                color="gray"
+                aria-hidden="true"
+              />
+            }
+          </div>
+        </div>
+      </div>
+    </form>
+  </app-modal>
+
+  <app-modal
+    [isOpen]="confirmingToggle()"
+    [title]="toggleConfirmTitle()"
+    [maxWidth]="'max-w-md'"
+    [showActions]="true"
+    confirmText="Confirmar"
+    (close)="closeToggleConfirmation()"
+    (cancel)="closeToggleConfirmation()"
+    (confirm)="executeToggle()"
+  >
+    <p class="text-sm text-neutral-600">{{ toggleConfirmMessage() }}</p>
+  </app-modal>
+</div>

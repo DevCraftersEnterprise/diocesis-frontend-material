@@ -1,0 +1,135 @@
+<div class="section-spacing">
+  <div class="page-header">
+    <app-title
+      title="ISMA — Información general"
+      description="Edita la información pública que se muestra en el sitio."
+    />
+  </div>
+
+  @if (loading()) {
+    <p>Cargando…</p>
+  } @else {
+    <form class="max-w-2xl space-y-4" (submit)="$event.preventDefault()">
+      <div>
+        <label for="isma-introduccion" class="mb-2 block text-sm font-medium">
+          Introducción <span class="text-red-500">*</span>
+        </label>
+        <textarea
+          id="isma-introduccion"
+          rows="4"
+          class="input"
+          [value]="form().introduccion"
+          (input)="updateField('introduccion', $event)"
+          required
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="isma-documentacion" class="mb-2 block text-sm font-medium">
+          Documentación necesaria <span class="text-red-500">*</span>
+        </label>
+        <textarea
+          id="isma-documentacion"
+          rows="4"
+          class="input"
+          [value]="form().documentacionNecesaria"
+          (input)="updateField('documentacionNecesaria', $event)"
+          required
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="isma-parroquia" class="mb-2 block text-sm font-medium">
+          Parroquia correspondiente <span class="text-red-500">*</span>
+        </label>
+        <textarea
+          id="isma-parroquia"
+          rows="4"
+          class="input"
+          [value]="form().parroquiaCorrespondiente"
+          (input)="updateField('parroquiaCorrespondiente', $event)"
+          required
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="isma-entrevista" class="mb-2 block text-sm font-medium">
+          Entrevista con el párroco <span class="text-red-500">*</span>
+        </label>
+        <textarea
+          id="isma-entrevista"
+          rows="4"
+          class="input"
+          [value]="form().entrevistaParroco"
+          (input)="updateField('entrevistaParroco', $event)"
+          required
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="isma-programa" class="mb-2 block text-sm font-medium">
+          Programa ISMA <span class="text-red-500">*</span>
+        </label>
+        <textarea
+          id="isma-programa"
+          rows="4"
+          class="input"
+          [value]="form().programaIsma"
+          (input)="updateField('programaIsma', $event)"
+          required
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="isma-tiempos" class="mb-2 block text-sm font-medium">
+          Tiempos de anticipación <span class="text-red-500">*</span>
+        </label>
+        <textarea
+          id="isma-tiempos"
+          rows="4"
+          class="input"
+          [value]="form().tiemposAnticipacion"
+          (input)="updateField('tiemposAnticipacion', $event)"
+          required
+        ></textarea>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label for="isma-tel1" class="mb-2 block text-sm font-medium">
+            Teléfono de contacto 1
+          </label>
+          <input
+            id="isma-tel1"
+            type="tel"
+            class="input"
+            [value]="form().contactoTelefono1"
+            (input)="updateField('contactoTelefono1', $event)"
+          />
+        </div>
+
+        <div>
+          <label for="isma-tel2" class="mb-2 block text-sm font-medium">
+            Teléfono de contacto 2
+          </label>
+          <input
+            id="isma-tel2"
+            type="tel"
+            class="input"
+            [value]="form().contactoTelefono2"
+            (input)="updateField('contactoTelefono2', $event)"
+          />
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="btn-primary"
+        [disabled]="saving() || !isFormValid()"
+        (click)="save()"
+      >
+        {{ saving() ? 'Guardando…' : 'Guardar cambios' }}
+      </button>
+    </form>
+  }
+</div>

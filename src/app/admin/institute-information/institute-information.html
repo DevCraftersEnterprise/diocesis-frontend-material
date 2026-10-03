@@ -1,0 +1,78 @@
+<div class="section-spacing">
+  <div class="page-header">
+    <app-title
+      title="Instituto Bíblico — Información general"
+      description="Edita la información pública que se muestra en el sitio."
+    />
+  </div>
+
+  @if (loading()) {
+    <p>Cargando…</p>
+  } @else {
+    <form class="max-w-2xl space-y-4" (submit)="$event.preventDefault()">
+      <div>
+        <label for="ib-name" class="mb-2 block text-sm font-medium">
+          Nombre <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="ib-name"
+          type="text"
+          class="input"
+          [value]="form().name"
+          (input)="updateName($event)"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="ib-description" class="mb-2 block text-sm font-medium">
+          Descripción <span class="text-red-500">*</span>
+        </label>
+        <textarea
+          id="ib-description"
+          rows="6"
+          class="input"
+          [value]="form().description"
+          (input)="updateDescription($event)"
+          required
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="ib-email" class="mb-2 block text-sm font-medium">
+          Correo de contacto
+        </label>
+        <input
+          id="ib-email"
+          type="email"
+          class="input"
+          [value]="form().contactEmail"
+          (input)="updateContactEmail($event)"
+          placeholder="instituto@ejemplo.com"
+        />
+      </div>
+
+      <div>
+        <label for="ib-phone" class="mb-2 block text-sm font-medium">
+          Teléfono de contacto
+        </label>
+        <input
+          id="ib-phone"
+          type="tel"
+          class="input"
+          [value]="form().contactPhone"
+          (input)="updateContactPhone($event)"
+        />
+      </div>
+
+      <button
+        type="button"
+        class="btn-primary"
+        [disabled]="saving() || !isFormValid()"
+        (click)="save()"
+      >
+        {{ saving() ? 'Guardando…' : 'Guardar cambios' }}
+      </button>
+    </form>
+  }
+</div>

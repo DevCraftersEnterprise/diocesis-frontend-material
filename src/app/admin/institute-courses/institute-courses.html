@@ -1,0 +1,341 @@
+<div class="section-spacing">
+  <div class="page-header">
+    <app-title title="Cursos" description="Gestión de cursos activos del Instituto Bíblico" />
+
+    <div class="actions-bar">
+      <button class="btn-primary btn-full" (click)="openCreateCourse()">
+        <div class="flex items-center justify-center gap-2">
+          <lucide-icon
+            [img]="iconsService.addInformation"
+            size="15"
+            color="black"
+            aria-hidden="true"
+          />
+          <span>Crear Curso</span>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <div class="flex items-center gap-2">
+      <label for="search-courses" class="sr-only">Buscar cursos por título</label>
+      <lucide-icon
+        [img]="iconsService.search"
+        size="15"
+        color="black"
+        aria-hidden="true"
+      ></lucide-icon>
+      <input
+        id="search-courses"
+        type="search"
+        placeholder="Buscar por título..."
+        [value]="search()"
+        (input)="updateSearch($event)"
+        class="input-search"
+        aria-label="Buscar cursos por título"
+      />
+    </div>
+
+    <select
+      id="filter-status"
+      [value]="activeFilterValue()"
+      (change)="updateFilterActive($event)"
+      class="select-full"
+      aria-label="Filtrar por estado"
+    >
+      <option class="font-bold" value="">Todos</option>
+      <option class="font-bold" value="true">Activos</option>
+      <option class="font-bold" value="false">Inactivos</option>
+    </select>
+  </div>
+
+  @if (coursesService.courses().length > 0) {
+    <div class="table-container overflow-x-auto">
+      <table class="min-w-full table-auto">
+        <thead class="bg-neutral-50 text-neutral-600">
+          <tr>
+            <th class="w-1/6 border-b border-neutral-300 px-6 py-4 text-center font-bold">Foto</th>
+            <th class="w-1/4 border-b border-neutral-300 px-6 py-4 text-left font-bold">Título</th>
+            <th class="w-1/4 border-b border-neutral-300 px-6 py-4 text-left font-bold">
+              Capacitación
+            </th>
+            <th class="w-1/6 border-b border-neutral-300 px-6 py-4 text-left font-bold">Fechas</th>
+            <th class="w-1/6 border-b border-neutral-300 px-6 py-4 text-left font-bold">Estado</th>
+            <th class="w-1/6 border-b border-neutral-300 px-6 py-4 text-right font-bold">
+              Acciones
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of coursesService.courses(); track row.id) {
+            <tr class="hover:bg-neutral-100">
+              <td class="w-1/6 border-b border-neutral-300 px-6 py-4 text-center">
+                @if (row.picture) {
+                  <img
+                    [src]="row.picture | cleanUrl"
+                    alt="Foto de {{ row.title }}"
+                    class="mx-auto h-12 w-12 rounded-lg border border-neutral-300 object-cover"
+                  />
+                } @else {
+                  <lucide-icon
+                    [img]="iconsService.picture"
+                    size="40"
+                    color="gray"
+                    class="mx-auto rounded-lg border border-neutral-300"
+                    aria-hidden="true"
+                  />
+                }
+              </td>
+              <td class="w-1/4 truncate border-b border-neutral-300 px-6 py-4">
+                {{ row.title }}
+              </td>
+              <td class="w-1/4 border-b border-neutral-300 px-6 py-4">
+                {{ chargeTrainingRowInfo(row.capacitacionId) }}
+              </td>
+              <td class="w-1/6 border-b border-neutral-300 px-6 py-4 text-xs">
+                @if (row.startDate || row.endDate) {
+                  {{ row.startDate || '—' }} / {{ row.endDate || '—' }}
+                } @else {
+                  —
+                }
+              </td>
+              <td class="w-1/6 border-b border-neutral-300 px-6 py-4">
+                <div
+                  class="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm"
+                  [class]="
+                    row.isActive
+                      ? 'border-green-200 bg-green-100 text-green-800'
+                      : 'border-red-200 bg-red-100 text-red-800'
+                  "
+                >
+                  <lucide-icon
+                    [img]="row.isActive ? iconsService.active : iconsService.inactive"
+                    size="20"
+                    [color]="row.isActive ? 'green' : 'red'"
+                  ></lucide-icon>
+
+                  <span>
+                    {{ row.isActive ? 'Activo' : 'Inactivo' }}
+                  </span>
+                </div>
+              </td>
+              <td class="w-1/6 border-b border-neutral-300 px-6 py-4">
+                <div class="flex flex-wrap items-center justify-end gap-2">
+                  <button class="btn-table-warning" (click)="openEditCourse(row)">
+                    <div class="flex items-center justify-center gap-1">
+                      <lucide-icon [img]="iconsService.edit" size="15" />
+                      <span class="hidden text-xs 2xl:inline"> Editar </span>
+                    </div>
+                  </button>
+                  <button
+                    class="btn-table"
+                    [class]="
+                      !row.isActive
+                        ? 'border-green-200 bg-green-100 text-green-800'
+                        : 'border-red-200 bg-red-100 text-red-800'
+                    "
+                    (click)="confirmToggleCourse(row, row.isActive ? 'deactivate' : 'activate')"
+                    [attr.aria-label]="
+                      (row.isActive ? 'Desactivar' : 'Activar') + ' curso ' + row.title
+                    "
+                  >
+                    <div class="flex items-center justify-center gap-1">
+                      <lucide-icon
+                        [img]="row.isActive ? iconsService.disable : iconsService.active"
+                        size="15"
+                        [color]="row.isActive ? 'red' : 'green'"
+                      ></lucide-icon>
+                      <span class="hidden text-xs 2xl:inline">
+                        {{ row.isActive ? 'Desactivar' : 'Activar' }}
+                      </span>
+                    </div>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <app-pagination
+      [total]="coursesService.totalCourses()"
+      [pageFrom]="pageFrom()"
+      [pageTo]="pageTo()"
+      [canPrev]="canPrev()"
+      [canNext]="canNext()"
+      [currentLimit]="pagination().limit"
+      (previousPage)="prevPage()"
+      (nextPage)="nextPage()"
+      (limitChange)="changeLimit($event)"
+    />
+  } @else {
+    <app-empty-state />
+  }
+
+  <app-modal
+    [isOpen]="mode() !== null"
+    [title]="modalTitle()"
+    [maxWidth]="'max-w-6xl'"
+    [showActions]="true"
+    [loading]="saving()"
+    [confirmDisabled]="!isCreateFormValid()"
+    [confirmText]="mode() === 'create' ? 'Crear' : 'Guardar'"
+    (close)="closeModal()"
+    (cancel)="closeModal()"
+    (confirm)="save()"
+  >
+    <form class="max-h-[80vh] space-y-4 overflow-y-auto" (submit)="$event.preventDefault()">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <div class="mb-2">
+            <label for="title" class="mb-2 block text-sm font-medium">Título</label>
+            <input
+              id="title"
+              type="text"
+              class="w-full rounded-xl border border-black/10 px-3 py-2"
+              [value]="createForm().title"
+              (input)="updateCreateFormField('title', $event)"
+              required
+            />
+          </div>
+
+          <div class="mb-2">
+            <label for="course-description" class="mb-2 block text-sm font-medium"
+              >Descripción</label
+            >
+            <textarea
+              id="course-description"
+              rows="4"
+              class="w-full rounded-xl border border-black/10 px-3 py-2"
+              [value]="createForm().description"
+              (input)="updateCreateFormField('description', $event)"
+              required
+            ></textarea>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="mb-2">
+              <label for="startDate" class="mb-2 block text-sm font-medium">Fecha de inicio</label>
+              <input
+                id="startDate"
+                type="date"
+                class="w-full rounded-xl border border-black/10 px-3 py-2"
+                [value]="createForm().startDate"
+                (input)="updateCreateFormField('startDate', $event)"
+              />
+            </div>
+
+            <div class="mb-2">
+              <label for="endDate" class="mb-2 block text-sm font-medium">Fecha de término</label>
+              <input
+                id="endDate"
+                type="date"
+                class="w-full rounded-xl border border-black/10 px-3 py-2"
+                [value]="createForm().endDate"
+                (input)="updateCreateFormField('endDate', $event)"
+              />
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <label for="meetingLink" class="mb-2 block text-sm font-medium"
+              >Enlace de videoconferencia</label
+            >
+            <input
+              id="meetingLink"
+              type="url"
+              placeholder="https://..."
+              class="w-full rounded-xl border border-black/10 px-3 py-2"
+              [value]="createForm().meetingLink"
+              (input)="updateCreateFormField('meetingLink', $event)"
+            />
+          </div>
+
+          <div class="mb-2">
+            <label for="course-photo" class="mb-2 block text-sm font-medium">Foto</label>
+            <input
+              #photoInput
+              id="course-photo"
+              type="file"
+              class="hidden"
+              (change)="onPhotoUpload($event)"
+            />
+            <button
+              type="button"
+              class="w-full rounded-xl border border-black/10 bg-gray-200 px-3 py-2 hover:bg-gray-300"
+              (click)="photoInput.click()"
+            >
+              Seleccionar fotografía
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-center justify-center">
+          <div class="flex items-center justify-center">
+            @if (photoPreview() !== null) {
+              <img
+                [src]="photoPreview()"
+                alt="Vista previa de la foto"
+                class="h-auto w-auto max-w-xs rounded-lg border border-black/10"
+              />
+            } @else {
+              <lucide-icon
+                [img]="iconsService.picture"
+                size="256"
+                color="gray"
+                aria-hidden="true"
+              />
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label for="modality" class="mb-2 block text-sm font-medium">Modalidad</label>
+          <select
+            id="modality"
+            class="w-full rounded-xl border border-black/10 px-3 py-2"
+            [value]="createForm().modality"
+            (change)="updateCreateFormField('modality', $event)"
+            required
+          >
+            @for (m of modalities; track m) {
+              <option [value]="m">{{ modalityLabels[m] }}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <label for="capacitacionId" class="mb-2 block text-sm font-medium">Capacitación</label>
+          <select
+            id="capacitacionId"
+            class="w-full rounded-xl border border-black/10 px-3 py-2"
+            [value]="createForm().capacitacionId"
+            (change)="updateCreateFormField('capacitacionId', $event)"
+          >
+            <option value="">Sin capacitación asociada</option>
+            @for (training of trainingsService.trainings(); track training.id) {
+              <option [value]="training.id">{{ training.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </form>
+  </app-modal>
+
+  <app-modal
+    [isOpen]="confirmingToggle()"
+    [title]="toggleConfirmTitle()"
+    [maxWidth]="'max-w-md'"
+    [showActions]="true"
+    confirmText="Confirmar"
+    (close)="closeToggleConfirmation()"
+    (cancel)="closeToggleConfirmation()"
+    (confirm)="executeToggle()"
+  >
+    <p class="text-sm text-neutral-600">{{ toggleConfirmMessage() }}</p>
+  </app-modal>
+</div>

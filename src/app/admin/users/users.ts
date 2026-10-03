@@ -10,7 +10,7 @@ import {
 import { LucideAngularModule } from 'lucide-angular';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, EMPTY } from 'rxjs';
-import { User, UserRole } from '../../core/models/user.model';
+import { AppModuleName, MODULE_ACCESS_OPTIONS, User, UserRole } from '../../core/models/user.model';
 import { IconsService } from '../../core/services/icons.service';
 import { EmptyState } from '../../shared/components/empty-state/empty-state';
 import { ModalComponent } from '../../shared/components/modal/modal';
@@ -46,6 +46,7 @@ export class UsersComponent implements OnInit {
   readonly filters = signal<{ isActive?: boolean }>({});
 
   readonly USER_ROLES: UserRole[] = ['admin', 'user'];
+  readonly MODULE_ACCESS_OPTIONS = MODULE_ACCESS_OPTIONS;
 
   readonly loading = signal(false);
   readonly mode = signal<Mode>(null);
@@ -56,12 +57,14 @@ export class UsersComponent implements OnInit {
     password: '',
     username: '',
     role: 'user',
+    moduleAccess: [],
   });
 
   readonly editForm = signal<UserEditForm>({
     email: '',
     username: '',
     role: 'user',
+    moduleAccess: [],
   });
 
   private readonly paginationState = createPaginationState(this.usersService.totalUsers, {
@@ -133,13 +136,24 @@ export class UsersComponent implements OnInit {
 
   openCreateUser() {
     this.mode.set('create');
-    this.createForm.set({ email: '', password: '', role: 'user', username: '' });
+    this.createForm.set({
+      email: '',
+      password: '',
+      role: 'user',
+      username: '',
+      moduleAccess: [],
+    });
   }
 
   openEditUser(user: User) {
     this.mode.set('edit');
     this.targetUser.set(user);
-    this.editForm.set({ email: user.email, role: user.role, username: user.username });
+    this.editForm.set({
+      email: user.email,
+      role: user.role,
+      username: user.username,
+      moduleAccess: [...(user.moduleAccess ?? [])],
+    });
   }
 
   loadUsers() {
@@ -164,7 +178,13 @@ export class UsersComponent implements OnInit {
 
   closeModal() {
     this.mode.set(null);
-    this.createForm.set({ email: '', password: '', role: 'user', username: '' });
+    this.createForm.set({
+      email: '',
+      password: '',
+      role: 'user',
+      username: '',
+      moduleAccess: [],
+    });
   }
 
   save() {
@@ -173,13 +193,14 @@ export class UsersComponent implements OnInit {
       return;
     }
 
-    const { email, password, role, username } = this.createForm();
+    const { email, password, role, username, moduleAccess } = this.createForm();
 
     const payload: Partial<User> = {
       username,
       email,
       role,
       password,
+      moduleAccess,
     };
 
     this.saving.set(true);
@@ -204,12 +225,13 @@ export class UsersComponent implements OnInit {
       return;
     }
 
-    const { email, role, username } = this.editForm();
+    const { email, role, username, moduleAccess } = this.editForm();
 
     const payload: Partial<User> = {
       username,
       email,
       role,
+      moduleAccess,
     };
 
     if (this.targetUser() === null) return;
@@ -319,6 +341,26 @@ export class UsersComponent implements OnInit {
   updateCreateFormRole(event: Event): void {
     const target = event.target as HTMLSelectElement;
     this.createForm.update((f) => ({ ...f, role: target.value as UserRole }));
+  }
+
+  toggleCreateModuleAccess(mod: AppModuleName, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.createForm.update((f) => ({
+      ...f,
+      moduleAccess: checked
+        ? [...f.moduleAccess, mod]
+        : f.moduleAccess.filter((m) => m !== mod),
+    }));
+  }
+
+  toggleEditModuleAccess(mod: AppModuleName, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.editForm.update((f) => ({
+      ...f,
+      moduleAccess: checked
+        ? [...f.moduleAccess, mod]
+        : f.moduleAccess.filter((m) => m !== mod),
+    }));
   }
 
   updateEditName(e: Event) {

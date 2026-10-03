@@ -1,0 +1,188 @@
+<div class="section-spacing">
+  <div class="page-header">
+    <app-title
+      title="Preguntas frecuentes"
+      description="Administra las preguntas frecuentes de ISMA"
+    />
+
+    <div class="actions-bar">
+      <button class="btn-primary btn-full" (click)="openCreateFaq()">
+        <div class="flex items-center justify-center gap-2">
+          <lucide-icon [img]="iconsService.add" size="15" color="black" aria-hidden="true" />
+          <span>Crear Pregunta</span>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <select
+      id="filter-status"
+      [value]="activeFilterValue()"
+      (change)="updateFilterActive($event)"
+      class="select-full"
+      aria-label="Filtrar por estado"
+    >
+      <option class="font-bold" value="">Todos</option>
+      <option class="font-bold" value="true">Activos</option>
+      <option class="font-bold" value="false">Inactivos</option>
+    </select>
+  </div>
+
+  @if (faqService.faqs().length > 0) {
+    <div class="table-container">
+      <table class="min-w-200 table-fixed">
+        <thead class="bg-neutral-50 text-neutral-600">
+          <tr>
+            <th class="w-1/12 px-4 py-3 text-left font-bold">#</th>
+            <th class="w-1/2 px-4 py-3 text-left font-bold">Pregunta</th>
+            <th class="w-1/4 px-4 py-3 text-left font-bold">Estado</th>
+            <th class="px-4 py-3 text-right font-bold">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of faqService.faqs(); track row.id) {
+            <tr
+              class="animate-fade-in animate-duration-300 hover:bg-custom-yellow/50 border-t border-black/5 transition-all"
+            >
+              <td class="w-1/12 px-4 py-3">{{ row.order }}</td>
+              <td class="w-1/2 truncate px-4 py-3" [title]="row.question">{{ row.question }}</td>
+              <td class="w-1/4 px-4 py-3">
+                <div
+                  class="inline-flex items-center gap-2 rounded-full border px-2 py-1 text-xs"
+                  [class]="
+                    row.isActive
+                      ? 'border-green-200 bg-green-100 text-green-800'
+                      : 'border-red-200 bg-red-100 text-red-800'
+                  "
+                >
+                  <lucide-icon
+                    [img]="row.isActive ? iconsService.active : iconsService.inactive"
+                    size="20"
+                    [color]="row.isActive ? 'green' : 'red'"
+                  ></lucide-icon>
+
+                  <span class="">
+                    {{ row.isActive ? 'Activo' : 'Inactivo' }}
+                  </span>
+                </div>
+              </td>
+              <td class="py3 px-4">
+                <div class="flex flex-wrap items-center justify-end gap-2">
+                  <button class="btn-table-warning" (click)="openEditFaq(row)">
+                    <div class="flex items-center justify-center gap-1">
+                      <lucide-icon [img]="iconsService.edit" size="15" />
+                      <span class="hidden text-xs 2xl:inline"> Editar </span>
+                    </div>
+                  </button>
+                  <button
+                    class="btn-table"
+                    [class]="
+                      !row.isActive
+                        ? 'border-green-200 bg-green-100 text-green-800'
+                        : 'border-red-200 bg-red-100 text-red-800'
+                    "
+                    (click)="confirmToggleFaq(row, row.isActive ? 'deactivate' : 'activate')"
+                    [attr.aria-label]="
+                      (row.isActive ? 'Desactivar' : 'Activar') + ' pregunta ' + row.question
+                    "
+                  >
+                    <div class="flex items-center justify-center gap-1">
+                      <lucide-icon
+                        [img]="row.isActive ? iconsService.disable : iconsService.active"
+                        size="15"
+                        [color]="row.isActive ? 'red' : 'green'"
+                      ></lucide-icon>
+                      <span class="hidden text-xs 2xl:inline">
+                        {{ row.isActive ? 'Desactivar' : 'Activar' }}
+                      </span>
+                    </div>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <app-pagination
+      [total]="faqService.totalFaqs()"
+      [pageFrom]="pageFrom()"
+      [pageTo]="pageTo()"
+      [canPrev]="canPrev()"
+      [canNext]="canNext()"
+      [currentLimit]="pagination().limit"
+      (previousPage)="prevPage()"
+      (nextPage)="nextPage()"
+      (limitChange)="changeLimit($event)"
+    />
+  } @else {
+    <app-empty-state />
+  }
+
+  <app-modal
+    [isOpen]="mode() !== null"
+    [title]="modalTitle()"
+    [maxWidth]="'max-w-2xl'"
+    [showActions]="true"
+    [loading]="saving()"
+    [confirmDisabled]="!isCreateFormValid()"
+    [confirmText]="mode() === 'create' ? 'Crear' : 'Guardar'"
+    (close)="closeModal()"
+    (cancel)="closeModal()"
+    (confirm)="save()"
+  >
+    <form class="space-y-4" (submit)="$event.preventDefault()">
+      <div>
+        <label for="question" class="mb-2 block text-sm font-medium">Pregunta</label>
+        <textarea
+          id="question"
+          rows="2"
+          class="w-full rounded-xl border border-black/10 px-3 py-2"
+          [value]="createForm().question"
+          (input)="updateCreateFormField('question', $event)"
+          required
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="answer" class="mb-2 block text-sm font-medium">Respuesta</label>
+        <textarea
+          id="answer"
+          rows="4"
+          class="w-full rounded-xl border border-black/10 px-3 py-2"
+          [value]="createForm().answer"
+          (input)="updateCreateFormField('answer', $event)"
+          required
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="order" class="mb-2 block text-sm font-medium">Orden</label>
+        <input
+          id="order"
+          type="number"
+          min="1"
+          class="w-full rounded-xl border border-black/10 px-3 py-2"
+          [value]="createForm().order"
+          (input)="updateCreateFormOrder($event)"
+          required
+        />
+      </div>
+    </form>
+  </app-modal>
+
+  <app-modal
+    [isOpen]="confirmingToggle()"
+    [title]="toggleConfirmTitle()"
+    [maxWidth]="'max-w-md'"
+    [showActions]="true"
+    confirmText="Confirmar"
+    (close)="closeToggleConfirmation()"
+    (cancel)="closeToggleConfirmation()"
+    (confirm)="executeToggle()"
+  >
+    <p class="text-sm text-neutral-600">{{ toggleConfirmMessage() }}</p>
+  </app-modal>
+</div>

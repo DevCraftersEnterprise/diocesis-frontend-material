@@ -20,12 +20,14 @@ import {
   GraduationCap,
   HandCoins,
   Heart,
+  HeartHandshake,
   History,
   House,
   IdCard,
   Image,
   ImagePlay,
   Landmark,
+  Library,
   LogOut,
   Map,
   MapPin,
@@ -104,4 +106,6 @@ export class IconsService {
   readonly mapPin = MapPin;
   readonly building = Building;
   readonly church = Church;
+  readonly institute = Library;
+  readonly isma = HeartHandshake;
 }

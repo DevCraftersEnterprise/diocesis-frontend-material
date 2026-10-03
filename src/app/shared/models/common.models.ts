@@ -1,5 +1,7 @@
 import { DocumentType } from '../../core/models/document.model';
-import { UserRole } from '../../core/models/user.model';
+import { EventoType } from '../../core/models/institute-event.model';
+import { InstituteModality } from '../../core/models/institute-training.model';
+import { AppModuleName, UserRole } from '../../core/models/user.model';
 
 export type Mode = 'create' | 'edit' | null;
 
@@ -8,6 +10,7 @@ export interface UserCreateForm {
   email: string;
   password: string;
   role: UserRole;
+  moduleAccess: AppModuleName[];
 }
 
 export interface UserEditForm {
@@ -15,6 +18,7 @@ export interface UserEditForm {
   email: string;
   password?: string;
   role: UserRole;
+  moduleAccess: AppModuleName[];
 }
 
 export interface ReverendForm {
@@ -61,4 +65,51 @@ export interface DocumentForm {
   title: string;
   tags: string;
   type: DocumentType;
+}
+
+export interface TrainingForm {
+  name: string;
+  description: string;
+  modality: InstituteModality;
+}
+
+export interface CourseForm {
+  title: string;
+  description: string;
+  modality: InstituteModality;
+  capacitacionId: string;
+  startDate: string;
+  endDate: string;
+  meetingLink: string;
+}
+
+export interface VenueForm {
+  name: string;
+  address: string;
+  mapsUrl: string;
+}
+
+export interface EventForm {
+  title: string;
+  description: string;
+  type: EventoType;
+  startDate: string;
+  endDate: string;
+  cursoId: string;
+  sedeId: string;
+}
+
+export interface SpecialCaseForm {
+  title: string;
+  order: number;
+  requisitosAdicionales: string;
+  documentosAdicionales: string;
+  excepciones: string;
+  contacto: string;
+}
+
+export interface FaqForm {
+  question: string;
+  answer: string;
+  order: number;
 }

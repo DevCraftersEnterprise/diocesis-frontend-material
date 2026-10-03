@@ -245,6 +245,23 @@
           <option [value]="role">{{ role }}</option>
         }
       </select>
+
+      <div>
+        <span class="text-sm font-medium text-neutral-700">Acceso a módulos</span>
+        <p class="mb-2 text-xs text-neutral-500">
+          Solo aplica a rol "user" — admin/super ya tienen acceso total.
+        </p>
+        @for (opt of MODULE_ACCESS_OPTIONS; track opt.value) {
+          <label class="mr-4 inline-flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              [checked]="createForm().moduleAccess.includes(opt.value)"
+              (change)="toggleCreateModuleAccess(opt.value, $event)"
+            />
+            {{ opt.label }}
+          </label>
+        }
+      </div>
     </form>
   </app-modal>
 
@@ -299,6 +316,23 @@
           <option [value]="role">{{ role }}</option>
         }
       </select>
+
+      <div>
+        <span class="text-sm font-medium text-neutral-700">Acceso a módulos</span>
+        <p class="mb-2 text-xs text-neutral-500">
+          Solo aplica a rol "user" — admin/super ya tienen acceso total.
+        </p>
+        @for (opt of MODULE_ACCESS_OPTIONS; track opt.value) {
+          <label class="mr-4 inline-flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              [checked]="editForm().moduleAccess.includes(opt.value)"
+              (change)="toggleEditModuleAccess(opt.value, $event)"
+            />
+            {{ opt.label }}
+          </label>
+        }
+      </div>
     </form>
   </app-modal>
 
