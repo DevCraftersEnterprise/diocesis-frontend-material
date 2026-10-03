@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { LucideAngularModule, LucideIconData } from 'lucide-angular';
+import { filter } from 'rxjs';
 import { IconsService } from '../../../core/services/icons.service';
 
 type PulblicNavItem = {
@@ -13,12 +15,30 @@ type PulblicNavItem = {
 
 @Component({
   selector: 'app-layout',
-  imports: [CommonModule, LucideAngularModule, RouterOutlet, RouterLink],
+  imports: [CommonModule, LucideAngularModule, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './layout.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Layout {
   protected readonly iconsService = inject(IconsService);
+  private readonly router = inject(Router);
+
+  /** URL actual, para resaltar en el nav el grupo que contiene la pagina activa. */
+  protected currentUrl = signal(this.router.url);
+
+  constructor() {
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe((event) => this.currentUrl.set(event.urlAfterRedirects));
+  }
+
+  protected isGroupActive(item: PulblicNavItem): boolean {
+    const url = this.currentUrl();
+    return (item.children ?? []).some((child) => !!child.to && url.startsWith(child.to));
+  }
 
   protected navItems: PulblicNavItem[] = [
     { label: 'Inicio', to: '/inicio', icon: this.iconsService.home },
