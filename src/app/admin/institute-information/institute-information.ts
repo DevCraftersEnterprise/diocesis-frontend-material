@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { ToastrService } from 'ngx-toastr';
 import { InstitutoInformacionForm } from '../../core/models/institute-information.model';
+import { IconsService } from '../../core/services/icons.service';
 import { TitleComponent } from '../../shared/components/title/title';
 import { InstituteInformationService } from './services/institute-information';
 
@@ -18,13 +20,14 @@ const EMPTY_FORM: InstitutoInformacionForm = {
  */
 @Component({
   selector: 'app-institute-information',
-  imports: [CommonModule, TitleComponent],
+  imports: [CommonModule, TitleComponent, LucideAngularModule],
   templateUrl: './institute-information.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InstituteInformationComponent implements OnInit {
   private readonly toastrService = inject(ToastrService);
   protected readonly informationService = inject(InstituteInformationService);
+  protected readonly iconsService = inject(IconsService);
 
   readonly loading = signal(false);
   readonly saving = signal(false);

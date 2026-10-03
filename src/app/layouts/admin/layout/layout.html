@@ -10,7 +10,7 @@
         <p class="mt-1 text-xs font-semibold text-black/60">Panel de administración</p>
       </header>
 
-      <nav class="min-h-0 flex-1 space-y-1 overflow-y-auto p-2 sm:p-3">
+      <nav class="scrollbar-themed min-h-0 flex-1 space-y-1 overflow-y-auto p-2 sm:p-3">
         @for (item of items(); track item.label) {
           @if (item.children) {
             <button

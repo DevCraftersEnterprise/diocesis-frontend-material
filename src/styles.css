@@ -110,6 +110,29 @@
     display: none; /* Chrome, Safari and Opera */
   }
 
+  /* Scrollbar delgada que sigue la paleta en vez del estilo nativo del SO */
+  .scrollbar-themed {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+  }
+
+  .scrollbar-themed::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-themed::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-themed::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.25);
+    border-radius: 999px;
+  }
+
+  .scrollbar-themed::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
   .btn-secondary {
     @apply hover:animate-scale rounded-xl border border-white px-4 py-2 transition-all hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:animate-none;
   }

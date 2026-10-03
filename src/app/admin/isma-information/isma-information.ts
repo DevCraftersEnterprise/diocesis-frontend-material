@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { ToastrService } from 'ngx-toastr';
 import { IsmaInformacionForm } from '../../core/models/isma-information.model';
+import { IconsService } from '../../core/services/icons.service';
 import { TitleComponent } from '../../shared/components/title/title';
 import { IsmaInformationService } from './services/isma-information';
 
@@ -23,13 +25,14 @@ const EMPTY_FORM: IsmaInformacionForm = {
  */
 @Component({
   selector: 'app-isma-information',
-  imports: [CommonModule, TitleComponent],
+  imports: [CommonModule, TitleComponent, LucideAngularModule],
   templateUrl: './isma-information.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IsmaInformationComponent implements OnInit {
   private readonly toastrService = inject(ToastrService);
   protected readonly informationService = inject(IsmaInformationService);
+  protected readonly iconsService = inject(IconsService);
 
   readonly loading = signal(false);
   readonly saving = signal(false);
