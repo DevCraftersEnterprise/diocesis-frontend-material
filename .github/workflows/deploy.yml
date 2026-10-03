@@ -34,9 +34,15 @@ jobs:
         uses: browser-actions/setup-chrome@v1
         id: chrome
 
+      - name: Chrome sin sandbox (runner de CI)
+        run: |
+          echo "CHROME_PATH=${{ steps.chrome.outputs.chrome-path }}" >> "$GITHUB_ENV"
+          echo "#!/bin/sh" > "$RUNNER_TEMP/chrome-nosandbox"
+          echo 'exec "$CHROME_PATH" --no-sandbox "$@"' >> "$RUNNER_TEMP/chrome-nosandbox"
+          chmod +x "$RUNNER_TEMP/chrome-nosandbox"
+          echo "CHROME_BIN=$RUNNER_TEMP/chrome-nosandbox" >> "$GITHUB_ENV"
+
       - name: Run tests
-        env:
-          CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
         run: npx ng test --watch=false --browsers=ChromeHeadless
 
       - name: Build production app
