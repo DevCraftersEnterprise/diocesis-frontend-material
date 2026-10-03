@@ -2,18 +2,19 @@
   @if (loading()) {
     <p class="text-center">Cargando…</p>
   } @else if (information(); as info) {
+    <div class="mb-6 flex justify-center">
+      <img
+        src="/images/isma-logo-1.jpeg"
+        alt="ISMA – Iniciación al Sacramento del Matrimonio, Diócesis de Ciudad Obregón"
+        class="h-44 w-auto object-contain sm:h-56"
+      />
+    </div>
+
     <div class="bg-custom-white overflow-hidden rounded-2xl p-8 shadow-xl">
-      <div class="flex items-center gap-4">
-        <div class="icon-chip h-14 w-14 rounded-2xl">
-          <lucide-icon [img]="iconsService.isma" size="26" />
-        </div>
-        <div>
-          <h1 class="text-custom-brown text-3xl font-bold">ISMA</h1>
-          <p class="mt-0.5 text-sm text-neutral-500">
-            Instituto Superior de Formación Matrimonial
-          </p>
-        </div>
-      </div>
+      <h1 class="sr-only">ISMA</h1>
+      <p class="text-custom-brown/70 text-center text-sm font-semibold tracking-wide uppercase">
+        Instituto Superior de Formación Matrimonial
+      </p>
 
       <section class="mt-8 flex gap-4">
         <div class="icon-chip">
