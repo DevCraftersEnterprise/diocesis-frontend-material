@@ -7,13 +7,13 @@
       <!-- Logo y Título -->
       <div class="flex items-center gap-3">
         <img src="/images/logo-normal-transparente.png" alt="Logo Diócesis" class="h-12 w-auto" />
-        <h1 class="text-custom-white hidden text-lg font-bold md:block">
+        <h1 class="text-custom-white hidden text-lg font-bold whitespace-nowrap md:block">
           Diócesis de Ciudad Obregón
         </h1>
       </div>
 
       <!-- Navegación Desktop -->
-      <nav class="hidden flex-1 justify-center xl:flex">
+      <nav class="hidden flex-1 justify-center 2xl:flex">
         <ul class="flex items-center gap-1">
           @for (item of navItems; track item.label) {
             @if (item.children) {
@@ -72,7 +72,7 @@
       <button
         type="button"
         (click)="toggle()"
-        class="text-custom-white hover:bg-custom-white/10 rounded-md p-2 transition-colors xl:hidden"
+        class="text-custom-white hover:bg-custom-white/10 rounded-md p-2 transition-colors 2xl:hidden"
         [attr.aria-label]="open() ? 'Cerrar menú' : 'Abrir menú'"
       >
         <lucide-angular [img]="iconsService.menu" [size]="24" />
@@ -89,13 +89,13 @@
   @if (open()) {
     <!-- Overlay -->
     <div
-      class="animate-fade-in fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-all duration-300 ease-out xl:hidden"
+      class="animate-fade-in fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-all duration-300 ease-out 2xl:hidden"
       (click)="toggle()"
     ></div>
 
     <!-- Sidebar -->
     <aside
-      class="animate-fade-in-left bg-custom-brown scrollbar-themed fixed top-0 right-0 z-50 h-full w-80 overflow-y-auto shadow-2xl transition-transform duration-300 ease-out xl:hidden"
+      class="animate-fade-in-left bg-custom-brown scrollbar-themed fixed top-0 right-0 z-50 h-full w-80 overflow-y-auto shadow-2xl transition-transform duration-300 ease-out 2xl:hidden"
     >
       <div class="flex h-16 items-center justify-between border-b border-white/10 px-4">
         <h2 class="text-custom-white text-lg font-bold">Diócesis de Ciudad Obregón</h2>
