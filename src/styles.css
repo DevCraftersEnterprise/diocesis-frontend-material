@@ -245,6 +245,10 @@
   .search-input-public {
     @apply text-custom-brown placeholder:text-custom-brown/50 focus:border-custom-yellow focus:ring-custom-yellow/20 w-full rounded-lg border border-gray-300 py-3 pr-4 pl-10 shadow-sm transition-shadow focus:shadow-md focus:ring-2 focus:outline-none;
   }
+
+  .icon-chip {
+    @apply bg-custom-yellow/15 text-custom-brown grid h-10 w-10 shrink-0 place-items-center rounded-xl;
+  }
 }
 
 /* Toast customization */

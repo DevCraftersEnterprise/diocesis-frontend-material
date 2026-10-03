@@ -3,24 +3,26 @@
     <!-- Título de la sección -->
     <div class="mb-6 flex items-center justify-between">
       <h2 class="text-custom-brown text-3xl font-bold">Últimas Noticias</h2>
-      <div class="flex gap-2">
-        <button
-          type="button"
-          (click)="scrollLeft()"
-          class="bg-custom-brown hover:bg-custom-brown/80 rounded-full p-2 text-white transition-all"
-          aria-label="Anterior"
-        >
-          <lucide-angular [img]="iconsService.previous" [size]="20" />
-        </button>
-        <button
-          type="button"
-          (click)="scrollRight()"
-          class="bg-custom-brown hover:bg-custom-brown/80 rounded-full p-2 text-white transition-all"
-          aria-label="Siguiente"
-        >
-          <lucide-angular [img]="iconsService.next" [size]="20" />
-        </button>
-      </div>
+      @if (news().length > 1) {
+        <div class="flex gap-2">
+          <button
+            type="button"
+            (click)="scrollLeft()"
+            class="bg-custom-brown hover:bg-custom-brown/80 rounded-full p-2 text-white transition-all"
+            aria-label="Anterior"
+          >
+            <lucide-angular [img]="iconsService.previous" [size]="20" />
+          </button>
+          <button
+            type="button"
+            (click)="scrollRight()"
+            class="bg-custom-brown hover:bg-custom-brown/80 rounded-full p-2 text-white transition-all"
+            aria-label="Siguiente"
+          >
+            <lucide-angular [img]="iconsService.next" [size]="20" />
+          </button>
+        </div>
+      }
     </div>
 
     <!-- Contenedor de cards con scroll horizontal -->
@@ -31,7 +33,7 @@
     >
       @for (item of news(); track item.id) {
         <article
-          class="bg-custom-white flex min-w-87.5 flex-col overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105"
+          class="bg-custom-white flex w-87.5 shrink-0 flex-col overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
           style="scroll-snap-align: start"
         >
           <!-- Imagen -->

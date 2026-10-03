@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { combineLatest } from 'rxjs';
 import { IsmaFaqService } from '../../admin/isma-faq/services/isma-faq';
 import { IsmaInformationService } from '../../admin/isma-information/services/isma-information';
 import { IsmaSpecialCasesService } from '../../admin/isma-special-cases/services/isma-special-cases';
 import { IsmaInformacion } from '../../core/models/isma-information.model';
+import { IconsService } from '../../core/services/icons.service';
 
 /**
  * Página pública "ISMA" (`/diocesis/isma`, Tarea 6.1/7.1). Información general
@@ -14,7 +16,7 @@ import { IsmaInformacion } from '../../core/models/isma-information.model';
  */
 @Component({
   selector: 'app-isma',
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './isma.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -22,6 +24,7 @@ export class Isma implements OnInit {
   private readonly informationService = inject(IsmaInformationService);
   protected readonly specialCasesService = inject(IsmaSpecialCasesService);
   protected readonly faqService = inject(IsmaFaqService);
+  protected readonly iconsService = inject(IconsService);
 
   readonly information = signal<IsmaInformacion | null>(null);
   readonly loading = signal(true);
