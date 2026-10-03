@@ -11,7 +11,7 @@ const base = (over: Partial<IsmaCurso> = {}): IsmaCurso =>
     diaSemana: 2,
     horaInicio: '19:30',
     horaFin: '21:00',
-    modalidad: 'presencial',
+    modalidades: ['presencial'],
     telefonoInformes: null,
     notas: null,
     isActive: true,

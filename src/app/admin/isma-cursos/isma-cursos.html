@@ -53,7 +53,7 @@
                 }
               </td>
               <td class="px-4 py-3">{{ horarioLabel(row) }}</td>
-              <td class="px-4 py-3">{{ row.modalidad === 'en_linea' ? 'En línea' : 'Presencial' }}</td>
+              <td class="px-4 py-3">{{ etiquetas(row.modalidades) }}</td>
               <td class="px-4 py-3">
                 <div [class]="row.isActive ? 'badge-active' : 'badge-inactive'">
                   <lucide-icon
@@ -218,18 +218,19 @@
         </div>
       </fieldset>
 
-      <div>
-        <label for="curso-modalidad" class="mb-2 block text-sm font-medium">Modalidad</label>
-        <select
-          id="curso-modalidad"
-          class="w-full rounded-xl border border-black/10 px-3 py-2"
-          [value]="form().modalidad"
-          (change)="updateModalidad($event)"
-        >
-          <option value="presencial">Presencial</option>
-          <option value="en_linea">En línea</option>
-        </select>
-      </div>
+      <fieldset class="rounded-xl border border-black/10 p-4">
+          <legend class="px-1 text-sm font-medium">Modalidad <span class="text-red-500">*</span></legend>
+          <div class="flex flex-wrap gap-6">
+            <label class="flex items-center gap-2 text-sm">
+              <input type="checkbox" [checked]="form().modalidades.includes('presencial')" (change)="toggleModalidad('presencial', $event)" />
+              Presencial
+            </label>
+            <label class="flex items-center gap-2 text-sm">
+              <input type="checkbox" [checked]="form().modalidades.includes('en_linea')" (change)="toggleModalidad('en_linea', $event)" />
+              En línea
+            </label>
+          </div>
+        </fieldset>
 
       <div>
         <label for="curso-telefono" class="mb-2 block text-sm font-medium">Teléfono de informes</label>

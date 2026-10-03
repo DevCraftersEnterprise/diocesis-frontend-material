@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { catchError, EMPTY } from 'rxjs';
 import {
   DIAS_SEMANA,
+  etiquetasModalidades,
   IsmaCurso,
   IsmaCursoForm,
   IsmaModalidad,
@@ -27,7 +28,7 @@ const EMPTY_FORM: IsmaCursoForm = {
   diaSemana: null,
   horaInicio: '',
   horaFin: '',
-  modalidad: 'presencial',
+  modalidades: ['presencial'],
   telefonoInformes: '',
   notas: '',
 };
@@ -35,6 +36,7 @@ const EMPTY_FORM: IsmaCursoForm = {
 /** Espejo de la validacion del backend para dar retroalimentacion antes de enviar. */
 export function validarCurso(f: IsmaCursoForm): string | null {
   if (!f.parroquiaId) return 'Selecciona una parroquia.';
+  if (f.modalidades.length === 0) return 'Selecciona al menos una modalidad.';
   if (!f.startDate || !f.endDate) return 'Indica fecha de inicio y de fin.';
   if (f.endDate < f.startDate) return 'La fecha de fin no puede ser anterior a la de inicio.';
   const tieneHorario = f.horaInicio !== '' || f.horaFin !== '';
@@ -70,6 +72,7 @@ export class IsmaCursosComponent implements OnInit {
   private readonly parishService = inject(Parish);
 
   readonly diasSemana = DIAS_SEMANA;
+  readonly etiquetas = etiquetasModalidades;
   readonly parroquias = signal<Parroquia[]>([]);
   readonly loading = signal(false);
   readonly mode = signal<Mode>(null);
@@ -166,7 +169,7 @@ export class IsmaCursosComponent implements OnInit {
       diaSemana: item.diaSemana,
       horaInicio: item.horaInicio ?? '',
       horaFin: item.horaFin ?? '',
-      modalidad: item.modalidad,
+      modalidades: [...item.modalidades],
       telefonoInformes: item.telefonoInformes ?? '',
       notas: item.notas ?? '',
     });
@@ -198,9 +201,12 @@ export class IsmaCursosComponent implements OnInit {
     this.form.update((f) => ({ ...f, diaSemana: value === '' ? null : Number(value) }));
   }
 
-  updateModalidad(e: Event): void {
-    const value = (e.target as HTMLSelectElement).value as IsmaModalidad;
-    this.form.update((f) => ({ ...f, modalidad: value }));
+  toggleModalidad(modalidad: IsmaModalidad, e: Event): void {
+    const marcada = (e.target as HTMLInputElement).checked;
+    this.form.update((f) => {
+      const sin = f.modalidades.filter((m) => m !== modalidad);
+      return { ...f, modalidades: marcada ? [...sin, modalidad] : sin };
+    });
   }
 
   save(): void {
@@ -217,7 +223,7 @@ export class IsmaCursosComponent implements OnInit {
       diaSemana: f.diaSemana,
       horaInicio: f.horaInicio || null,
       horaFin: f.horaFin || null,
-      modalidad: f.modalidad,
+      modalidades: f.modalidades,
       telefonoInformes: f.telefonoInformes.trim() === '' ? null : f.telefonoInformes.trim(),
       notas: f.notas.trim() === '' ? null : f.notas.trim(),
     };

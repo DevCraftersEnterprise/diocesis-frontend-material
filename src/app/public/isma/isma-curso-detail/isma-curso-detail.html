@@ -38,7 +38,7 @@
         <div>
           <dt class="text-sm font-bold text-neutral-500">Modalidad</dt>
           <dd>
-            {{ c.modalidad === 'en_linea' ? 'En línea (solo casos excepcionales)' : 'Presencial' }}
+            {{ etiquetas(c.modalidades) }}
           </dd>
         </div>
         @if (c.telefonoInformes) {

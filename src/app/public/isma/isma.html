@@ -140,7 +140,7 @@
                 {{ curso.diaSemana !== null ? diasSemana[curso.diaSemana] + ' ' + curso.horaInicio + '–' + curso.horaFin : 'Horario por confirmar' }}
               </p>
               <p class="text-sm">
-                {{ curso.modalidad === 'en_linea' ? 'En línea (casos excepcionales)' : 'Presencial' }}
+                {{ etiquetas(curso.modalidades) }}
               </p>
             </a>
           }

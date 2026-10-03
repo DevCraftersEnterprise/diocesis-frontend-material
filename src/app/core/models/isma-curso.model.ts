@@ -16,7 +16,7 @@ export interface IsmaCurso {
   diaSemana: number | null;
   horaInicio: string | null;
   horaFin: string | null;
-  modalidad: IsmaModalidad;
+  modalidades: IsmaModalidad[];
   telefonoInformes: string | null;
   notas: string | null;
   isActive: boolean;
@@ -35,7 +35,7 @@ export interface IsmaCursoForm {
   diaSemana: number | null;
   horaInicio: string;
   horaFin: string;
-  modalidad: IsmaModalidad;
+  modalidades: IsmaModalidad[];
   telefonoInformes: string;
   notas: string;
 }
@@ -49,3 +49,12 @@ export const DIAS_SEMANA = [
   'Viernes',
   'Sábado',
 ] as const;
+
+export const MODALIDAD_LABELS: Record<IsmaModalidad, string> = {
+  presencial: 'Presencial',
+  en_linea: 'En línea',
+};
+
+export function etiquetasModalidades(modalidades: IsmaModalidad[]): string {
+  return modalidades.map((m) => MODALIDAD_LABELS[m]).join(' y ');
+}

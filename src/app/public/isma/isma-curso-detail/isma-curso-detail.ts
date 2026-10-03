@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@ang
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { IsmaCursosService } from '../../../admin/isma-cursos/services/isma-cursos';
-import { DIAS_SEMANA, IsmaCurso } from '../../../core/models/isma-curso.model';
+import { DIAS_SEMANA, etiquetasModalidades, IsmaCurso } from '../../../core/models/isma-curso.model';
 import { IconsService } from '../../../core/services/icons.service';
 
 /** Primer numero de telefono de un campo libre ("644 413 2819 / 644 413 4770"). */
@@ -23,6 +23,7 @@ export class IsmaCursoDetailComponent implements OnInit {
   protected readonly iconsService = inject(IconsService);
 
   readonly diasSemana = DIAS_SEMANA;
+  readonly etiquetas = etiquetasModalidades;
   readonly curso = signal<IsmaCurso | null>(null);
   readonly loading = signal(true);
   readonly notFound = signal(false);

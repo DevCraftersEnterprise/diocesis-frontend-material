@@ -8,7 +8,7 @@ const valido = (over: Partial<IsmaCursoForm> = {}): IsmaCursoForm => ({
   diaSemana: 2,
   horaInicio: '19:30',
   horaFin: '21:00',
-  modalidad: 'presencial',
+  modalidades: ['presencial'],
   telefonoInformes: '',
   notas: '',
   ...over,
@@ -23,6 +23,11 @@ describe('validarCurso', () => {
     expect(
       validarCurso(valido({ diaSemana: null, horaInicio: '', horaFin: '' })),
     ).toBeNull();
+  });
+
+  it('exige al menos una modalidad y acepta ambas', () => {
+    expect(validarCurso(valido({ modalidades: [] }))).toContain('modalidad');
+    expect(validarCurso(valido({ modalidades: ['presencial', 'en_linea'] }))).toBeNull();
   });
 
   it('exige parroquia', () => {
