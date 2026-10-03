@@ -28,7 +28,7 @@
                 @for (child of item.children; track child.to) {
                   <a
                     [routerLink]="child.to"
-                    routerLinkActive="bg-black/10"
+                    routerLinkActive="bg-black/15 font-semibold"
                     class="layout-button"
                     (click)="closeOnNavigate()"
                   >
@@ -40,7 +40,7 @@
           } @else {
             <a
               [routerLink]="item.to"
-              routerLinkActive="bg-black/10"
+              routerLinkActive="bg-black/15 font-semibold"
               class="layout-button"
               (click)="closeOnNavigate()"
             >
@@ -73,7 +73,9 @@
   }
 
   <div class="flex h-dvh flex-1 flex-col overflow-y-auto lg:ml-72">
-    <header class="bg-custom-brown sticky top-0 z-20 border-b border-black/30 backdrop-blur">
+    <header
+      class="bg-custom-brown sticky top-0 z-20 border-b border-black/30 shadow-[0_6px_18px_rgba(0,0,0,0.12)] backdrop-blur"
+    >
       <div class="flex h-14 min-w-0 items-center justify-between gap-3 px-4">
         <div class="flex min-w-0 flex-1 items-center gap-3 overflow-x-auto">
           <button class="btn-secondary shrink-0 lg:hidden" (click)="toggle()">
@@ -82,15 +84,18 @@
         </div>
 
         <!-- USUARIO ACTIVO -->
-        <div class="flex shrink-0 items-center gap-2 sm:gap-4">
-          <div class="flex min-w-0 items-center gap-2">
+        <div class="flex shrink-0 items-center gap-3">
+          <div class="hidden min-w-0 flex-col items-end sm:flex">
             <span
-              class="hidden max-w-32 overflow-hidden text-sm text-ellipsis whitespace-nowrap text-white sm:inline md:max-w-44 lg:max-w-60"
+              class="max-w-44 overflow-hidden text-sm text-ellipsis whitespace-nowrap text-white lg:max-w-60"
             >
               {{ authService.user()?.username }}
             </span>
-
             <role-badge [role]="authService.user()?.role || 'Cargando...'" />
+          </div>
+
+          <div class="avatar-circle" aria-hidden="true">
+            {{ userInitials() }}
           </div>
         </div>
       </div>

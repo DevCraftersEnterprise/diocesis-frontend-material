@@ -135,6 +135,14 @@ export class Layout implements OnInit {
     return (user.moduleAccess ?? []).includes(item.requiredModuleAccess);
   }
 
+  userInitials = computed(() => {
+    const username = this.authService.user()?.username;
+    if (!username) return '··';
+    const parts = username.trim().split(/[\s._-]+/).filter(Boolean);
+    const initials = parts.length > 1 ? parts[0][0] + parts[1][0] : username.slice(0, 2);
+    return initials.toUpperCase();
+  });
+
   toggleSubmenu(label: string): void {
     this.openSubmenus.update((submenus) => {
       const next = new Set(submenus);
