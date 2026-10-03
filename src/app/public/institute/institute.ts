@@ -10,6 +10,7 @@ import {
 import { FullCalendarModule } from '@fullcalendar/angular';
 import type { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import esLocale from '@fullcalendar/core/locales/es';
 import { LucideAngularModule } from 'lucide-angular';
 import { combineLatest } from 'rxjs';
 import { InstituteInformationService } from '../../admin/institute-information/services/institute-information';
@@ -73,6 +74,7 @@ export class Institute implements OnInit {
     initialView: 'dayGridMonth',
     height: 'auto',
     locale: 'es',
+    locales: [esLocale],
     events: this.eventsService.events().map((e) => ({
       id: e.id,
       title: e.title,
