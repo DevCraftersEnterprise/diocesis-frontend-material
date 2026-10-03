@@ -1,0 +1,67 @@
+<article class="container mx-auto max-w-3xl px-4 py-8">
+  @if (loading()) {
+    <p class="text-center">Cargando…</p>
+  } @else if (notFound() || !curso()) {
+    <div class="bg-custom-white rounded-2xl p-8 text-center shadow-xl">
+      <p class="font-bold">No se encontró este curso.</p>
+      <a routerLink="/diocesis/isma" class="mt-4 inline-block underline">Volver a ISMA</a>
+    </div>
+  } @else if (curso(); as c) {
+    <div class="bg-custom-white overflow-hidden rounded-2xl p-8 shadow-xl">
+      <a routerLink="/diocesis/isma" class="text-sm underline">← Volver a ISMA</a>
+
+      <h1 class="text-custom-brown mt-4 text-3xl font-bold">{{ c.parroquia.name }}</h1>
+      <p class="text-neutral-600">{{ c.parroquia.address }}, {{ c.parroquia.town }}</p>
+
+      @if (c.finalizado) {
+        <div
+          class="mt-6 rounded-xl border border-neutral-300 bg-neutral-100 p-4"
+          role="status"
+        >
+          <p class="font-bold text-neutral-800">Curso finalizado</p>
+          <p class="mt-1 text-sm text-neutral-600">
+            Este curso ya terminó y ya no admite inscripciones. Consulta los próximos cursos en
+            la página de ISMA.
+          </p>
+        </div>
+      }
+
+      <dl class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <dt class="text-sm font-bold text-neutral-500">Fechas</dt>
+          <dd>{{ c.startDate }} al {{ c.endDate }}</dd>
+        </div>
+        <div>
+          <dt class="text-sm font-bold text-neutral-500">Horario</dt>
+          <dd>{{ horario(c) }}</dd>
+        </div>
+        <div>
+          <dt class="text-sm font-bold text-neutral-500">Modalidad</dt>
+          <dd>
+            {{ c.modalidad === 'en_linea' ? 'En línea (solo casos excepcionales)' : 'Presencial' }}
+          </dd>
+        </div>
+        @if (c.telefonoInformes) {
+          <div>
+            <dt class="text-sm font-bold text-neutral-500">Informes</dt>
+            <dd>{{ c.telefonoInformes }}</dd>
+          </div>
+        }
+      </dl>
+
+      @if (c.notas) {
+        <p class="mt-6 whitespace-pre-line text-sm">{{ c.notas }}</p>
+      }
+
+      @if (!c.finalizado && c.telefonoInformes) {
+        <a
+          [href]="telHref(c.telefonoInformes)"
+          class="btn-primary mt-8 inline-flex items-center gap-2"
+        >
+          <lucide-icon [img]="iconsService.phone" size="16" />
+          Llamar para inscribirse
+        </a>
+      }
+    </div>
+  }
+</article>

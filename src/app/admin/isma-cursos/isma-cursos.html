@@ -1,0 +1,274 @@
+<div class="section-spacing">
+  <div class="page-header">
+    <app-title
+      title="ISMA — Cursos y calendario"
+      description="Cursos ISMA por parroquia. Los terminados dejan de mostrarse en el sitio público."
+    />
+
+    <div class="actions-bar">
+      <button class="btn-primary btn-full" (click)="openCreate()">
+        <div class="flex items-center justify-center gap-2">
+          <lucide-icon [img]="iconsService.add" size="15" color="black" aria-hidden="true" />
+          <span>Crear curso</span>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <select
+      id="filter-status"
+      [value]="activeFilterValue()"
+      (change)="updateFilterActive($event)"
+      class="select-full"
+      aria-label="Filtrar por estado"
+    >
+      <option class="font-bold" value="">Todos</option>
+      <option class="font-bold" value="true">Activos</option>
+      <option class="font-bold" value="false">Inactivos</option>
+    </select>
+  </div>
+
+  @if (cursosService.cursos().length > 0) {
+    <div class="table-container">
+      <table class="min-w-200 table-fixed">
+        <thead class="bg-neutral-50 text-neutral-600">
+          <tr>
+            <th class="w-1/4 px-4 py-3 text-left font-bold">Parroquia</th>
+            <th class="w-1/5 px-4 py-3 text-left font-bold">Fechas</th>
+            <th class="w-1/5 px-4 py-3 text-left font-bold">Horario</th>
+            <th class="w-1/12 px-4 py-3 text-left font-bold">Modalidad</th>
+            <th class="w-1/8 px-4 py-3 text-left font-bold">Estado</th>
+            <th class="px-4 py-3 text-right font-bold">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of cursosService.cursos(); track row.id) {
+            <tr class="animate-fade-in animate-duration-300 hover:bg-custom-yellow/50 border-t border-black/5 transition-all">
+              <td class="truncate px-4 py-3" [title]="row.parroquia.name">{{ row.parroquia.name }}</td>
+              <td class="px-4 py-3">
+                {{ row.startDate }} – {{ row.endDate }}
+                @if (row.finalizado) {
+                  <span class="ml-1 text-xs font-bold text-neutral-500">(terminado)</span>
+                }
+              </td>
+              <td class="px-4 py-3">{{ horarioLabel(row) }}</td>
+              <td class="px-4 py-3">{{ row.modalidad === 'en_linea' ? 'En línea' : 'Presencial' }}</td>
+              <td class="px-4 py-3">
+                <div [class]="row.isActive ? 'badge-active' : 'badge-inactive'">
+                  <lucide-icon
+                    [img]="row.isActive ? iconsService.active : iconsService.inactive"
+                    size="20"
+                    [color]="row.isActive ? 'green' : 'red'"
+                  ></lucide-icon>
+                  <span>{{ row.isActive ? 'Activo' : 'Inactivo' }}</span>
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex flex-wrap items-center justify-end gap-2">
+                  <button class="btn-table-warning" (click)="openEdit(row)">
+                    <div class="flex items-center justify-center gap-1">
+                      <lucide-icon [img]="iconsService.edit" size="15" />
+                      <span class="hidden text-xs 2xl:inline"> Editar </span>
+                    </div>
+                  </button>
+                  <button
+                    class="btn-table"
+                    [class]="
+                      !row.isActive
+                        ? 'border-green-200 bg-green-100 text-green-800'
+                        : 'border-red-200 bg-red-100 text-red-800'
+                    "
+                    (click)="confirmToggle(row, row.isActive ? 'deactivate' : 'activate')"
+                    [attr.aria-label]="
+                      (row.isActive ? 'Deshabilitar' : 'Habilitar') + ' curso de ' + row.parroquia.name
+                    "
+                  >
+                    <div class="flex items-center justify-center gap-1">
+                      <lucide-icon
+                        [img]="row.isActive ? iconsService.disable : iconsService.active"
+                        size="15"
+                        [color]="row.isActive ? 'red' : 'green'"
+                      ></lucide-icon>
+                      <span class="hidden text-xs 2xl:inline">
+                        {{ row.isActive ? 'Deshabilitar' : 'Habilitar' }}
+                      </span>
+                    </div>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <app-pagination
+      [total]="cursosService.totalCursos()"
+      [pageFrom]="pageFrom()"
+      [pageTo]="pageTo()"
+      [canPrev]="canPrev()"
+      [canNext]="canNext()"
+      [currentLimit]="pagination().limit"
+      (previousPage)="prevPage()"
+      (nextPage)="nextPage()"
+      (limitChange)="changeLimit($event)"
+    />
+  } @else {
+    <app-empty-state />
+  }
+
+  <app-modal
+    [isOpen]="mode() !== null"
+    [title]="modalTitle()"
+    [maxWidth]="'max-w-2xl'"
+    [showActions]="true"
+    [loading]="saving()"
+    [confirmDisabled]="formError() !== null"
+    [confirmText]="mode() === 'create' ? 'Crear' : 'Guardar'"
+    (close)="closeModal()"
+    (cancel)="closeModal()"
+    (confirm)="save()"
+  >
+    <form class="max-h-[80vh] space-y-4 overflow-y-auto" (submit)="$event.preventDefault()">
+      <div>
+        <label for="curso-parroquia" class="mb-2 block text-sm font-medium">
+          Parroquia <span class="text-red-500">*</span>
+        </label>
+        <select
+          id="curso-parroquia"
+          class="w-full rounded-xl border border-black/10 px-3 py-2"
+          [value]="form().parroquiaId"
+          (change)="updateField('parroquiaId', $event)"
+          required
+        >
+          <option value="">Selecciona una parroquia</option>
+          @for (p of parroquias(); track p.id) {
+            <option [value]="p.id">{{ p.name }} ({{ p.town }})</option>
+          }
+        </select>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label for="curso-inicio" class="mb-2 block text-sm font-medium">
+            Fecha de inicio <span class="text-red-500">*</span>
+          </label>
+          <input
+            id="curso-inicio"
+            type="date"
+            class="w-full rounded-xl border border-black/10 px-3 py-2"
+            [value]="form().startDate"
+            (input)="updateField('startDate', $event)"
+            required
+          />
+        </div>
+        <div>
+          <label for="curso-fin" class="mb-2 block text-sm font-medium">
+            Fecha de fin <span class="text-red-500">*</span>
+          </label>
+          <input
+            id="curso-fin"
+            type="date"
+            class="w-full rounded-xl border border-black/10 px-3 py-2"
+            [value]="form().endDate"
+            (input)="updateField('endDate', $event)"
+            required
+          />
+        </div>
+      </div>
+
+      <fieldset class="rounded-xl border border-black/10 p-4">
+        <legend class="px-1 text-sm font-medium">Horario de sesiones (opcional)</legend>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div>
+            <label for="curso-dia" class="mb-2 block text-sm font-medium">Día</label>
+            <select
+              id="curso-dia"
+              class="w-full rounded-xl border border-black/10 px-3 py-2"
+              [value]="form().diaSemana ?? ''"
+              (change)="updateDia($event)"
+            >
+              <option value="">Sin horario</option>
+              @for (d of diasSemana; track $index) {
+                <option [value]="$index">{{ d }}</option>
+              }
+            </select>
+          </div>
+          <div>
+            <label for="curso-hora-inicio" class="mb-2 block text-sm font-medium">Hora de inicio</label>
+            <input
+              id="curso-hora-inicio"
+              type="time"
+              class="w-full rounded-xl border border-black/10 px-3 py-2"
+              [value]="form().horaInicio"
+              (input)="updateField('horaInicio', $event)"
+            />
+          </div>
+          <div>
+            <label for="curso-hora-fin" class="mb-2 block text-sm font-medium">Hora de fin</label>
+            <input
+              id="curso-hora-fin"
+              type="time"
+              class="w-full rounded-xl border border-black/10 px-3 py-2"
+              [value]="form().horaFin"
+              (input)="updateField('horaFin', $event)"
+            />
+          </div>
+        </div>
+      </fieldset>
+
+      <div>
+        <label for="curso-modalidad" class="mb-2 block text-sm font-medium">Modalidad</label>
+        <select
+          id="curso-modalidad"
+          class="w-full rounded-xl border border-black/10 px-3 py-2"
+          [value]="form().modalidad"
+          (change)="updateModalidad($event)"
+        >
+          <option value="presencial">Presencial</option>
+          <option value="en_linea">En línea</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="curso-telefono" class="mb-2 block text-sm font-medium">Teléfono de informes</label>
+        <input
+          id="curso-telefono"
+          type="text"
+          class="w-full rounded-xl border border-black/10 px-3 py-2"
+          [value]="form().telefonoInformes"
+          (input)="updateField('telefonoInformes', $event)"
+        />
+      </div>
+
+      <div>
+        <label for="curso-notas" class="mb-2 block text-sm font-medium">Notas (opcional)</label>
+        <textarea
+          id="curso-notas"
+          rows="3"
+          class="w-full rounded-xl border border-black/10 px-3 py-2"
+          [value]="form().notas"
+          (input)="updateField('notas', $event)"
+        ></textarea>
+      </div>
+
+      @if (formError(); as error) {
+        <p class="text-sm font-bold text-red-500" role="alert">{{ error }}</p>
+      }
+    </form>
+  </app-modal>
+
+  <app-modal
+    [isOpen]="confirmingToggle()"
+    [title]="toggleConfirmTitle()"
+    [maxWidth]="'max-w-md'"
+    [showActions]="true"
+    confirmText="Confirmar"
+    (close)="closeToggleConfirmation()"
+    (cancel)="closeToggleConfirmation()"
+    (confirm)="executeToggle()"
+  >
+    <p class="text-sm text-neutral-600">{{ toggleConfirmMessage() }}</p>
+  </app-modal>
+</div>

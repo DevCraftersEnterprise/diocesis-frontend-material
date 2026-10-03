@@ -1,12 +1,27 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import type { CalendarOptions, EventClickArg } from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import rrulePlugin from '@fullcalendar/rrule';
 import { LucideAngularModule } from 'lucide-angular';
 import { combineLatest } from 'rxjs';
+import { Router, RouterLink } from '@angular/router';
 import { IsmaFaqService } from '../../admin/isma-faq/services/isma-faq';
 import { IsmaInformationService } from '../../admin/isma-information/services/isma-information';
+import { IsmaCursosService } from '../../admin/isma-cursos/services/isma-cursos';
 import { IsmaSpecialCasesService } from '../../admin/isma-special-cases/services/isma-special-cases';
 import { IsmaInformacion } from '../../core/models/isma-information.model';
+import { DIAS_SEMANA } from '../../core/models/isma-curso.model';
 import { IconsService } from '../../core/services/icons.service';
+import { cursoToEvents } from './isma-calendar';
 
 /**
  * Página pública "ISMA" (`/diocesis/isma`, Tarea 6.1/7.1). Información general
@@ -16,22 +31,39 @@ import { IconsService } from '../../core/services/icons.service';
  */
 @Component({
   selector: 'app-isma',
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, FullCalendarModule, RouterLink],
   templateUrl: './isma.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Isma implements OnInit {
   private readonly informationService = inject(IsmaInformationService);
+  private readonly router = inject(Router);
   protected readonly specialCasesService = inject(IsmaSpecialCasesService);
   protected readonly faqService = inject(IsmaFaqService);
+  protected readonly cursosService = inject(IsmaCursosService);
   protected readonly iconsService = inject(IconsService);
 
+  readonly diasSemana = DIAS_SEMANA;
   readonly information = signal<IsmaInformacion | null>(null);
   readonly loading = signal(true);
   readonly openCaseIds = signal<Set<string>>(new Set());
   readonly openFaqIds = signal<Set<string>>(new Set());
 
+  readonly calendarOptions = computed<CalendarOptions>(() => ({
+    plugins: [dayGridPlugin, rrulePlugin],
+    initialView: 'dayGridMonth',
+    locale: 'es',
+    height: 'auto',
+    headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
+    events: this.cursosService.cursos().flatMap((c) => cursoToEvents(c)),
+    eventClick: (arg: EventClickArg) => {
+      const id = arg.event.extendedProps['cursoId'] as string | undefined;
+      if (id) void this.router.navigate(['/diocesis/isma/cursos', id]);
+    },
+  }));
+
   ngOnInit(): void {
+    this.cursosService.getPublicCursos(0, 100).subscribe();
     combineLatest([
       this.informationService.getInformation(),
       this.specialCasesService.getCasosEspecialesPaginated(0, 100, { isActive: true }),

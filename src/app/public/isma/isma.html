@@ -112,6 +112,44 @@
       }
     </div>
 
+    <section class="bg-custom-white mt-6 overflow-hidden rounded-2xl p-8 shadow-xl">
+      <div class="flex items-center gap-4">
+        <div class="icon-chip">
+          <lucide-icon [img]="iconsService.calendar" size="18" />
+        </div>
+        <h2 class="text-custom-brown text-2xl font-bold">Próximos cursos</h2>
+      </div>
+
+      <div class="mt-6">
+        <full-calendar [options]="calendarOptions()" />
+      </div>
+
+      @if (cursosService.cursos().length > 0) {
+        <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          @for (curso of cursosService.cursos(); track curso.id) {
+            <a
+              [routerLink]="['/diocesis/isma/cursos', curso.id]"
+              class="flex flex-col gap-2 rounded-xl border border-black/10 p-4 no-underline transition-colors hover:border-black/20 hover:bg-custom-brown/5"
+            >
+              <h3 class="text-custom-brown font-bold">{{ curso.parroquia.name }}</h3>
+              <p class="text-sm text-neutral-600">{{ curso.parroquia.address }}, {{ curso.parroquia.town }}</p>
+              <p class="text-sm">
+                <strong>Del</strong> {{ curso.startDate }} <strong>al</strong> {{ curso.endDate }}
+              </p>
+              <p class="text-sm">
+                {{ curso.diaSemana !== null ? diasSemana[curso.diaSemana] + ' ' + curso.horaInicio + '–' + curso.horaFin : 'Horario por confirmar' }}
+              </p>
+              <p class="text-sm">
+                {{ curso.modalidad === 'en_linea' ? 'En línea (casos excepcionales)' : 'Presencial' }}
+              </p>
+            </a>
+          }
+        </div>
+      } @else {
+        <p class="mt-6 text-sm text-neutral-600">Por ahora no hay cursos programados.</p>
+      }
+    </section>
+
     @if (specialCasesService.specialCases().length > 0) {
       <div class="bg-custom-white mt-6 overflow-hidden rounded-2xl p-8 shadow-xl">
         <div class="flex items-center gap-4">
