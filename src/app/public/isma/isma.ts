@@ -10,6 +10,7 @@ import {
 import { FullCalendarModule } from '@fullcalendar/angular';
 import type { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import esLocale from '@fullcalendar/core/locales/es';
 import rrulePlugin from '@fullcalendar/rrule';
 import { LucideAngularModule } from 'lucide-angular';
 import { combineLatest } from 'rxjs';
@@ -54,6 +55,7 @@ export class Isma implements OnInit {
     plugins: [dayGridPlugin, rrulePlugin],
     initialView: 'dayGridMonth',
     locale: 'es',
+    locales: [esLocale],
     height: 'auto',
     headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
     events: this.cursosService.cursos().flatMap((c) => cursoToEvents(c)),
