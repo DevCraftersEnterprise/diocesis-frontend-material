@@ -2,36 +2,52 @@
   @if (loading()) {
     <p class="text-center">Cargando…</p>
   } @else if (information(); as info) {
-    <div class="bg-custom-white overflow-hidden rounded-lg p-8 shadow-xl">
-      <h1 class="text-custom-brown text-3xl font-bold">{{ info.name }}</h1>
+    <div class="mb-6 flex justify-center">
+      <img
+        src="/images/instituto-biblico.jpeg"
+        alt=""
+        class="h-44 w-auto object-contain sm:h-56"
+      />
+    </div>
+
+    <div class="bg-custom-white overflow-hidden rounded-2xl p-8 shadow-xl">
+      <h1 class="text-custom-brown text-center text-3xl font-bold">{{ info.name }}</h1>
 
       <p class="mt-6 leading-relaxed whitespace-pre-line">{{ info.description }}</p>
 
       @if (info.contactEmail || info.contactPhone) {
-        <div class="mt-8 border-t border-black/10 pt-6">
-          <h2 class="text-lg font-semibold">Contacto</h2>
-          <ul class="mt-2 space-y-1 text-sm">
-            @if (info.contactEmail) {
-              <li>
-                <a [href]="'mailto:' + info.contactEmail" class="underline">
+        <div class="mt-8 flex gap-4 border-t border-black/10 pt-6">
+          <div class="icon-chip">
+            <lucide-icon [img]="iconsService.phone" size="18" />
+          </div>
+          <div class="min-w-0 flex-1">
+            <h2 class="text-custom-brown text-lg font-bold">Contacto</h2>
+            <div class="mt-3 flex flex-wrap gap-2">
+              @if (info.contactEmail) {
+                <a
+                  [href]="'mailto:' + info.contactEmail"
+                  class="bg-custom-brown/5 hover:bg-custom-brown/10 text-custom-brown rounded-full px-4 py-2 text-sm font-medium no-underline transition-colors"
+                >
                   {{ info.contactEmail }}
                 </a>
-              </li>
-            }
-            @if (info.contactPhone) {
-              <li>
-                <a [href]="'tel:' + info.contactPhone" class="underline">
+              }
+              @if (info.contactPhone) {
+                <a
+                  [href]="'tel:' + info.contactPhone"
+                  class="bg-custom-brown/5 hover:bg-custom-brown/10 text-custom-brown flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium no-underline transition-colors"
+                >
+                  <lucide-icon [img]="iconsService.phone" size="14" />
                   {{ info.contactPhone }}
                 </a>
-              </li>
-            }
-          </ul>
+              }
+            </div>
+          </div>
         </div>
       }
     </div>
 
     @if (trainingsService.trainings().length > 0) {
-      <div class="bg-custom-white mt-6 overflow-hidden rounded-lg p-8 shadow-xl">
+      <div class="bg-custom-white mt-6 overflow-hidden rounded-2xl p-8 shadow-xl">
         <h2 class="text-custom-brown text-2xl font-bold">Oferta de capacitación</h2>
         <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
           @for (training of trainingsService.trainings(); track training.id) {
@@ -46,7 +62,7 @@
     }
 
     @if (coursesService.courses().length > 0) {
-      <div class="bg-custom-white mt-6 overflow-hidden rounded-lg p-8 shadow-xl">
+      <div class="bg-custom-white mt-6 overflow-hidden rounded-2xl p-8 shadow-xl">
         <h2 class="text-custom-brown text-2xl font-bold">Cursos activos</h2>
         <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
           @for (course of coursesService.courses(); track course.id) {
@@ -85,7 +101,7 @@
     }
 
     @if (venuesService.venues().length > 0) {
-      <div class="bg-custom-white mt-6 overflow-hidden rounded-lg p-8 shadow-xl">
+      <div class="bg-custom-white mt-6 overflow-hidden rounded-2xl p-8 shadow-xl">
         <h2 class="text-custom-brown text-2xl font-bold">Sedes</h2>
         <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
           @for (venue of venuesService.venues(); track venue.id) {
@@ -116,7 +132,7 @@
     }
 
     @if (eventsService.events().length > 0) {
-      <div class="bg-custom-white mt-6 overflow-hidden rounded-lg p-8 shadow-xl">
+      <div class="bg-custom-white mt-6 overflow-hidden rounded-2xl p-8 shadow-xl">
         <h2 class="text-custom-brown text-2xl font-bold">Calendario</h2>
         <div class="mt-4">
           <full-calendar [options]="calendarOptions()" />

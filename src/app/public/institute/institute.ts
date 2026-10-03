@@ -10,6 +10,7 @@ import {
 import { FullCalendarModule } from '@fullcalendar/angular';
 import type { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import { LucideAngularModule } from 'lucide-angular';
 import { combineLatest } from 'rxjs';
 import { InstituteInformationService } from '../../admin/institute-information/services/institute-information';
 import { InstituteCoursesService } from '../../admin/institute-courses/services/institute-courses';
@@ -20,6 +21,7 @@ import { Evento } from '../../core/models/institute-event.model';
 import { InstitutoInformacion } from '../../core/models/institute-information.model';
 import { Capacitacion } from '../../core/models/institute-training.model';
 import { CleanUrlPipe } from '../../core/pipes/clean-url.pipe';
+import { IconsService } from '../../core/services/icons.service';
 
 const MODALITY_LABELS: Record<Capacitacion['modality'], string> = {
   presencial: 'Presencial',
@@ -47,7 +49,7 @@ const TYPE_COLORS: Record<Evento['type'], string> = {
  */
 @Component({
   selector: 'app-institute',
-  imports: [CommonModule, CleanUrlPipe, FullCalendarModule],
+  imports: [CommonModule, CleanUrlPipe, FullCalendarModule, LucideAngularModule],
   templateUrl: './institute.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -57,6 +59,7 @@ export class Institute implements OnInit {
   protected readonly coursesService = inject(InstituteCoursesService);
   protected readonly venuesService = inject(InstituteVenuesService);
   protected readonly eventsService = inject(InstituteEventsService);
+  protected readonly iconsService = inject(IconsService);
 
   readonly modalityLabels = MODALITY_LABELS;
   readonly typeLabels = TYPE_LABELS;
