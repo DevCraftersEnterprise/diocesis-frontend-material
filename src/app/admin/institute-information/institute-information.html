@@ -9,70 +9,92 @@
   @if (loading()) {
     <p>Cargando…</p>
   } @else {
-    <form class="max-w-2xl space-y-4" (submit)="$event.preventDefault()">
-      <div>
-        <label for="ib-name" class="mb-2 block text-sm font-medium">
-          Nombre <span class="text-red-500">*</span>
-        </label>
-        <input
-          id="ib-name"
-          type="text"
-          class="input"
-          [value]="form().name"
-          (input)="updateName($event)"
-          required
-        />
+    <form
+      class="mx-auto max-w-3xl space-y-6 rounded-2xl border border-black/10 bg-white p-6 shadow-sm sm:p-8"
+      (submit)="$event.preventDefault()"
+    >
+      <div class="flex gap-4">
+        <div class="icon-chip">
+          <lucide-icon [img]="iconsService.institute" size="18" />
+        </div>
+        <div class="min-w-0 flex-1">
+          <label for="ib-name" class="mb-2 block text-sm font-medium">
+            Nombre <span class="text-red-500">*</span>
+          </label>
+          <input
+            id="ib-name"
+            type="text"
+            class="input"
+            [value]="form().name"
+            (input)="updateName($event)"
+            required
+          />
+        </div>
       </div>
 
-      <div>
-        <label for="ib-description" class="mb-2 block text-sm font-medium">
-          Descripción <span class="text-red-500">*</span>
-        </label>
-        <textarea
-          id="ib-description"
-          rows="6"
-          class="input"
-          [value]="form().description"
-          (input)="updateDescription($event)"
-          required
-        ></textarea>
+      <div class="flex gap-4 border-t border-black/10 pt-6">
+        <div class="icon-chip">
+          <lucide-icon [img]="iconsService.articles" size="18" />
+        </div>
+        <div class="min-w-0 flex-1">
+          <label for="ib-description" class="mb-2 block text-sm font-medium">
+            Descripción <span class="text-red-500">*</span>
+          </label>
+          <textarea
+            id="ib-description"
+            rows="6"
+            class="input"
+            [value]="form().description"
+            (input)="updateDescription($event)"
+            required
+          ></textarea>
+        </div>
       </div>
 
-      <div>
-        <label for="ib-email" class="mb-2 block text-sm font-medium">
-          Correo de contacto
-        </label>
-        <input
-          id="ib-email"
-          type="email"
-          class="input"
-          [value]="form().contactEmail"
-          (input)="updateContactEmail($event)"
-          placeholder="instituto@ejemplo.com"
-        />
+      <div class="flex gap-4 border-t border-black/10 pt-6">
+        <div class="icon-chip">
+          <lucide-icon [img]="iconsService.phone" size="18" />
+        </div>
+        <div class="min-w-0 flex-1 space-y-4">
+          <div>
+            <label for="ib-email" class="mb-2 block text-sm font-medium">
+              Correo de contacto
+            </label>
+            <input
+              id="ib-email"
+              type="email"
+              class="input"
+              [value]="form().contactEmail"
+              (input)="updateContactEmail($event)"
+              placeholder="instituto@ejemplo.com"
+            />
+          </div>
+
+          <div>
+            <label for="ib-phone" class="mb-2 block text-sm font-medium">
+              Teléfono de contacto
+            </label>
+            <input
+              id="ib-phone"
+              type="tel"
+              class="input"
+              [value]="form().contactPhone"
+              (input)="updateContactPhone($event)"
+            />
+          </div>
+        </div>
       </div>
 
-      <div>
-        <label for="ib-phone" class="mb-2 block text-sm font-medium">
-          Teléfono de contacto
-        </label>
-        <input
-          id="ib-phone"
-          type="tel"
-          class="input"
-          [value]="form().contactPhone"
-          (input)="updateContactPhone($event)"
-        />
+      <div class="border-t border-black/10 pt-6">
+        <button
+          type="button"
+          class="btn-primary"
+          [disabled]="saving() || !isFormValid()"
+          (click)="save()"
+        >
+          {{ saving() ? 'Guardando…' : 'Guardar cambios' }}
+        </button>
       </div>
-
-      <button
-        type="button"
-        class="btn-primary"
-        [disabled]="saving() || !isFormValid()"
-        (click)="save()"
-      >
-        {{ saving() ? 'Guardando…' : 'Guardar cambios' }}
-      </button>
     </form>
   }
 </div>

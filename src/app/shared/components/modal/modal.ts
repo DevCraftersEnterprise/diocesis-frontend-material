@@ -43,7 +43,7 @@ export class ModalComponent {
   confirm = output<void>();
 
   protected containerClasses(): string {
-    return `relative bg-white w-full rounded-2xl border border-black/10 p-6 shadow-xl ${this.maxWidth()}`;
+    return `relative bg-white w-full rounded-3xl border border-black/5 p-6 shadow-2xl ring-1 ring-black/5 ${this.maxWidth()}`;
   }
 
   protected handleOverlayClick(): void {

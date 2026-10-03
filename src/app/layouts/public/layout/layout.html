@@ -1,17 +1,19 @@
 <div class="flex h-dvh flex-col">
   <!-- Header -->
-  <header class="bg-custom-brown sticky top-0 z-30 border-b border-black/30 shadow-lg">
+  <header
+    class="bg-custom-brown sticky top-0 z-30 border-b border-black/30 shadow-[0_6px_18px_rgba(0,0,0,0.12)]"
+  >
     <div class="flex h-16 items-center justify-between gap-6 px-4 lg:px-8">
       <!-- Logo y Título -->
       <div class="flex items-center gap-3">
         <img src="/images/logo-normal-transparente.png" alt="Logo Diócesis" class="h-12 w-auto" />
-        <h1 class="text-custom-white hidden text-lg font-bold md:block">
+        <h1 class="text-custom-white hidden text-lg font-bold whitespace-nowrap md:block">
           Diócesis de Ciudad Obregón
         </h1>
       </div>
 
       <!-- Navegación Desktop -->
-      <nav class="hidden flex-1 justify-center xl:flex">
+      <nav class="hidden flex-1 justify-center 2xl:flex">
         <ul class="flex items-center gap-1">
           @for (item of navItems; track item.label) {
             @if (item.children) {
@@ -19,20 +21,25 @@
               <li class="group relative">
                 <button
                   type="button"
-                  class="text-custom-white hover:bg-custom-white/10 flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors"
+                  class="hover:bg-custom-white/10 flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors"
+                  [class.text-custom-white]="!isGroupActive(item)"
+                  [class.bg-custom-white/15]="isGroupActive(item)"
+                  [class.text-custom-yellow]="isGroupActive(item)"
+                  [class.font-semibold]="isGroupActive(item)"
                 >
                   <lucide-icon *ngIf="item.icon" [img]="item.icon" size="18" />
                   {{ item.label }}
                 </button>
                 <!-- Dropdown -->
                 <div
-                  class="bg-custom-brown invisible absolute top-full left-0 mt-1 w-48 rounded-md opacity-0 shadow-lg ring-1 ring-black/10 transition-all group-hover:visible group-hover:opacity-100"
+                  class="bg-custom-brown invisible absolute top-full left-0 mt-1 w-52 -translate-y-1 rounded-xl opacity-0 shadow-xl ring-1 ring-black/10 transition-all duration-200 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"
                 >
-                  <ul class="py-1">
+                  <ul class="py-1.5">
                     @for (child of item.children; track child.label) {
                       <li>
                         <a
                           [routerLink]="child.to"
+                          routerLinkActive="bg-custom-white/15 text-custom-yellow font-semibold"
                           class="text-custom-white hover:bg-custom-white/10 flex items-center gap-2 px-4 py-2 text-sm transition-colors"
                           (click)="closeOnNavigate()"
                         >
@@ -49,6 +56,7 @@
               <li>
                 <a
                   [routerLink]="item.to"
+                  routerLinkActive="bg-custom-white/15 text-custom-yellow font-semibold"
                   class="text-custom-white hover:bg-custom-white/10 flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors"
                 >
                   <lucide-icon *ngIf="item.icon" [img]="item.icon" size="18" />
@@ -64,7 +72,7 @@
       <button
         type="button"
         (click)="toggle()"
-        class="text-custom-white hover:bg-custom-white/10 rounded-md p-2 transition-colors xl:hidden"
+        class="text-custom-white hover:bg-custom-white/10 rounded-md p-2 transition-colors 2xl:hidden"
         [attr.aria-label]="open() ? 'Cerrar menú' : 'Abrir menú'"
       >
         <lucide-angular [img]="iconsService.menu" [size]="24" />
@@ -81,16 +89,24 @@
   @if (open()) {
     <!-- Overlay -->
     <div
-      class="animate-fade-in fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-all duration-300 ease-out xl:hidden"
+      class="animate-fade-in fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-all duration-300 ease-out 2xl:hidden"
       (click)="toggle()"
     ></div>
 
     <!-- Sidebar -->
     <aside
-      class="animate-fade-in-left bg-custom-brown fixed top-0 right-0 z-50 h-full w-80 overflow-y-auto shadow-2xl transition-transform duration-300 ease-out xl:hidden"
+      class="animate-fade-in-left bg-custom-brown scrollbar-themed fixed top-0 right-0 z-50 h-full w-80 overflow-y-auto shadow-2xl transition-transform duration-300 ease-out 2xl:hidden"
     >
-      <div class="flex h-16 items-center justify-start border-b border-white/10 px-4">
-        <h2 class="text-custom-white text-center text-lg font-bold">Diócesis de Ciudad Obregón</h2>
+      <div class="flex h-16 items-center justify-between border-b border-white/10 px-4">
+        <h2 class="text-custom-white text-lg font-bold">Diócesis de Ciudad Obregón</h2>
+        <button
+          type="button"
+          (click)="toggle()"
+          class="text-custom-white hover:bg-custom-white/10 rounded-lg p-2 transition-colors"
+          aria-label="Cerrar menú"
+        >
+          <span aria-hidden="true">✕</span>
+        </button>
       </div>
 
       <nav class="p-4">
@@ -102,7 +118,10 @@
                 <button
                   type="button"
                   (click)="toggleSubmenu(item.label)"
-                  class="text-custom-white hover:bg-custom-white/10 flex w-full items-center gap-2 rounded-md px-4 py-3 text-left font-medium transition-colors"
+                  class="hover:bg-custom-white/10 flex w-full items-center gap-2 rounded-md px-4 py-3 text-left font-medium transition-colors"
+                  [class.text-custom-white]="!isGroupActive(item)"
+                  [class.bg-custom-white/15]="isGroupActive(item)"
+                  [class.text-custom-yellow]="isGroupActive(item)"
                 >
                   <lucide-icon *ngIf="item.icon" [img]="item.icon" size="18" />
                   {{ item.label }}
@@ -113,6 +132,7 @@
                       <li>
                         <a
                           [routerLink]="child.to"
+                          routerLinkActive="bg-custom-white/15 text-custom-yellow"
                           class="text-custom-white/80 hover:text-custom-white hover:bg-custom-white/10 flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
                           (click)="closeOnNavigate()"
                         >
@@ -129,6 +149,7 @@
               <li>
                 <a
                   [routerLink]="item.to"
+                  routerLinkActive="bg-custom-white/15 text-custom-yellow"
                   class="text-custom-white hover:bg-custom-white/10 flex items-center gap-2 rounded-md px-4 py-3 font-medium transition-colors"
                   (click)="closeOnNavigate()"
                 >

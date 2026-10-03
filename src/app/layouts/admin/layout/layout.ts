@@ -104,6 +104,11 @@ export class Layout implements OnInit {
           to: '/dashboard/isma/faq',
           requiredModuleAccess: 'isma',
         },
+        {
+          label: 'Cursos y calendario',
+          to: '/dashboard/isma/cursos',
+          requiredModuleAccess: 'isma',
+        },
       ],
     },
   ];
@@ -134,6 +139,14 @@ export class Layout implements OnInit {
     if (user.role === 'admin' || user.role === 'super') return true;
     return (user.moduleAccess ?? []).includes(item.requiredModuleAccess);
   }
+
+  userInitials = computed(() => {
+    const username = this.authService.user()?.username;
+    if (!username) return '··';
+    const parts = username.trim().split(/[\s._-]+/).filter(Boolean);
+    const initials = parts.length > 1 ? parts[0][0] + parts[1][0] : username.slice(0, 2);
+    return initials.toUpperCase();
+  });
 
   toggleSubmenu(label: string): void {
     this.openSubmenus.update((submenus) => {

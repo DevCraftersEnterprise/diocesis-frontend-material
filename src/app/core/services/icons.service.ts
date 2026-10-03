@@ -8,6 +8,7 @@ import {
   Calendar1,
   Church,
   CircleUserRound,
+  Clock,
   Copy,
   Download,
   Earth,
@@ -37,6 +38,7 @@ import {
   Network,
   Newspaper,
   Pen,
+  Phone,
   Plus,
   Search,
   ShieldCheck,
@@ -108,4 +110,6 @@ export class IconsService {
   readonly church = Church;
   readonly institute = Library;
   readonly isma = HeartHandshake;
+  readonly clock = Clock;
+  readonly phone = Phone;
 }

@@ -114,6 +114,12 @@ export const routes: Routes = [
         loadComponent: () => import('./admin/isma-faq/isma-faq').then((m) => m.IsmaFaqComponent),
       },
       {
+        path: 'isma/cursos',
+        canActivate: [moduleAccessGuard('isma')],
+        loadComponent: () =>
+          import('./admin/isma-cursos/isma-cursos').then((m) => m.IsmaCursosComponent),
+      },
+      {
         path: '**',
         redirectTo: 'users',
       },
@@ -167,6 +173,13 @@ export const routes: Routes = [
       {
         path: 'diocesis/isma',
         loadComponent: () => import('./public/isma/isma').then((m) => m.Isma),
+      },
+      {
+        path: 'diocesis/isma/cursos/:id',
+        loadComponent: () =>
+          import('./public/isma/isma-curso-detail/isma-curso-detail').then(
+            (m) => m.IsmaCursoDetailComponent,
+          ),
       },
       {
         path: '**',
