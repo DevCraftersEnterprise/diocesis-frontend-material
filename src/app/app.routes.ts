@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { moduleAccessGuard } from './core/guards/module-access.guard';
+import { adminOnlyGuard } from './core/guards/admin-only.guard';
 import { ReverendDetails } from './public/reverend-details/reverend-details';
 
 export const routes: Routes = [
@@ -15,6 +16,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'users',
+        canActivate: [adminOnlyGuard],
         loadComponent: () => import('./admin/users/users').then((m) => m.UsersComponent),
       },
       {

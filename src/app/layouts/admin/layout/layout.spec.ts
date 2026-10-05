@@ -67,9 +67,9 @@ describe('Layout (admin) — filtro de moduleAccess en el sidebar', () => {
     await fixture.whenStable();
   });
 
-  it('sin usuario cargado: los 9 modulos existentes se ven; Instituto Bíblico/ISMA no', () => {
-    expect(labels()).toContain('Usuarios');
-    expect(labels()).toContain('Documentos');
+  it('sin usuario cargado: no se ve ningun grupo ni modulo general', () => {
+    expect(labels()).not.toContain('Usuarios');
+    expect(labels()).not.toContain('Documentos');
     expect(labels()).not.toContain('Instituto Bíblico');
     expect(labels()).not.toContain('ISMA');
   });
@@ -135,10 +135,14 @@ describe('Layout (admin) — filtro de moduleAccess en el sidebar', () => {
     expect(labels()).toContain('ISMA');
   });
 
-  it('los 9 modulos existentes siempre son visibles, sin importar el rol/moduleAccess', () => {
-    authStub.user.set(fakeUser({ role: 'user', moduleAccess: [] }));
+  it('los 9 modulos generales solo los ven admin y super', () => {
+    authStub.user.set(fakeUser({ role: 'user', moduleAccess: ['isma'] }));
     fixture.detectChanges();
+    expect(labels()).not.toContain('Usuarios');
+    expect(labels()).not.toContain('Carrusel');
 
+    authStub.user.set(fakeUser({ role: 'admin', moduleAccess: [] }));
+    fixture.detectChanges();
     for (const label of [
       'Usuarios',
       'Carrusel',
