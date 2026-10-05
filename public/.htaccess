@@ -43,7 +43,7 @@
 # El index.html no se cachea: asi cada visita pide la version publicada y no una vieja.
 # Los JS/CSS llevan hash en el nombre, por eso pueden cachearse sin problema.
 <IfModule mod_headers.c>
-  <FilesMatch "^index.html$">
+  <FilesMatch "^index\.html$">
     Header set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
 </IfModule>
