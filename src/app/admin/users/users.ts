@@ -10,6 +10,7 @@ import {
 import { LucideAngularModule } from 'lucide-angular';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, EMPTY } from 'rxjs';
+import { Auth } from '../../public/login/services/auth';
 import { AppModuleName, MODULE_ACCESS_OPTIONS, User, UserRole } from '../../core/models/user.model';
 import { IconsService } from '../../core/services/icons.service';
 import { EmptyState } from '../../shared/components/empty-state/empty-state';
@@ -39,6 +40,11 @@ export class UsersComponent implements OnInit {
   private readonly toastrService = inject(ToastrService);
   protected readonly usersService = inject(Users);
   protected readonly iconsService = inject(IconsService);
+  protected readonly authService = inject(Auth);
+
+  readonly resetTarget = signal<User | null>(null);
+  readonly resetResult = signal<{ username: string; password: string } | null>(null);
+  readonly resetting = signal(false);
 
   readonly confirmingToggle = signal(false);
   readonly targetUser = signal<User | null>(null);
@@ -251,6 +257,50 @@ export class UsersComponent implements OnInit {
         this.saving.set(false);
       },
     });
+  }
+
+  canResetPassword(row: User): boolean {
+    const role = this.authService.user()?.role;
+    if (role !== 'super' && role !== 'admin') return false;
+    return !(role === 'admin' && row.role === 'super');
+  }
+
+  confirmReset(row: User): void {
+    this.resetTarget.set(row);
+  }
+
+  closeReset(): void {
+    this.resetTarget.set(null);
+  }
+
+  executeReset(): void {
+    const target = this.resetTarget();
+    if (!target) return;
+    this.resetting.set(true);
+    this.usersService.resetPassword(target.id).subscribe({
+      next: (res) => {
+        this.resetResult.set({ username: target.username, password: res.password });
+        this.closeReset();
+        this.resetting.set(false);
+      },
+      error: () => {
+        this.toastrService.error('No se pudo resetear la contraseña', 'Error');
+        this.resetting.set(false);
+      },
+    });
+  }
+
+  closeResetResult(): void {
+    this.resetResult.set(null);
+  }
+
+  async copyResetPassword(password: string): Promise<void> {
+    try {
+      await navigator.clipboard.writeText(password);
+      this.toastrService.success('Contraseña copiada', 'Listo');
+    } catch {
+      this.toastrService.error('No se pudo copiar; cópiala manualmente', 'Error');
+    }
   }
 
   confirmToggleUser(user: User, action: 'activate' | 'deactivate') {

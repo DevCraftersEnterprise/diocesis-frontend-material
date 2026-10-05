@@ -12,6 +12,8 @@ import {
   Copy,
   Download,
   Earth,
+  Eye,
+  EyeOff,
   File,
   FileImage,
   FilePlusCorner,
@@ -30,6 +32,7 @@ import {
   Landmark,
   Library,
   LogOut,
+  KeyRound,
   Map,
   MapPin,
   MapPinHouse,
@@ -68,6 +71,9 @@ export class IconsService {
   readonly next = ArrowRight;
   readonly previous = ArrowLeft;
   readonly edit = Pen;
+  readonly resetPassword = KeyRound;
+  readonly eye = Eye;
+  readonly eyeOff = EyeOff;
   readonly disable = ShieldOff;
   readonly upload = Upload;
   readonly carousel = ImagePlay;

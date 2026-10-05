@@ -2,11 +2,13 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { LucideAngularModule } from 'lucide-angular';
+import { IconsService } from '../../core/services/icons.service';
 import { Auth } from './services/auth';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, LucideAngularModule],
   templateUrl: './login.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -15,9 +17,15 @@ export class Login {
   private readonly auth = inject(Auth);
   private readonly router = inject(Router);
   private readonly toast = inject(ToastrService);
+  protected readonly iconsService = inject(IconsService);
 
   protected readonly date = new Date();
   protected readonly loading = signal(false);
+  protected readonly showPassword = signal(false);
+
+  togglePassword(): void {
+    this.showPassword.update((v) => !v);
+  }
 
   protected readonly form = this.fb.nonNullable.group({
     user: ['', Validators.required],
