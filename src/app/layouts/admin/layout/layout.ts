@@ -134,7 +134,7 @@ export class Layout implements OnInit {
   }
 
   private itemVisible(item: NavItem, user: User | null): boolean {
-    if (!item.requiredModuleAccess) return true;
+    if (!item.requiredModuleAccess) return user?.role === 'admin' || user?.role === 'super';
     if (!user) return false;
     if (user.role === 'admin' || user.role === 'super') return true;
     return (user.moduleAccess ?? []).includes(item.requiredModuleAccess);
