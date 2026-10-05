@@ -11,7 +11,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401 || error.status === 403) {
+      // 401 = token inválido o expirado. 403 = sesión válida sin permiso para esa acción:
+      // no debe cerrar la sesión.
+      if (error.status === 401) {
         console.warn('Token inválido o expirado. Cerrando sesión...');
         auth.logout();
         router.navigate(['/login']);
