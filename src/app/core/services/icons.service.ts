@@ -12,6 +12,8 @@ import {
   Copy,
   Download,
   Earth,
+  Eye,
+  EyeOff,
   File,
   FileImage,
   FilePlusCorner,
@@ -70,6 +72,8 @@ export class IconsService {
   readonly previous = ArrowLeft;
   readonly edit = Pen;
   readonly resetPassword = KeyRound;
+  readonly eye = Eye;
+  readonly eyeOff = EyeOff;
   readonly disable = ShieldOff;
   readonly upload = Upload;
   readonly carousel = ImagePlay;
