@@ -120,10 +120,6 @@
         <h2 class="text-custom-brown text-2xl font-bold">Próximos cursos</h2>
       </div>
 
-      <div class="mt-6">
-        <full-calendar [options]="calendarOptions()" />
-      </div>
-
       @if (cursosService.cursos().length > 0) {
         <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
           @for (curso of cursosService.cursos(); track curso.id) {
@@ -131,6 +127,7 @@
               [routerLink]="['/diocesis/isma/cursos', curso.id]"
               class="flex flex-col gap-2 rounded-xl border border-black/10 p-4 no-underline transition-colors hover:border-black/20 hover:bg-custom-brown/5"
             >
+              <span class="text-xs font-bold uppercase tracking-wide text-custom-brown/60">Curso ISMA</span>
               <h3 class="text-custom-brown font-bold">{{ curso.parroquia.name }}</h3>
               <p class="text-sm text-neutral-600">{{ curso.parroquia.address }}, {{ curso.parroquia.town }}</p>
               <p class="text-sm">
