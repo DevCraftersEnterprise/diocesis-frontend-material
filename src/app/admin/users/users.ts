@@ -284,7 +284,7 @@ export class UsersComponent implements OnInit {
         this.resetting.set(false);
       },
       error: () => {
-        this.toastrService.error('No se pudo resetear la contraseña', 'Error');
+        this.toastrService.error('No se pudo restablecer la contraseña', 'Error');
         this.resetting.set(false);
       },
     });

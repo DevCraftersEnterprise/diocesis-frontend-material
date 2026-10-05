@@ -128,13 +128,13 @@
                   </button>
                   @if (canResetPassword(row)) {
                   <button
-                    class="btn-table-info"
+                    class="btn-table-info w-12 whitespace-nowrap 2xl:w-auto 2xl:px-3"
                     (click)="confirmReset(row)"
-                    [attr.aria-label]="'Resetear contraseña de ' + row.username"
+                    [attr.aria-label]="'Restablecer contraseña de ' + row.username"
                   >
                     <div class="flex items-center justify-center gap-1">
                       <lucide-icon [img]="iconsService.resetPassword" size="15" />
-                      <span class="hidden text-xs 2xl:inline">Resetear</span>
+                      <span class="hidden text-xs 2xl:inline">Restablecer</span>
                     </div>
                   </button>
                 }
@@ -358,11 +358,11 @@
 
   <app-modal
     [isOpen]="resetTarget() !== null"
-    title="Resetear contraseña"
+    title="Restablecer contraseña"
     [maxWidth]="'max-w-md'"
     [showActions]="true"
     [loading]="resetting()"
-    confirmText="Resetear"
+    confirmText="Restablecer"
     (close)="closeReset()"
     (cancel)="closeReset()"
     (confirm)="executeReset()"
