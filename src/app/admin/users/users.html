@@ -126,6 +126,18 @@
                       <span class="hidden text-xs 2xl:inline"> Editar </span>
                     </div>
                   </button>
+                  @if (canResetPassword(row)) {
+                  <button
+                    class="btn-table-info"
+                    (click)="confirmReset(row)"
+                    [attr.aria-label]="'Resetear contraseña de ' + row.username"
+                  >
+                    <div class="flex items-center justify-center gap-1">
+                      <lucide-icon [img]="iconsService.resetPassword" size="15" />
+                      <span class="hidden text-xs 2xl:inline">Resetear</span>
+                    </div>
+                  </button>
+                }
                   <button
                     class="btn-table"
                     [class]="
@@ -342,5 +354,38 @@
     (confirm)="executeToggle()"
   >
     <p class="text-sm text-neutral-600">{{ toggleConfirmMessage() }}</p>
+  </app-modal>
+
+  <app-modal
+    [isOpen]="resetTarget() !== null"
+    title="Resetear contraseña"
+    [maxWidth]="'max-w-md'"
+    [showActions]="true"
+    [loading]="resetting()"
+    confirmText="Resetear"
+    (close)="closeReset()"
+    (cancel)="closeReset()"
+    (confirm)="executeReset()"
+  >
+    <p class="text-sm text-neutral-600">
+      Se generará una contraseña nueva para <strong>{{ resetTarget()?.username }}</strong>. La anterior dejará de funcionar.
+    </p>
+  </app-modal>
+
+  <app-modal
+    [isOpen]="resetResult() !== null"
+    title="Contraseña nueva"
+    [maxWidth]="'max-w-md'"
+    [showActions]="false"
+    (close)="closeResetResult()"
+  >
+    @if (resetResult(); as r) {
+      <p class="text-sm">Nueva contraseña de <strong>{{ r.username }}</strong>:</p>
+      <p class="mt-2 break-all rounded-xl bg-neutral-100 p-3 font-mono text-lg">{{ r.password }}</p>
+      <p class="mt-2 text-xs text-neutral-500">Se muestra una sola vez. Compártela y pide que la cambie.</p>
+      <button type="button" class="btn-primary mt-4 w-full" (click)="copyResetPassword(r.password)">
+        Copiar contraseña
+      </button>
+    }
   </app-modal>
 </div>

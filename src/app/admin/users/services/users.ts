@@ -49,6 +49,13 @@ export class Users {
     return this.http.put(`${this.apiUrl}/users/usuarios/${id}/`, data);
   }
 
+  resetPassword(id: string) {
+    return this.http.post<{ mensaje: string; password: string }>(
+      `${this.apiUrl}/users/usuarios/reset-password/${id}/`,
+      {},
+    );
+  }
+
   changeUserStatus(id: string) {
     return this.http.put(`${this.apiUrl}/users/usuarios/cambiar-estado/${id}/`, {});
   }

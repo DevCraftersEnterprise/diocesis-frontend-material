@@ -30,6 +30,7 @@ import {
   Landmark,
   Library,
   LogOut,
+  KeyRound,
   Map,
   MapPin,
   MapPinHouse,
@@ -68,6 +69,7 @@ export class IconsService {
   readonly next = ArrowRight;
   readonly previous = ArrowLeft;
   readonly edit = Pen;
+  readonly resetPassword = KeyRound;
   readonly disable = ShieldOff;
   readonly upload = Upload;
   readonly carousel = ImagePlay;
