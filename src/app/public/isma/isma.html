@@ -24,10 +24,15 @@
           {{ info.introduccion }}
         </p>
       </div>
+    </div>
 
-      <section class="mt-8 flex gap-4 border-t border-black/10 pt-6">
-        <div class="icon-chip">
-          <lucide-icon [img]="iconsService.clock" size="18" />
+    <!-- Cada tema va en su propia tarjeta con fondo alterno, en vez de una lista de
+         fichas identicas separadas por lineas (el "efecto Wikipedia" que reporto el
+         cliente): asi se siente como una serie de tarjetas, no como un articulo. -->
+    <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <section class="bg-white flex gap-4 rounded-2xl p-6 shadow-sm">
+        <div class="bg-custom-yellow text-custom-brown grid h-12 w-12 shrink-0 place-items-center rounded-2xl">
+          <lucide-icon [img]="iconsService.clock" size="20" />
         </div>
         <div class="min-w-0 flex-1">
           <h2 class="text-custom-brown text-lg font-bold">Tiempos de anticipación</h2>
@@ -35,9 +40,9 @@
         </div>
       </section>
 
-      <section class="mt-6 flex gap-4 border-t border-black/10 pt-6">
-        <div class="icon-chip">
-          <lucide-icon [img]="iconsService.documents" size="18" />
+      <section class="bg-custom-yellow/10 flex gap-4 rounded-2xl p-6 shadow-sm">
+        <div class="bg-custom-yellow text-custom-brown grid h-12 w-12 shrink-0 place-items-center rounded-2xl">
+          <lucide-icon [img]="iconsService.documents" size="20" />
         </div>
         <div class="min-w-0 flex-1">
           <h2 class="text-custom-brown text-lg font-bold">Documentación necesaria</h2>
@@ -47,9 +52,9 @@
         </div>
       </section>
 
-      <section class="mt-6 flex gap-4 border-t border-black/10 pt-6">
-        <div class="icon-chip">
-          <lucide-icon [img]="iconsService.church" size="18" />
+      <section class="bg-white flex gap-4 rounded-2xl p-6 shadow-sm">
+        <div class="bg-custom-yellow text-custom-brown grid h-12 w-12 shrink-0 place-items-center rounded-2xl">
+          <lucide-icon [img]="iconsService.church" size="20" />
         </div>
         <div class="min-w-0 flex-1">
           <h2 class="text-custom-brown text-lg font-bold">Parroquia correspondiente</h2>
@@ -59,9 +64,9 @@
         </div>
       </section>
 
-      <section class="mt-6 flex gap-4 border-t border-black/10 pt-6">
-        <div class="icon-chip">
-          <lucide-icon [img]="iconsService.user" size="18" />
+      <section class="bg-custom-yellow/10 flex gap-4 rounded-2xl p-6 shadow-sm">
+        <div class="bg-custom-yellow text-custom-brown grid h-12 w-12 shrink-0 place-items-center rounded-2xl">
+          <lucide-icon [img]="iconsService.user" size="20" />
         </div>
         <div class="min-w-0 flex-1">
           <h2 class="text-custom-brown text-lg font-bold">Entrevista con el párroco</h2>
@@ -69,9 +74,9 @@
         </div>
       </section>
 
-      <section class="mt-6 flex gap-4 border-t border-black/10 pt-6">
-        <div class="icon-chip">
-          <lucide-icon [img]="iconsService.graduationCap" size="18" />
+      <section class="bg-white flex gap-4 rounded-2xl p-6 shadow-sm">
+        <div class="bg-custom-yellow text-custom-brown grid h-12 w-12 shrink-0 place-items-center rounded-2xl">
+          <lucide-icon [img]="iconsService.graduationCap" size="20" />
         </div>
         <div class="min-w-0 flex-1">
           <h2 class="text-custom-brown text-lg font-bold">Programa ISMA</h2>
@@ -80,9 +85,9 @@
       </section>
 
       @if (info.contactoTelefono1 || info.contactoTelefono2) {
-        <section class="mt-6 flex gap-4 border-t border-black/10 pt-6">
-          <div class="icon-chip">
-            <lucide-icon [img]="iconsService.phone" size="18" />
+        <section class="bg-custom-yellow/10 flex gap-4 rounded-2xl p-6 shadow-sm">
+          <div class="bg-custom-yellow text-custom-brown grid h-12 w-12 shrink-0 place-items-center rounded-2xl">
+            <lucide-icon [img]="iconsService.phone" size="20" />
           </div>
           <div class="min-w-0 flex-1">
             <h2 class="text-custom-brown text-lg font-bold">Contacto</h2>
@@ -90,7 +95,7 @@
               @if (info.contactoTelefono1) {
                 <a
                   [href]="'tel:' + info.contactoTelefono1"
-                  class="bg-custom-brown/5 hover:bg-custom-brown/10 text-custom-brown flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium no-underline transition-colors"
+                  class="bg-white hover:bg-custom-brown/10 text-custom-brown flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium no-underline transition-colors"
                 >
                   <lucide-icon [img]="iconsService.phone" size="14" />
                   {{ info.contactoTelefono1 }}
@@ -99,7 +104,7 @@
               @if (info.contactoTelefono2) {
                 <a
                   [href]="'tel:' + info.contactoTelefono2"
-                  class="bg-custom-brown/5 hover:bg-custom-brown/10 text-custom-brown flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium no-underline transition-colors"
+                  class="bg-white hover:bg-custom-brown/10 text-custom-brown flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium no-underline transition-colors"
                 >
                   <lucide-icon [img]="iconsService.phone" size="14" />
                   {{ info.contactoTelefono2 }}
