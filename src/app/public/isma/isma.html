@@ -13,16 +13,20 @@
     <div class="bg-custom-white overflow-hidden rounded-2xl p-8 shadow-xl">
       <h1 class="sr-only">ISMA</h1>
       <p class="text-custom-brown/70 text-center text-sm font-semibold tracking-wide uppercase">
-        Instituto Superior de Formación Matrimonial
+        Iniciación al Sacramento del Matrimonio
       </p>
 
-      <section class="mt-8 flex gap-4">
+      <p class="text-custom-brown mt-6 text-center text-lg leading-relaxed whitespace-pre-line">
+        {{ info.introduccion }}
+      </p>
+
+      <section class="mt-8 flex gap-4 border-t border-black/10 pt-6">
         <div class="icon-chip">
-          <lucide-icon [img]="iconsService.articles" size="18" />
+          <lucide-icon [img]="iconsService.clock" size="18" />
         </div>
         <div class="min-w-0 flex-1">
-          <h2 class="text-custom-brown text-lg font-bold">Introducción</h2>
-          <p class="mt-2 leading-relaxed whitespace-pre-line">{{ info.introduccion }}</p>
+          <h2 class="text-custom-brown text-lg font-bold">Tiempos de anticipación</h2>
+          <p class="mt-2 leading-relaxed whitespace-pre-line">{{ info.tiemposAnticipacion }}</p>
         </div>
       </section>
 
@@ -70,16 +74,6 @@
         </div>
       </section>
 
-      <section class="mt-6 flex gap-4 border-t border-black/10 pt-6">
-        <div class="icon-chip">
-          <lucide-icon [img]="iconsService.clock" size="18" />
-        </div>
-        <div class="min-w-0 flex-1">
-          <h2 class="text-custom-brown text-lg font-bold">Tiempos de anticipación</h2>
-          <p class="mt-2 leading-relaxed whitespace-pre-line">{{ info.tiemposAnticipacion }}</p>
-        </div>
-      </section>
-
       @if (info.contactoTelefono1 || info.contactoTelefono2) {
         <section class="mt-6 flex gap-4 border-t border-black/10 pt-6">
           <div class="icon-chip">
@@ -117,7 +111,7 @@
         <div class="icon-chip">
           <lucide-icon [img]="iconsService.calendar" size="18" />
         </div>
-        <h2 class="text-custom-brown text-2xl font-bold">Próximos cursos</h2>
+        <h2 class="text-custom-brown text-2xl font-bold">Próximos ISMAs</h2>
       </div>
 
       @if (cursosService.cursos().length > 0) {
@@ -127,7 +121,7 @@
               [routerLink]="['/diocesis/isma/cursos', curso.id]"
               class="flex flex-col gap-2 rounded-xl border border-black/10 p-4 no-underline transition-colors hover:border-black/20 hover:bg-custom-brown/5"
             >
-              <span class="text-xs font-bold uppercase tracking-wide text-custom-brown/60">Curso ISMA</span>
+              <span class="text-xs font-bold uppercase tracking-wide text-custom-brown/60">ISMA</span>
               <h3 class="text-custom-brown font-bold">{{ curso.parroquia.name }}</h3>
               <p class="text-sm text-neutral-600">{{ curso.parroquia.address }}, {{ curso.parroquia.town }}</p>
               <p class="text-sm">
@@ -143,7 +137,7 @@
           }
         </div>
       } @else {
-        <p class="mt-6 text-sm text-neutral-600">Por ahora no hay cursos programados.</p>
+        <p class="mt-6 text-sm text-neutral-600">Por ahora no hay ISMAs programados.</p>
       }
     </section>
 
