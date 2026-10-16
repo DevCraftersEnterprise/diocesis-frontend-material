@@ -16,9 +16,14 @@
         Iniciación al Sacramento del Matrimonio
       </p>
 
-      <p class="text-custom-brown mt-6 text-center text-lg leading-relaxed whitespace-pre-line">
-        {{ info.introduccion }}
-      </p>
+      <div class="bg-custom-yellow/10 mt-6 flex flex-col items-center gap-3 rounded-2xl p-6 text-center">
+        <div class="bg-custom-yellow text-custom-brown grid h-12 w-12 shrink-0 place-items-center rounded-full">
+          <lucide-icon [img]="iconsService.heart" size="22" />
+        </div>
+        <p class="text-custom-brown text-lg leading-relaxed whitespace-pre-line">
+          {{ info.introduccion }}
+        </p>
+      </div>
 
       <section class="mt-8 flex gap-4 border-t border-black/10 pt-6">
         <div class="icon-chip">
