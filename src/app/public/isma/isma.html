@@ -119,20 +119,44 @@
           @for (curso of cursosService.cursos(); track curso.id) {
             <a
               [routerLink]="['/diocesis/isma/cursos', curso.id]"
-              class="flex flex-col gap-2 rounded-xl border border-black/10 p-4 no-underline transition-colors hover:border-black/20 hover:bg-custom-brown/5"
+              class="flex flex-col gap-3 rounded-2xl border-2 border-custom-yellow/25 bg-white p-5 no-underline shadow-sm transition-all hover:-translate-y-1 hover:border-custom-yellow hover:shadow-lg"
             >
-              <span class="text-xs font-bold uppercase tracking-wide text-custom-brown/60">ISMA</span>
-              <h3 class="text-custom-brown font-bold">{{ curso.parroquia.name }}</h3>
-              <p class="text-sm text-neutral-600">{{ curso.parroquia.address }}, {{ curso.parroquia.town }}</p>
-              <p class="text-sm">
-                <strong>Del</strong> {{ curso.startDate }} <strong>al</strong> {{ curso.endDate }}
-              </p>
-              <p class="text-sm">
-                {{ curso.diaSemana !== null ? diasSemana[curso.diaSemana] + ' ' + curso.horaInicio + '–' + curso.horaFin : 'Horario por confirmar' }}
-              </p>
-              <p class="text-sm">
-                {{ etiquetas(curso.modalidades) }}
-              </p>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span
+                  class="bg-custom-yellow text-custom-brown inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-extrabold tracking-wide uppercase"
+                >
+                  <lucide-icon [img]="iconsService.isma" size="13" />
+                  ISMA
+                </span>
+                @for (m of curso.modalidades; track m) {
+                  <span class="bg-custom-brown/5 text-custom-brown rounded-full px-2.5 py-1 text-xs font-semibold">
+                    {{ modalidadLabels[m] }}
+                  </span>
+                }
+              </div>
+
+              <h3 class="text-custom-brown text-lg leading-snug font-bold">{{ curso.parroquia.name }}</h3>
+
+              <div class="flex items-start gap-2 text-sm text-neutral-600">
+                <lucide-icon
+                  [img]="iconsService.mapPin"
+                  size="15"
+                  class="text-custom-brown/50 mt-0.5 shrink-0"
+                />
+                <span>{{ curso.parroquia.address }}, {{ curso.parroquia.town }}</span>
+              </div>
+
+              <div class="text-custom-brown flex items-center gap-2 text-sm font-semibold">
+                <lucide-icon [img]="iconsService.calendar" size="15" class="text-custom-brown/50 shrink-0" />
+                <span>{{ fecha(curso.startDate) }} al {{ fecha(curso.endDate) }}</span>
+              </div>
+
+              <div class="flex items-center gap-2 text-sm text-neutral-600">
+                <lucide-icon [img]="iconsService.clock" size="15" class="text-custom-brown/50 shrink-0" />
+                <span>
+                  {{ curso.diaSemana !== null ? diasSemana[curso.diaSemana] + ' ' + curso.horaInicio + '–' + curso.horaFin : 'Horario por confirmar' }}
+                </span>
+              </div>
             </a>
           }
         </div>
