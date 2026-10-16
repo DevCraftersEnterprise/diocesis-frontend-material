@@ -58,3 +58,26 @@ export const MODALIDAD_LABELS: Record<IsmaModalidad, string> = {
 export function etiquetasModalidades(modalidades: IsmaModalidad[]): string {
   return modalidades.map((m) => MODALIDAD_LABELS[m]).join(' y ');
 }
+
+const MESES = [
+  'enero',
+  'febrero',
+  'marzo',
+  'abril',
+  'mayo',
+  'junio',
+  'julio',
+  'agosto',
+  'septiembre',
+  'octubre',
+  'noviembre',
+  'diciembre',
+] as const;
+
+/** Formatea una fecha ISO "yyyy-MM-dd" (sin hora) como "8 de septiembre de 2026", sin
+ * pasar por `Date` para evitar corrimientos de zona horaria. */
+export function fechaLarga(iso: string): string {
+  const [anio, mes, dia] = iso.split('-').map(Number);
+  if (!anio || !mes || !dia) return iso;
+  return `${dia} de ${MESES[mes - 1]} de ${anio}`;
+}

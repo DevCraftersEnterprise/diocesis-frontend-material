@@ -27,24 +27,44 @@
       }
 
       <dl class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div>
-          <dt class="text-sm font-bold text-neutral-500">Fechas</dt>
-          <dd>{{ c.startDate }} al {{ c.endDate }}</dd>
+        <div class="flex items-start gap-3">
+          <div class="icon-chip">
+            <lucide-icon [img]="iconsService.calendar" size="16" />
+          </div>
+          <div class="min-w-0">
+            <dt class="text-sm font-bold text-neutral-500">Fechas</dt>
+            <dd>{{ fecha(c.startDate) }} al {{ fecha(c.endDate) }}</dd>
+          </div>
         </div>
-        <div>
-          <dt class="text-sm font-bold text-neutral-500">Horario</dt>
-          <dd>{{ horario(c) }}</dd>
+        <div class="flex items-start gap-3">
+          <div class="icon-chip">
+            <lucide-icon [img]="iconsService.clock" size="16" />
+          </div>
+          <div class="min-w-0">
+            <dt class="text-sm font-bold text-neutral-500">Horario</dt>
+            <dd>{{ horario(c) }}</dd>
+          </div>
         </div>
-        <div>
-          <dt class="text-sm font-bold text-neutral-500">Modalidad</dt>
-          <dd>
-            {{ etiquetas(c.modalidades) }}
-          </dd>
+        <div class="flex items-start gap-3">
+          <div class="icon-chip">
+            <lucide-icon [img]="iconsService.isma" size="16" />
+          </div>
+          <div class="min-w-0">
+            <dt class="text-sm font-bold text-neutral-500">Modalidad</dt>
+            <dd>
+              {{ etiquetas(c.modalidades) }}
+            </dd>
+          </div>
         </div>
         @if (c.telefonoInformes) {
-          <div>
-            <dt class="text-sm font-bold text-neutral-500">Informes</dt>
-            <dd>{{ c.telefonoInformes }}</dd>
+          <div class="flex items-start gap-3">
+            <div class="icon-chip">
+              <lucide-icon [img]="iconsService.phone" size="16" />
+            </div>
+            <div class="min-w-0">
+              <dt class="text-sm font-bold text-neutral-500">Informes</dt>
+              <dd>{{ c.telefonoInformes }}</dd>
+            </div>
           </div>
         }
       </dl>

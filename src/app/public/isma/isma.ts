@@ -14,7 +14,7 @@ import { IsmaInformationService } from '../../admin/isma-information/services/is
 import { IsmaCursosService } from '../../admin/isma-cursos/services/isma-cursos';
 import { IsmaSpecialCasesService } from '../../admin/isma-special-cases/services/isma-special-cases';
 import { IsmaInformacion } from '../../core/models/isma-information.model';
-import { DIAS_SEMANA, etiquetasModalidades } from '../../core/models/isma-curso.model';
+import { DIAS_SEMANA, etiquetasModalidades, fechaLarga, MODALIDAD_LABELS } from '../../core/models/isma-curso.model';
 import { IconsService } from '../../core/services/icons.service';
 
 /**
@@ -38,6 +38,8 @@ export class Isma implements OnInit {
 
   readonly diasSemana = DIAS_SEMANA;
   readonly etiquetas = etiquetasModalidades;
+  readonly modalidadLabels = MODALIDAD_LABELS;
+  readonly fecha = fechaLarga;
   readonly information = signal<IsmaInformacion | null>(null);
   readonly loading = signal(true);
   readonly openCaseIds = signal<Set<string>>(new Set());
