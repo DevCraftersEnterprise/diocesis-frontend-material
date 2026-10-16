@@ -48,6 +48,13 @@ jobs:
       - name: Build production app
         run: npm run build
 
+      - name: Write version.json
+        run: |
+          printf '{"version":"%s","deployedAt":"%s"}' \
+            "${{ github.sha }}" \
+            "$(date -u +%FT%TZ)" \
+            > dist/diocesis-frontend-material/browser/version.json
+
       - name: Deploy to Hostinger (FTP)
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:

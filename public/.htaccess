@@ -42,8 +42,10 @@
 
 # El index.html no se cachea: asi cada visita pide la version publicada y no una vieja.
 # Los JS/CSS llevan hash en el nombre, por eso pueden cachearse sin problema.
+# version.json tampoco se cachea: lo consulta VersionCheckService para avisar cuando
+# hay una version nueva, aunque la pestana ya estuviera abierta desde antes del deploy.
 <IfModule mod_headers.c>
-  <FilesMatch "^index\.html$">
+  <FilesMatch "^(index\.html|version\.json)$">
     Header set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
 </IfModule>
