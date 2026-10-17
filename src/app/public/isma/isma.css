@@ -1,0 +1,28 @@
+/* Fondo propio de la vista publica de ISMA (pedido del cliente: el fondo se sentia
+ * muy plano / tipo articulo de referencia). Rosa suave + patron de rombos hecho con
+ * gradientes CSS superpuestos, sin imagenes ni SVG — dos diagonales desfasadas que se
+ * cruzan y forman el rombo. Opacidad baja para que no compita con las tarjetas. */
+.isma-bg {
+  background-color: #fff1f0;
+  background-image:
+    linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.045) 25%,
+      transparent 25%,
+      transparent 75%,
+      rgba(0, 0, 0, 0.045) 75%,
+      rgba(0, 0, 0, 0.045)
+    ),
+    linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.045) 25%,
+      transparent 25%,
+      transparent 75%,
+      rgba(0, 0, 0, 0.045) 75%,
+      rgba(0, 0, 0, 0.045)
+    );
+  background-size: 48px 48px;
+  background-position:
+    0 0,
+    24px 24px;
+}

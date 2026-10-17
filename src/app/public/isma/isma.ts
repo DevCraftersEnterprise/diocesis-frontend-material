@@ -27,6 +27,7 @@ import { IconsService } from '../../core/services/icons.service';
   selector: 'app-isma',
   imports: [CommonModule, LucideAngularModule, RouterLink],
   templateUrl: './isma.html',
+  styleUrl: './isma.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Isma implements OnInit {
