@@ -16,6 +16,7 @@ import { IsmaSpecialCasesService } from '../../admin/isma-special-cases/services
 import { IsmaInformacion } from '../../core/models/isma-information.model';
 import { DIAS_SEMANA, etiquetasModalidades, fechaLarga, MODALIDAD_LABELS } from '../../core/models/isma-curso.model';
 import { IconsService } from '../../core/services/icons.service';
+import { LoadingState } from '../../shared/components/loading-state/loading-state';
 // TEMPORAL: ver isma-background-picker/services/isma-background-config.ts.
 import { IsmaBackgroundPickerComponent } from './isma-background-picker/isma-background-picker';
 import { IsmaBackgroundConfigService } from './isma-background-picker/services/isma-background-config';
@@ -28,7 +29,7 @@ import { IsmaBackgroundConfigService } from './isma-background-picker/services/i
  */
 @Component({
   selector: 'app-isma',
-  imports: [CommonModule, LucideAngularModule, RouterLink, IsmaBackgroundPickerComponent],
+  imports: [CommonModule, LucideAngularModule, RouterLink, IsmaBackgroundPickerComponent, LoadingState],
   templateUrl: './isma.html',
   styleUrl: './isma.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
