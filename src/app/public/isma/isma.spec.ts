@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection, signal } from '@angular/core';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { provideToastr } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { Isma } from './isma';
 import { IsmaFaqService } from '../../admin/isma-faq/services/isma-faq';
@@ -93,6 +95,8 @@ describe('Isma (pagina publica)', () => {
       imports: [Isma],
       providers: [
         provideZonelessChangeDetection(),
+        provideNoopAnimations(),
+        provideToastr(),
         { provide: IsmaInformationService, useValue: serviceStub },
         { provide: IsmaSpecialCasesService, useValue: specialCasesStub },
         { provide: IsmaFaqService, useValue: faqStub },

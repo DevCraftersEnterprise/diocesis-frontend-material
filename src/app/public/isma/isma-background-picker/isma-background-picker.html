@@ -1,0 +1,134 @@
+<!-- Boton flotante -->
+<button
+  type="button"
+  (click)="toggle()"
+  class="bg-custom-yellow text-custom-brown fixed right-4 bottom-4 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform hover:scale-105"
+  [attr.aria-label]="open() ? 'Cerrar personalizador de fondo' : 'Personalizar fondo de ISMA'"
+  [attr.aria-expanded]="open()"
+>
+  <lucide-icon [img]="open() ? closeIcon : paletteIcon" size="22" />
+</button>
+
+@if (open()) {
+  <div
+    class="bg-custom-white scrollbar-themed fixed right-4 bottom-20 z-50 max-h-[75vh] w-[min(22rem,calc(100vw-2rem))] overflow-y-auto rounded-2xl p-5 shadow-2xl ring-1 ring-black/10"
+  >
+    <div class="mb-3 flex items-center justify-between gap-2">
+      <div>
+        <p class="text-custom-brown text-sm font-bold">Probar fondo de ISMA</p>
+        <p class="text-custom-brown/60 text-xs">Herramienta temporal, solo para pruebas.</p>
+      </div>
+      <button
+        type="button"
+        (click)="toggle()"
+        class="hover:bg-custom-brown/10 shrink-0 rounded-lg p-1.5 transition-colors"
+        aria-label="Cerrar"
+      >
+        <lucide-icon [img]="closeIcon" size="16" />
+      </button>
+    </div>
+
+    <div class="space-y-4">
+      <label class="block">
+        <span class="text-custom-brown mb-1 block text-xs font-bold tracking-wide uppercase">
+          Patrón
+        </span>
+        <select
+          class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+          [value]="bgConfig.config().pattern"
+          (change)="onPatternChange($any($event.target).value)"
+        >
+          @for (p of patterns; track p.value) {
+            <option [value]="p.value">{{ p.label }}</option>
+          }
+        </select>
+      </label>
+
+      <div class="grid grid-cols-2 gap-3">
+        <label class="block">
+          <span class="text-custom-brown mb-1 block text-xs font-bold tracking-wide uppercase">
+            Color de fondo
+          </span>
+          <input
+            type="color"
+            class="h-10 w-full cursor-pointer rounded-lg border border-gray-300"
+            [value]="bgConfig.config().bgColor"
+            (input)="onBgColorChange($any($event.target).value)"
+          />
+        </label>
+
+        @if (bgConfig.config().pattern !== 'solid') {
+          <label class="block">
+            <span class="text-custom-brown mb-1 block text-xs font-bold tracking-wide uppercase">
+              Color del patrón
+            </span>
+            <input
+              type="color"
+              class="h-10 w-full cursor-pointer rounded-lg border border-gray-300"
+              [value]="bgConfig.config().patternColor"
+              (input)="onPatternColorChange($any($event.target).value)"
+            />
+          </label>
+        }
+      </div>
+
+      @if (bgConfig.config().pattern !== 'solid') {
+        <label class="block">
+          <span
+            class="text-custom-brown mb-1 flex justify-between text-xs font-bold tracking-wide uppercase"
+          >
+            <span>Opacidad del patrón</span>
+            <span>{{ bgConfig.config().patternOpacity }}%</span>
+          </span>
+          <input
+            type="range"
+            min="2"
+            max="40"
+            class="w-full"
+            [value]="bgConfig.config().patternOpacity"
+            (input)="onOpacityChange($any($event.target).value)"
+          />
+        </label>
+      }
+
+      @if (hasSize()) {
+        <label class="block">
+          <span
+            class="text-custom-brown mb-1 flex justify-between text-xs font-bold tracking-wide uppercase"
+          >
+            <span>Tamaño / separación</span>
+            <span>{{ bgConfig.config().patternSize }}px</span>
+          </span>
+          <input
+            type="range"
+            min="8"
+            max="64"
+            step="2"
+            class="w-full"
+            [value]="bgConfig.config().patternSize"
+            (input)="onSizeChange($any($event.target).value)"
+          />
+        </label>
+      }
+    </div>
+
+    <div class="mt-5 flex gap-2">
+      <button
+        type="button"
+        (click)="reset()"
+        class="hover:bg-custom-brown/10 text-custom-brown flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium transition-colors"
+      >
+        <lucide-icon [img]="resetIcon" size="14" />
+        Restablecer
+      </button>
+      <button
+        type="button"
+        (click)="copyConfig()"
+        class="bg-custom-yellow text-custom-brown flex flex-1 items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-sm font-bold transition-opacity hover:opacity-90"
+      >
+        <lucide-icon [img]="copied() ? checkIcon : copyIcon" size="14" />
+        {{ copied() ? 'Copiado' : 'Copiar config.' }}
+      </button>
+    </div>
+  </div>
+}

@@ -16,6 +16,9 @@ import { IsmaSpecialCasesService } from '../../admin/isma-special-cases/services
 import { IsmaInformacion } from '../../core/models/isma-information.model';
 import { DIAS_SEMANA, etiquetasModalidades, fechaLarga, MODALIDAD_LABELS } from '../../core/models/isma-curso.model';
 import { IconsService } from '../../core/services/icons.service';
+// TEMPORAL: ver isma-background-picker/services/isma-background-config.ts.
+import { IsmaBackgroundPickerComponent } from './isma-background-picker/isma-background-picker';
+import { IsmaBackgroundConfigService } from './isma-background-picker/services/isma-background-config';
 
 /**
  * Página pública "ISMA" (`/diocesis/isma`, Tarea 6.1/7.1). Información general
@@ -25,7 +28,7 @@ import { IconsService } from '../../core/services/icons.service';
  */
 @Component({
   selector: 'app-isma',
-  imports: [CommonModule, LucideAngularModule, RouterLink],
+  imports: [CommonModule, LucideAngularModule, RouterLink, IsmaBackgroundPickerComponent],
   templateUrl: './isma.html',
   styleUrl: './isma.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,6 +39,8 @@ export class Isma implements OnInit {
   protected readonly faqService = inject(IsmaFaqService);
   protected readonly cursosService = inject(IsmaCursosService);
   protected readonly iconsService = inject(IconsService);
+  // TEMPORAL: ver isma-background-picker/services/isma-background-config.ts.
+  protected readonly bgConfig = inject(IsmaBackgroundConfigService);
 
   readonly diasSemana = DIAS_SEMANA;
   readonly etiquetas = etiquetasModalidades;

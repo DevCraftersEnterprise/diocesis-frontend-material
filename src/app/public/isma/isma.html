@@ -1,11 +1,20 @@
-<div class="isma-bg -m-4">
+<!-- TEMPORAL: bindings del selector de fondo (isma-background-picker/). Al quitar la
+     herramienta, borra estos 4 atributos y deja el valor fijo que elija el cliente en
+     isma.css. -->
+<div
+  class="isma-bg -m-4"
+  [attr.data-isma-pattern]="bgConfig.config().pattern"
+  [style.--isma-bg-color]="bgConfig.config().bgColor"
+  [style.--isma-pattern-rgba]="bgConfig.patternRgba()"
+  [style.--isma-pattern-size.px]="bgConfig.config().patternSize"
+>
 <article class="container mx-auto max-w-4xl px-4 py-8">
   @if (loading()) {
     <p class="text-center">Cargando…</p>
   } @else if (information(); as info) {
     <div class="mb-6 flex justify-center">
       <img
-        src="/images/isma-logo-2.jpeg"
+        src="/images/isma-logo-2.png"
         alt="ISMA – Iniciación al Sacramento del Matrimonio, Diócesis de Ciudad Obregón"
         class="h-44 w-auto object-contain sm:h-56"
       />
@@ -267,3 +276,7 @@
   }
 </article>
 </div>
+
+<!-- TEMPORAL: borrar junto con isma-background-picker/ cuando el cliente elija el
+     diseño definitivo. -->
+<app-isma-background-picker />
