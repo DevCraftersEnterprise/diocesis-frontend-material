@@ -183,6 +183,145 @@ export const routes: Routes = [
             (m) => m.IsmaCursoDetailComponent,
           ),
       },
+      // Rutas del menú público sin módulo en el backend todavía: muestran
+      // "En construcción" (Tarea pendiente de información del cliente) en vez de
+      // redirigir silenciosamente a inicio. Reemplazar cada una por su vista real
+      // conforme vaya llegando el contenido/backend correspondiente.
+      {
+        path: 'diocesis/historia',
+        title: 'Historia · En construcción',
+        data: { label: 'Historia' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
+      {
+        path: 'diocesis/obispo',
+        title: 'Obispo · En construcción',
+        data: { label: 'Obispo' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
+      {
+        path: 'diocesis/planeacion-pastoral',
+        title: 'Planeación Pastoral · En construcción',
+        data: { label: 'Planeación Pastoral' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
+      {
+        path: 'diocesis/obituario',
+        title: 'Obituario · En construcción',
+        data: { label: 'Obituario' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
+      {
+        path: 'gobierno/curia',
+        title: 'Curia · En construcción',
+        data: { label: 'Curia' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
+      {
+        path: 'gobierno/pastoral',
+        title: 'Gobierno Pastoral · En construcción',
+        data: { label: 'Gobierno Pastoral' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
+      {
+        path: 'gobierno/actividad-pastoral',
+        title: 'Actividad Pastoral · En construcción',
+        data: { label: 'Actividad Pastoral' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
+      {
+        path: 'directorio/diaconos/permanentes',
+        title: 'Diáconos Permanentes · En construcción',
+        data: { label: 'Diáconos Permanentes' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
+      {
+        path: 'directorio/diaconos/transitorios',
+        title: 'Diáconos Transitorios · En construcción',
+        data: { label: 'Diáconos Transitorios' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
+      {
+        path: 'seminario',
+        title: 'Seminario · En construcción',
+        data: { label: 'Seminario' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
+      {
+        path: 'archivo/documentos',
+        title: 'Documentos · En construcción',
+        data: { label: 'Documentos' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
+      {
+        path: 'archivo/nombramientos',
+        title: 'Nombramientos · En construcción',
+        data: { label: 'Nombramientos' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
+      {
+        path: 'descargas',
+        title: 'Descargas · En construcción',
+        data: { label: 'Descargas' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
+      {
+        path: 'multimedia/misas',
+        title: 'Misas · En construcción',
+        data: { label: 'Misas' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
+      {
+        path: 'diezmo',
+        title: 'Diezmo · En construcción',
+        data: { label: 'Diezmo' },
+        loadComponent: () =>
+          import('./public/under-construction/under-construction').then(
+            (m) => m.UnderConstruction,
+          ),
+      },
       {
         path: '**',
         redirectTo: 'inicio',
