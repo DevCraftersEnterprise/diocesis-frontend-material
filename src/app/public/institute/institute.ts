@@ -23,6 +23,7 @@ import { InstitutoInformacion } from '../../core/models/institute-information.mo
 import { Capacitacion } from '../../core/models/institute-training.model';
 import { CleanUrlPipe } from '../../core/pipes/clean-url.pipe';
 import { IconsService } from '../../core/services/icons.service';
+import { LoadingState } from '../../shared/components/loading-state/loading-state';
 
 const MODALITY_LABELS: Record<Capacitacion['modality'], string> = {
   presencial: 'Presencial',
@@ -50,7 +51,7 @@ const TYPE_COLORS: Record<Evento['type'], string> = {
  */
 @Component({
   selector: 'app-institute',
-  imports: [CommonModule, CleanUrlPipe, FullCalendarModule, LucideAngularModule],
+  imports: [CommonModule, CleanUrlPipe, FullCalendarModule, LucideAngularModule, LoadingState],
   templateUrl: './institute.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
