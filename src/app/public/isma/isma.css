@@ -1,0 +1,54 @@
+/* Fondo de la vista publica de ISMA.
+ *
+ * TEMPORAL: mientras el cliente prueba opciones con el selector flotante
+ * (isma-background-picker/), estas reglas leen variables CSS que ese componente
+ * actualiza en isma.html ([style.--isma-bg-color], [style.--isma-pattern-rgba],
+ * [style.--isma-pattern-size.px], [attr.data-isma-pattern]). Los valores por
+ * defecto de abajo (paleta marfil/dorado) son el punto de partida mientras no hay
+ * JS: una vez que el cliente elija el diseno definitivo, borra el selector, deja
+ * solo el bloque de ".isma-bg[data-isma-pattern='...']" elegido con sus valores
+ * fijos, y quita los bindings de isma.html/isma.ts.
+ */
+.isma-bg {
+  background-color: var(--isma-bg-color, #f8f5f0);
+  background-image: none;
+}
+
+.isma-bg[data-isma-pattern='diagonal'] {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--isma-pattern-rgba, rgba(201, 162, 39, 0.1)) 0,
+    var(--isma-pattern-rgba, rgba(201, 162, 39, 0.1)) 1px,
+    transparent 1px,
+    transparent var(--isma-pattern-size, 18px)
+  );
+}
+
+/* Rombos formados por una retícula diagonal cruzada (dos direcciones de 45°), como
+ * las lineas de plomo de un vitral. */
+.isma-bg[data-isma-pattern='geometric'] {
+  background-image:
+    linear-gradient(135deg, var(--isma-pattern-rgba, rgba(201, 162, 39, 0.1)) 1px, transparent 1px),
+    linear-gradient(45deg, var(--isma-pattern-rgba, rgba(201, 162, 39, 0.1)) 1px, transparent 1px);
+  background-size: var(--isma-pattern-size, 24px) var(--isma-pattern-size, 24px);
+}
+
+.isma-bg[data-isma-pattern='dots'] {
+  background-image: radial-gradient(
+    var(--isma-pattern-rgba, rgba(201, 162, 39, 0.1)) 1.5px,
+    transparent 1.5px
+  );
+  background-size: var(--isma-pattern-size, 20px) var(--isma-pattern-size, 20px);
+}
+
+.isma-bg[data-isma-pattern='gradient'] {
+  background-image: radial-gradient(
+    ellipse at top,
+    var(--isma-pattern-rgba, rgba(201, 162, 39, 0.12)),
+    transparent 65%
+  );
+}
+
+.isma-bg[data-isma-pattern='solid'] {
+  background-image: none;
+}
