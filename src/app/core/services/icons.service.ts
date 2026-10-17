@@ -9,6 +9,7 @@ import {
   Church,
   CircleUserRound,
   Clock,
+  Construction,
   Copy,
   Download,
   Earth,
@@ -118,4 +119,5 @@ export class IconsService {
   readonly isma = HeartHandshake;
   readonly clock = Clock;
   readonly phone = Phone;
+  readonly construction = Construction;
 }
