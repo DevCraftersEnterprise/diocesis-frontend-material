@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { Padre } from '../../../core/models/reverend.model';
+import { fetchAllPages } from '../../../shared/utils/fetch-all-pages.util';
 import { tap } from 'rxjs';
 
 @Injectable({
@@ -41,6 +42,10 @@ export class Reverends {
       );
   }
 
+  /** Trae TODOS los padres (no una pagina), usado por el select de parroco en la
+   * creacion/edicion de parroquias. Antes de este arreglo quedaba siempre vacio:
+   * `res` nunca es un arreglo (es el sobre `{count, results}`), asi que
+   * `Array.isArray(res)` era siempre `false` y descartaba los resultados. */
   getAllPadres(filters: Record<string, any> = {}) {
     const params = new URLSearchParams();
 
@@ -50,21 +55,12 @@ export class Reverends {
       }
     });
 
-    const url = `${this.apiUrl}/?${params.toString()}`;
-
-    return this.http
-      .get<{
-        count: number;
-        next: string | null;
-        previous: string | null;
-        results: Padre[];
-      }>(url)
-      .pipe(
-        tap((res) => {
-          this.reverends.set(Array.isArray(res) ? res : []);
-          this.totalReverends.set(res.count);
-        }),
-      );
+    return fetchAllPages<Padre>(this.http, `${this.apiUrl}/`, params).pipe(
+      tap((results) => {
+        this.reverends.set(results);
+        this.totalReverends.set(results.length);
+      }),
+    );
   }
 
   getPadreById(id: string) {

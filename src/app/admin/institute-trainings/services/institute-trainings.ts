@@ -3,6 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Capacitacion } from '../../../core/models/institute-training.model';
+import { fetchAllPages } from '../../../shared/utils/fetch-all-pages.util';
 
 @Injectable({
   providedIn: 'root',
@@ -41,6 +42,7 @@ export class InstituteTrainingsService {
       );
   }
 
+  /** Trae TODAS las capacitaciones (no una pagina), usado por selects de admin. */
   getAllCapacitaciones(filters: Record<string, any> = {}) {
     const params = new URLSearchParams();
 
@@ -50,19 +52,12 @@ export class InstituteTrainingsService {
       }
     });
 
-    return this.http
-      .get<{
-        count: number;
-        next: string | null;
-        previous: string | null;
-        results: Capacitacion[];
-      }>(`${this.apiUrl}/?${params.toString()}`)
-      .pipe(
-        tap((res) => {
-          this.trainings.set(Array.isArray(res.results) ? res.results : []);
-          this.totalTrainings.set(res.count);
-        }),
-      );
+    return fetchAllPages<Capacitacion>(this.http, `${this.apiUrl}/`, params).pipe(
+      tap((results) => {
+        this.trainings.set(results);
+        this.totalTrainings.set(results.length);
+      }),
+    );
   }
 
   createCapacitacion(data: Partial<Capacitacion>) {

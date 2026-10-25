@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { Colonia } from '../../../core/models/colony.model';
+import { fetchAllPages } from '../../../shared/utils/fetch-all-pages.util';
 import { tap } from 'rxjs';
 
 @Injectable({
@@ -41,6 +42,10 @@ export class Colony {
       );
   }
 
+  /** Trae TODAS las colonias (no una pagina) — usado por el select de la creacion de
+   * parroquias. Antes solo pedia sin `page_size`, asi que el backend devolvia su
+   * limite por defecto (10) y el select se veia incompleto con ~100 colonias en
+   * produccion. */
   getAllColonias(filters: Record<string, any> = {}) {
     const params = new URLSearchParams();
 
@@ -50,19 +55,12 @@ export class Colony {
       }
     });
 
-    return this.http
-      .get<{
-        count: number;
-        next: string | null;
-        previous: string | null;
-        results: Colonia[];
-      }>(`${this.apiUrl}/?${params.toString()}`)
-      .pipe(
-        tap((res) => {
-          this.colonies.set(Array.isArray(res.results) ? res.results : []);
-          this.totalColonies.set(res.count);
-        }),
-      );
+    return fetchAllPages<Colonia>(this.http, `${this.apiUrl}/`, params).pipe(
+      tap((results) => {
+        this.colonies.set(results);
+        this.totalColonies.set(results.length);
+      }),
+    );
   }
 
   getColoniaById(id: string) {

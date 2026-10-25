@@ -3,6 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Sede } from '../../../core/models/institute-venue.model';
+import { fetchAllPages } from '../../../shared/utils/fetch-all-pages.util';
 
 @Injectable({
   providedIn: 'root',
@@ -41,6 +42,7 @@ export class InstituteVenuesService {
       );
   }
 
+  /** Trae TODAS las sedes (no una pagina), usado por selects de admin. */
   getAllSedes(filters: Record<string, any> = {}) {
     const params = new URLSearchParams();
 
@@ -50,19 +52,12 @@ export class InstituteVenuesService {
       }
     });
 
-    return this.http
-      .get<{
-        count: number;
-        next: string | null;
-        previous: string | null;
-        results: Sede[];
-      }>(`${this.apiUrl}/?${params.toString()}`)
-      .pipe(
-        tap((res) => {
-          this.venues.set(Array.isArray(res.results) ? res.results : []);
-          this.totalVenues.set(res.count);
-        }),
-      );
+    return fetchAllPages<Sede>(this.http, `${this.apiUrl}/`, params).pipe(
+      tap((results) => {
+        this.venues.set(results);
+        this.totalVenues.set(results.length);
+      }),
+    );
   }
 
   createSede(data: FormData) {
