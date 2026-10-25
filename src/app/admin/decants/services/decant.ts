@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { Decanato } from '../../../core/models/decant.model';
+import { fetchAllPages } from '../../../shared/utils/fetch-all-pages.util';
 import { tap } from 'rxjs';
 
 @Injectable({
@@ -41,6 +42,7 @@ export class Decant {
       );
   }
 
+  /** Trae TODOS los decanatos (no una pagina), usado por selects de admin. */
   getAllDecanatos(filters: Record<string, any> = {}) {
     const params = new URLSearchParams();
 
@@ -50,19 +52,12 @@ export class Decant {
       }
     });
 
-    return this.http
-      .get<{
-        count: number;
-        next: string | null;
-        previous: string | null;
-        results: Decanato[];
-      }>(`${this.apiUrl}/?${params.toString()}`)
-      .pipe(
-        tap((res) => {
-          this.decants.set(Array.isArray(res.results) ? res.results : []);
-          this.totalDecants.set(res.count);
-        }),
-      );
+    return fetchAllPages<Decanato>(this.http, `${this.apiUrl}/`, params).pipe(
+      tap((results) => {
+        this.decants.set(results);
+        this.totalDecants.set(results.length);
+      }),
+    );
   }
 
   getDecanatoById(id: string) {
