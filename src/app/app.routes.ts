@@ -55,6 +55,20 @@ export const routes: Routes = [
           import('./admin/documents/documents').then((m) => m.DocumentsComponent),
       },
       {
+        path: 'paginas',
+        loadComponent: () =>
+          import('./admin/pages/pagina-contenido-list').then(
+            (m) => m.PaginaContenidoListComponent,
+          ),
+      },
+      {
+        path: 'paginas/:slug',
+        loadComponent: () =>
+          import('./admin/pages/pagina-contenido-edit').then(
+            (m) => m.PaginaContenidoEditComponent,
+          ),
+      },
+      {
         path: 'institute/information',
         canActivate: [moduleAccessGuard('instituto-biblico')],
         loadComponent: () =>
@@ -189,66 +203,45 @@ export const routes: Routes = [
       // conforme vaya llegando el contenido/backend correspondiente.
       {
         path: 'diocesis/historia',
-        title: 'Historia · En construcción',
-        data: { label: 'Historia' },
+        data: { slug: 'historia' },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
-          ),
+          import('./public/content-page/content-page').then((m) => m.ContentPage),
       },
       {
         path: 'diocesis/obispo',
-        title: 'Obispo · En construcción',
-        data: { label: 'Obispo' },
+        data: { slug: 'obispo' },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
-          ),
+          import('./public/content-page/content-page').then((m) => m.ContentPage),
       },
       {
         path: 'diocesis/planeacion-pastoral',
-        title: 'Planeación Pastoral · En construcción',
-        data: { label: 'Planeación Pastoral' },
+        data: { slug: 'planeacion-pastoral' },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
-          ),
+          import('./public/content-page/content-page').then((m) => m.ContentPage),
       },
       {
         path: 'diocesis/obituario',
-        title: 'Obituario · En construcción',
-        data: { label: 'Obituario' },
+        data: { slug: 'obituario' },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
-          ),
+          import('./public/content-page/content-page').then((m) => m.ContentPage),
       },
       {
         path: 'gobierno/curia',
-        title: 'Curia · En construcción',
-        data: { label: 'Curia' },
+        data: { slug: 'curia' },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
-          ),
+          import('./public/content-page/content-page').then((m) => m.ContentPage),
       },
       {
         path: 'gobierno/pastoral',
-        title: 'Gobierno Pastoral · En construcción',
-        data: { label: 'Gobierno Pastoral' },
+        data: { slug: 'gobierno-pastoral' },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
-          ),
+          import('./public/content-page/content-page').then((m) => m.ContentPage),
       },
       {
         path: 'gobierno/actividad-pastoral',
-        title: 'Actividad Pastoral · En construcción',
-        data: { label: 'Actividad Pastoral' },
+        data: { slug: 'actividad-pastoral' },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
-          ),
+          import('./public/content-page/content-page').then((m) => m.ContentPage),
       },
       {
         path: 'directorio/diaconos/permanentes',
@@ -270,12 +263,9 @@ export const routes: Routes = [
       },
       {
         path: 'seminario',
-        title: 'Seminario · En construcción',
-        data: { label: 'Seminario' },
+        data: { slug: 'seminario' },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
-          ),
+          import('./public/content-page/content-page').then((m) => m.ContentPage),
       },
       {
         path: 'archivo/documentos',
@@ -288,12 +278,9 @@ export const routes: Routes = [
       },
       {
         path: 'archivo/nombramientos',
-        title: 'Nombramientos · En construcción',
-        data: { label: 'Nombramientos' },
+        data: { slug: 'nombramientos' },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
-          ),
+          import('./public/content-page/content-page').then((m) => m.ContentPage),
       },
       {
         path: 'descargas',
@@ -315,12 +302,9 @@ export const routes: Routes = [
       },
       {
         path: 'diezmo',
-        title: 'Diezmo · En construcción',
-        data: { label: 'Diezmo' },
+        data: { slug: 'diezmo' },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
-          ),
+          import('./public/content-page/content-page').then((m) => m.ContentPage),
       },
       {
         path: '**',
