@@ -1,0 +1,59 @@
+<article class="container mx-auto max-w-4xl px-4 py-8">
+  @if (loading()) {
+    <app-loading-state message="Cargando…" />
+  } @else if (notFound()) {
+    <div class="bg-custom-white rounded-2xl p-8 text-center shadow-xl">
+      <p class="font-bold">No se encontró esta página.</p>
+    </div>
+  } @else if (page(); as current) {
+    <div class="bg-custom-white overflow-hidden rounded-2xl p-8 shadow-xl">
+      <h1 class="text-custom-brown text-center text-3xl font-bold">{{ current.title }}</h1>
+
+      @if (current.body) {
+        <div class="prose prose-lg text-custom-brown mt-6 max-w-none" [innerHTML]="current.body"></div>
+      } @else {
+        <p class="mt-6 text-center text-neutral-600">
+          Pronto publicaremos el contenido de esta sección.
+        </p>
+      }
+    </div>
+
+    @if (current.images.length > 0) {
+      <section class="bg-custom-white mt-6 overflow-hidden rounded-2xl p-8 shadow-xl">
+        <h2 class="text-custom-brown text-2xl font-bold">Galería</h2>
+        <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          @for (image of current.images; track image.id) {
+            <button
+              type="button"
+              class="group overflow-hidden rounded-xl"
+              (click)="openLightbox(image)"
+              [attr.aria-label]="'Ver foto ampliada' + (image.caption ? ': ' + image.caption : '')"
+            >
+              <img
+                [src]="image.url | cleanUrl"
+                [alt]="image.caption || current.title"
+                class="h-32 w-full object-cover transition-transform group-hover:scale-105"
+              />
+            </button>
+          }
+        </div>
+      </section>
+    }
+  }
+</article>
+
+<app-modal
+  [isOpen]="lightboxImage() !== null"
+  [title]="lightboxImage()?.caption || 'Foto'"
+  [showActions]="false"
+  maxWidth="max-w-3xl"
+  (close)="closeLightbox()"
+>
+  @if (lightboxImage(); as image) {
+    <img
+      [src]="image.url | cleanUrl"
+      [alt]="image.caption || ''"
+      class="max-h-[70vh] w-full rounded-lg object-contain"
+    />
+  }
+</app-modal>

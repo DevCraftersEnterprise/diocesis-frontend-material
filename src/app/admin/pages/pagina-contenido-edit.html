@@ -1,0 +1,182 @@
+<div class="section-spacing">
+  <div class="page-header">
+    <a routerLink="/dashboard/paginas" class="text-sm underline">← Volver a Páginas</a>
+  </div>
+
+  @if (loading()) {
+    <p class="text-center">Cargando…</p>
+  } @else if (notFound()) {
+    <p class="text-center">No se encontró esta página.</p>
+  } @else if (page(); as current) {
+    <app-title title="Editar: {{ current.title }}" description="Título, texto y galería de fotos" />
+
+    <form
+      class="mx-auto mt-6 max-w-3xl space-y-6 rounded-2xl border border-black/10 bg-white p-6 shadow-sm sm:p-8"
+      (submit)="$event.preventDefault()"
+    >
+      <div>
+        <label for="pagina-title" class="mb-2 block text-sm font-medium">
+          Título <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="pagina-title"
+          type="text"
+          class="input"
+          [value]="title()"
+          (input)="onTitleChange($event)"
+          required
+        />
+      </div>
+
+      <div>
+        <span id="pagina-body-label" class="mb-2 block text-sm font-medium">Contenido</span>
+        <quill-editor-field
+          [value]="body()"
+          (valueChange)="onBodyChange($event)"
+          format="html"
+          [sanitize]="true"
+          [modules]="quillModules"
+          placeholder="Escribe el contenido de esta página…"
+          [styles]="quillStyles"
+          aria-label="Contenido"
+        />
+      </div>
+
+      <div class="border-t border-black/10 pt-6">
+        <button
+          type="button"
+          class="btn-primary"
+          [disabled]="saving() || !title().trim()"
+          (click)="save()"
+        >
+          {{ saving() ? 'Guardando…' : 'Guardar cambios' }}
+        </button>
+      </div>
+    </form>
+
+    <!-- Galería -->
+    <div class="mx-auto mt-6 max-w-3xl rounded-2xl border border-black/10 bg-white p-6 shadow-sm sm:p-8">
+      <h2 class="text-lg font-bold">Galería de fotos</h2>
+      <p class="mt-1 text-sm text-neutral-600">
+        Las fotos se muestran en este orden en la página pública. Usa las flechas para
+        reordenar.
+      </p>
+
+      @if (current.images.length > 0) {
+        <div class="mt-4 space-y-3">
+          @for (image of current.images; track image.id; let i = $index) {
+            <div class="flex items-center gap-3 rounded-xl border border-black/10 p-3">
+              <img
+                [src]="image.url | cleanUrl"
+                alt=""
+                class="h-16 w-16 shrink-0 rounded-lg object-cover"
+              />
+
+              <div class="min-w-0 flex-1">
+                @if (editingCaptionId() === image.id) {
+                  <div class="flex items-center gap-2">
+                    <input
+                      type="text"
+                      class="input"
+                      aria-label="Pie de foto"
+                      placeholder="Pie de foto (opcional)"
+                      [value]="editingCaptionValue()"
+                      (input)="editingCaptionValue.set($any($event.target).value)"
+                    />
+                    <button
+                      type="button"
+                      class="btn-table-info"
+                      (click)="saveCaption(image.id)"
+                    >
+                      Guardar
+                    </button>
+                    <button type="button" class="btn-table-neutral" (click)="cancelEditCaption()">
+                      Cancelar
+                    </button>
+                  </div>
+                } @else {
+                  <p class="truncate text-sm">
+                    {{ image.caption || 'Sin pie de foto' }}
+                  </p>
+                  <button
+                    type="button"
+                    class="mt-1 text-xs underline"
+                    (click)="startEditCaption(image)"
+                  >
+                    Editar pie de foto
+                  </button>
+                }
+              </div>
+
+              <div class="flex shrink-0 items-center gap-1">
+                <button
+                  type="button"
+                  class="btn-table-info"
+                  [disabled]="i === 0"
+                  (click)="moveImage(i, -1)"
+                  aria-label="Subir"
+                >
+                  <lucide-icon [img]="iconsService.moveUp" size="14" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  class="btn-table-info"
+                  [disabled]="i === current.images.length - 1"
+                  (click)="moveImage(i, 1)"
+                  aria-label="Bajar"
+                >
+                  <lucide-icon [img]="iconsService.moveDown" size="14" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  class="btn-table-danger"
+                  (click)="deleteImage(image.id)"
+                  aria-label="Eliminar foto"
+                >
+                  <lucide-icon [img]="iconsService.delete" size="14" aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="mt-4 text-sm text-neutral-600">Todavía no hay fotos en esta página.</p>
+      }
+
+      <div class="mt-6 flex flex-wrap items-end gap-3 border-t border-black/10 pt-6">
+        <div class="flex-1">
+          <label for="pagina-image-file" class="mb-2 block text-sm font-medium">
+            Agregar foto
+          </label>
+          <input
+            id="pagina-image-file"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            class="input"
+            (change)="onFileSelected($event)"
+          />
+        </div>
+        <div class="flex-1">
+          <label for="pagina-image-caption" class="mb-2 block text-sm font-medium">
+            Pie de foto (opcional)
+          </label>
+          <input
+            id="pagina-image-caption"
+            type="text"
+            class="input"
+            [value]="newImageCaption()"
+            (input)="newImageCaption.set($any($event.target).value)"
+          />
+        </div>
+        <button
+          type="button"
+          class="btn-primary"
+          [disabled]="!newImageFile() || uploadingImage()"
+          (click)="addImage()"
+        >
+          {{ uploadingImage() ? 'Subiendo…' : 'Subir foto' }}
+        </button>
+      </div>
+    </div>
+  }
+</div>

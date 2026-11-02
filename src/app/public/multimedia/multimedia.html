@@ -1,0 +1,47 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-8">
+    <h1 class="text-custom-brown mb-2 text-4xl font-bold">Multimedia</h1>
+    <p class="text-custom-brown/70 text-lg">Videos y transmisiones de la diócesis</p>
+  </div>
+
+  @if (loading()) {
+    <div class="flex h-64 items-center justify-center">
+      <p class="text-custom-brown text-lg font-medium">Cargando...</p>
+    </div>
+  } @else if (multimediaService.links().length > 0) {
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+      @for (item of multimediaService.links(); track item.id) {
+        <div class="bg-custom-white overflow-hidden rounded-lg shadow-lg">
+          @if (embedUrl(item.url); as safeUrl) {
+            <div class="aspect-video w-full">
+              <iframe
+                [src]="safeUrl"
+                [title]="item.title"
+                class="h-full w-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+          }
+
+          <div class="p-6">
+            <h3 class="text-custom-brown mb-2 text-xl font-bold">{{ item.title }}</h3>
+            <p class="text-custom-brown/70 mb-4 text-sm">{{ item.description }}</p>
+            <a
+              [href]="item.url"
+              target="_blank"
+              rel="noopener"
+              class="text-custom-brown inline-flex items-center gap-2 text-sm font-bold underline"
+            >
+              <lucide-angular [img]="iconsService.international" [size]="16" />
+              Ver enlace original
+            </a>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <app-empty-state />
+  }
+</div>

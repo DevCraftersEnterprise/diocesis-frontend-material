@@ -1,0 +1,98 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-8">
+    <h1 class="text-custom-brown mb-2 text-4xl font-bold">Documentos</h1>
+    <p class="text-custom-brown/70 text-lg">
+      Cartas, circulares, decretos y demás comunicados oficiales de la diócesis
+    </p>
+  </div>
+
+  <div class="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+    <div class="relative">
+      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+        <lucide-angular [img]="iconsService.search" [size]="20" class="text-custom-brown/50" />
+      </div>
+      <input
+        id="search-title"
+        type="search"
+        placeholder="Buscar por título..."
+        [value]="searchTitle()"
+        (input)="updateTitleSearch($event)"
+        class="search-input-public"
+      />
+    </div>
+    <select
+      id="filter-type"
+      [value]="selectedType()"
+      (change)="updateType($event)"
+      class="select-full"
+      aria-label="Filtrar por tipo de documento"
+    >
+      <option value="">Todos los tipos</option>
+      @for (entry of types; track entry[0]) {
+        <option [value]="entry[0]">{{ entry[1] }}</option>
+      }
+    </select>
+  </div>
+
+  @if (loading()) {
+    <div class="flex h-64 items-center justify-center">
+      <p class="text-custom-brown text-lg font-medium">Cargando documentos...</p>
+    </div>
+  } @else if (documentsService.documents().length > 0) {
+    <div class="mb-6 space-y-3">
+      @for (doc of documentsService.documents(); track doc.id) {
+        <div
+          class="bg-custom-white flex flex-wrap items-center gap-4 rounded-lg p-5 shadow-lg transition-shadow hover:shadow-xl sm:flex-nowrap"
+        >
+          <div class="icon-chip shrink-0">
+            <lucide-angular [img]="iconsService.documentPlaceholder" [size]="22" />
+          </div>
+
+          <div class="min-w-0 flex-1">
+            <h3 class="text-custom-brown font-bold">{{ doc.title }}</h3>
+            <div class="mt-1 flex flex-wrap items-center gap-2 text-sm text-neutral-600">
+              <span class="bg-custom-yellow/20 text-custom-brown rounded-full px-2.5 py-0.5 text-xs font-bold">
+                {{ typeLabels[doc.type] }}
+              </span>
+              <span>{{ doc.createdAt | date: 'dd/MM/yyyy' }}</span>
+            </div>
+            @if (doc.tags && doc.tags.length > 0) {
+              <div class="mt-2 flex flex-wrap gap-2">
+                @for (tag of doc.tags; track $index) {
+                  <span class="inline-block rounded-full bg-blue-100 px-2 py-1 text-xs font-bold text-blue-800">
+                    {{ tag }}
+                  </span>
+                }
+              </div>
+            }
+          </div>
+
+          <a
+            [href]="doc.document | cleanUrl"
+            target="_blank"
+            rel="noopener"
+            download
+            class="btn-primary inline-flex shrink-0 items-center gap-2"
+          >
+            <lucide-angular [img]="iconsService.download" [size]="16" />
+            Descargar
+          </a>
+        </div>
+      }
+    </div>
+
+    <app-pagination
+      [total]="documentsService.totalDocuments()"
+      [pageFrom]="pageFrom()"
+      [pageTo]="pageTo()"
+      [canPrev]="canPrev()"
+      [canNext]="canNext()"
+      [currentLimit]="pagination().limit"
+      (previousPage)="prevPage()"
+      (nextPage)="nextPage()"
+      (limitChange)="changeLimit($event)"
+    />
+  } @else {
+    <app-empty-state />
+  }
+</div>
