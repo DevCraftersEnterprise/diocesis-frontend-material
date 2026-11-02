@@ -1,0 +1,173 @@
+<div class="section-spacing">
+  <div class="page-header">
+    <app-title title="Multimedia" description="Enlaces de YouTube, Facebook, Vimeo, Spotify, etc." />
+
+    <div class="actions-bar">
+      <button class="btn-primary btn-full" (click)="openCreate()">
+        <div class="flex items-center justify-center gap-2">
+          <lucide-icon [img]="iconsService.add" size="15" color="black" aria-hidden="true" />
+          <span>Crear Enlace</span>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <p class="text-center">Cargando…</p>
+  } @else if (multimediaService.links().length > 0) {
+    <div class="space-y-3">
+      @for (row of activeLinks(); track row.id; let i = $index) {
+        <div class="flex items-center gap-3 rounded-xl border border-black/10 bg-white p-4">
+          <div class="flex shrink-0 flex-col gap-1">
+            <button
+              type="button"
+              class="btn-table-info"
+              [disabled]="i === 0"
+              (click)="moveLink(i, -1)"
+              aria-label="Subir"
+            >
+              <lucide-icon [img]="iconsService.moveUp" size="14" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              class="btn-table-info"
+              [disabled]="i === activeLinks().length - 1"
+              (click)="moveLink(i, 1)"
+              aria-label="Bajar"
+            >
+              <lucide-icon [img]="iconsService.moveDown" size="14" aria-hidden="true" />
+            </button>
+          </div>
+
+          <div class="min-w-0 flex-1">
+            <h3 class="truncate font-bold" [title]="row.title">{{ row.title }}</h3>
+            <p class="truncate text-sm text-neutral-600" [title]="row.description">
+              {{ row.description }}
+            </p>
+            <a [href]="row.url" target="_blank" rel="noopener" class="truncate text-xs underline">
+              {{ row.url }}
+            </a>
+          </div>
+
+          <div class="flex shrink-0 items-center gap-2">
+            <button class="btn-table-warning" (click)="openEdit(row)">
+              <div class="flex items-center justify-center gap-1">
+                <lucide-icon [img]="iconsService.edit" size="15" />
+                <span class="hidden text-xs 2xl:inline">Editar</span>
+              </div>
+            </button>
+            <button
+              class="btn-table border-red-200 bg-red-100 text-red-800"
+              (click)="confirmToggle(row, 'deactivate')"
+              [attr.aria-label]="'Desactivar enlace ' + row.title"
+            >
+              <div class="flex items-center justify-center gap-1">
+                <lucide-icon [img]="iconsService.disable" size="15" color="red"></lucide-icon>
+                <span class="hidden text-xs 2xl:inline">Desactivar</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (multimediaService.links().length > activeLinks().length) {
+      <div class="mt-8">
+        <h2 class="mb-3 text-lg font-bold text-neutral-600">Inactivos</h2>
+        <div class="space-y-3">
+          @for (row of multimediaService.links(); track row.id) {
+            @if (!row.isActive) {
+              <div
+                class="flex items-center gap-3 rounded-xl border border-black/10 bg-neutral-50 p-4 opacity-70"
+              >
+                <div class="min-w-0 flex-1">
+                  <h3 class="truncate font-bold" [title]="row.title">{{ row.title }}</h3>
+                  <p class="truncate text-sm text-neutral-600">{{ row.url }}</p>
+                </div>
+                <button
+                  class="btn-table border-green-200 bg-green-100 text-green-800"
+                  (click)="confirmToggle(row, 'activate')"
+                  [attr.aria-label]="'Activar enlace ' + row.title"
+                >
+                  <div class="flex items-center justify-center gap-1">
+                    <lucide-icon [img]="iconsService.active" size="15" color="green"></lucide-icon>
+                    <span class="hidden text-xs 2xl:inline">Activar</span>
+                  </div>
+                </button>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    }
+  } @else {
+    <app-empty-state />
+  }
+
+  <app-modal
+    [isOpen]="mode() !== null"
+    [title]="modalTitle()"
+    [maxWidth]="'max-w-xl'"
+    [showActions]="true"
+    [loading]="saving()"
+    [confirmDisabled]="!isCreateFormValid()"
+    [confirmText]="mode() === 'create' ? 'Crear' : 'Guardar'"
+    (close)="closeModal()"
+    (cancel)="closeModal()"
+    (confirm)="save()"
+  >
+    <form class="space-y-4" (submit)="$event.preventDefault()">
+      <div>
+        <label for="multimedia-title" class="mb-2 block text-sm font-medium">Título</label>
+        <input
+          id="multimedia-title"
+          type="text"
+          class="w-full rounded-xl border border-black/10 px-3 py-2"
+          [value]="createForm().title"
+          (input)="updateField('title', $event)"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="multimedia-description" class="mb-2 block text-sm font-medium">
+          Descripción
+        </label>
+        <textarea
+          id="multimedia-description"
+          rows="3"
+          class="w-full rounded-xl border border-black/10 px-3 py-2"
+          [value]="createForm().description"
+          (input)="updateField('description', $event)"
+          required
+        ></textarea>
+      </div>
+
+      <div>
+        <label for="multimedia-url" class="mb-2 block text-sm font-medium">Enlace</label>
+        <input
+          id="multimedia-url"
+          type="url"
+          placeholder="https://..."
+          class="w-full rounded-xl border border-black/10 px-3 py-2"
+          [value]="createForm().url"
+          (input)="updateField('url', $event)"
+          required
+        />
+      </div>
+    </form>
+  </app-modal>
+
+  <app-modal
+    [isOpen]="confirmingToggle()"
+    [title]="toggleConfirmTitle()"
+    [maxWidth]="'max-w-md'"
+    [showActions]="true"
+    confirmText="Confirmar"
+    (close)="closeToggleConfirmation()"
+    (cancel)="closeToggleConfirmation()"
+    (confirm)="executeToggle()"
+  >
+    <p class="text-sm text-neutral-600">{{ toggleConfirmMessage() }}</p>
+  </app-modal>
+</div>
