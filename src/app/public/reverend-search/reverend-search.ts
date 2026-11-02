@@ -79,6 +79,7 @@ export class ReverendSearch implements OnInit {
         firstName: this.searchName(),
         lastName: this.searchLastName(),
         isActive: true, // Solo mostrar padres activos en la vista pública
+        role: 'presbitero',
       })
       .subscribe({
         next: () => {

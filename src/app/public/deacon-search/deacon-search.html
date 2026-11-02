@@ -1,0 +1,147 @@
+<div class="container mx-auto px-4 py-8">
+  <!-- Título -->
+  <div class="mb-8">
+    <h1 class="text-custom-brown mb-2 text-4xl font-bold">{{ pageTitle() }}</h1>
+    <p class="text-custom-brown/70 text-lg">{{ pageSubtitle() }}</p>
+  </div>
+
+  <!-- Búsqueda -->
+  <div class="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+    <div class="relative">
+      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+        <lucide-angular [img]="iconsService.search" [size]="20" class="text-custom-brown/50" />
+      </div>
+      <input
+        id="search-name"
+        type="search"
+        placeholder="Buscar por nombre..."
+        [value]="searchName()"
+        (input)="updateNameSearch($event)"
+        class="search-input-public"
+      />
+    </div>
+
+    <div class="relative">
+      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+        <lucide-angular [img]="iconsService.search" [size]="20" class="text-custom-brown/50" />
+      </div>
+      <input
+        id="search-lastname"
+        type="search"
+        placeholder="Buscar por apellido..."
+        [value]="searchLastName()"
+        (input)="updateLastNameSearch($event)"
+        class="search-input-public"
+      />
+    </div>
+  </div>
+
+  <!-- Grid de diáconos -->
+  @if (loading()) {
+    <div class="flex h-64 items-center justify-center">
+      <p class="text-custom-brown text-lg font-medium">Cargando...</p>
+    </div>
+  } @else if (reverendsService.reverends().length > 0) {
+    <div class="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      @for (padre of reverendsService.reverends(); track padre.id) {
+        <a
+          [routerLink]="['/directorio/padres', padre.id]"
+          class="bg-custom-white group flex flex-col items-center rounded-lg p-6 no-underline shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+        >
+          <!-- Foto -->
+          <div class="mb-4 h-32 w-32 overflow-hidden rounded-full">
+            @if (padre.picture) {
+              <img
+                [src]="padre.picture | cleanUrl"
+                [alt]="padre.firstName + ' ' + padre.lastName"
+                class="h-full w-full object-cover"
+              />
+            } @else {
+              <div class="bg-custom-brown/10 flex h-full w-full items-center justify-center">
+                <lucide-angular
+                  [img]="iconsService.avatarPlaceholder"
+                  [size]="64"
+                  class="text-custom-brown/30"
+                />
+              </div>
+            }
+          </div>
+
+          <!-- Nombre -->
+          <h3 class="text-custom-brown mb-2 text-center text-xl font-bold">
+            {{ padre.firstName }}
+          </h3>
+          <p class="text-custom-brown/70 mb-2 text-center">
+            {{ padre.lastName }}
+          </p>
+
+          <!-- Comunidad asignada -->
+          @if (padre.assignedCommunity) {
+            <p class="text-custom-brown/60 mb-4 text-center text-sm">
+              {{ padre.assignedCommunity }}
+            </p>
+          }
+
+          <!-- Redes sociales -->
+          @if (padre.email || padre.facebook || padre.instagram || padre.twitter) {
+            <div class="flex flex-wrap items-center justify-center gap-2">
+              @if (padre.email) {
+                <a
+                  [href]="'mailto:' + padre.email"
+                  class="hover:bg-custom-yellow/20 rounded-full p-2 transition-colors"
+                  [attr.aria-label]="'Email de ' + padre.firstName"
+                >
+                  <img src="/svgs/email.svg" alt="Email" class="h-6 w-6" />
+                </a>
+              }
+              @if (padre.facebook) {
+                <a
+                  [href]="padre.facebook"
+                  target="_blank"
+                  class="hover:bg-custom-yellow/20 rounded-full p-2 transition-colors"
+                  [attr.aria-label]="'Facebook de ' + padre.firstName"
+                >
+                  <img src="/svgs/facebook.svg" alt="Facebook" class="h-6 w-6" />
+                </a>
+              }
+              @if (padre.instagram) {
+                <a
+                  [href]="padre.instagram"
+                  target="_blank"
+                  class="hover:bg-custom-yellow/20 rounded-full p-2 transition-colors"
+                  [attr.aria-label]="'Instagram de ' + padre.firstName"
+                >
+                  <img src="/svgs/instagram.svg" alt="Instagram" class="h-6 w-6" />
+                </a>
+              }
+              @if (padre.twitter) {
+                <a
+                  [href]="padre.twitter"
+                  target="_blank"
+                  class="hover:bg-custom-yellow/20 rounded-full p-2 transition-colors"
+                  [attr.aria-label]="'Twitter de ' + padre.firstName"
+                >
+                  <img src="/svgs/twitter.svg" alt="Twitter" class="h-6 w-6" />
+                </a>
+              }
+            </div>
+          }
+        </a>
+      }
+    </div>
+
+    <app-pagination
+      [total]="reverendsService.totalReverends()"
+      [pageFrom]="pageFrom()"
+      [pageTo]="pageTo()"
+      [canPrev]="canPrev()"
+      [canNext]="canNext()"
+      [currentLimit]="pagination().limit"
+      (previousPage)="prevPage()"
+      (nextPage)="nextPage()"
+      (limitChange)="changeLimit($event)"
+    />
+  } @else {
+    <app-empty-state />
+  }
+</div>

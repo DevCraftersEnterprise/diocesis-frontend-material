@@ -55,6 +55,18 @@
       <option class="font-bold" value="true">Activos</option>
       <option class="font-bold" value="false">Inactivos</option>
     </select>
+
+    <select
+      id="filter-role"
+      (change)="updateFilterRole($event)"
+      class="select-full"
+      aria-label="Filtrar por rol"
+    >
+      <option class="font-bold" value="">Todos los roles</option>
+      @for (role of padreRoles; track role) {
+        <option class="font-bold" [value]="role">{{ padreRoleLabels[role] }}</option>
+      }
+    </select>
   </div>
 
   @if (reverendsService.reverends().length > 0) {
@@ -64,6 +76,7 @@
           <tr>
             <th class="px-4 py-3 text-center font-bold">Foto</th>
             <th class="px-4 py-3 text-left font-bold">Nombre</th>
+            <th class="px-4 py-3 text-left font-bold">Rol</th>
             <th class="px-4 py-3 text-left font-bold">Estado</th>
             <th class="px-4 py-3 text-left font-bold">Cumpleaños</th>
             <th class="px-4 py-3 text-left font-bold">Redes Sociales</th>
@@ -94,6 +107,9 @@
               </td>
               <td class="truncate px-4 py-3" [title]="row.firstName + ' ' + row.lastName">
                 {{ row.firstName }} {{ row.lastName }}
+              </td>
+              <td class="truncate px-4 py-3">
+                {{ padreRoleLabels[row.role] }}
               </td>
               <td class="px-4 py-3">
                 <div
@@ -275,7 +291,60 @@
             </div>
           </div>
 
-          <div>
+          <div class="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label for="role" class="mb-2 block text-sm font-medium">Rol</label>
+              <select
+                id="role"
+                class="w-full rounded-xl border border-black/10 px-3 py-2"
+                [value]="createForm().role"
+                (change)="updateCreateFormField('role', $event)"
+              >
+                @for (role of padreRoles; track role) {
+                  <option [value]="role">{{ padreRoleLabels[role] }}</option>
+                }
+              </select>
+            </div>
+            <div>
+              <label for="ordinationDate" class="mb-2 block text-sm font-medium"
+                >Fecha de ordenación</label
+              >
+              <input
+                id="ordinationDate"
+                type="date"
+                class="w-full rounded-xl border border-black/10 px-3 py-2"
+                [value]="createForm().ordinationDate"
+                (input)="updateCreateFormField('ordinationDate', $event)"
+              />
+            </div>
+          </div>
+
+          <div class="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label for="phone" class="mb-2 block text-sm font-medium">Teléfono</label>
+              <input
+                id="phone"
+                type="text"
+                class="w-full rounded-xl border border-black/10 px-3 py-2"
+                [value]="createForm().phone"
+                (input)="updateCreateFormField('phone', $event)"
+              />
+            </div>
+            <div>
+              <label for="assignedCommunity" class="mb-2 block text-sm font-medium"
+                >Parroquia / comunidad asignada</label
+              >
+              <input
+                id="assignedCommunity"
+                type="text"
+                class="w-full rounded-xl border border-black/10 px-3 py-2"
+                [value]="createForm().assignedCommunity"
+                (input)="updateCreateFormField('assignedCommunity', $event)"
+              />
+            </div>
+          </div>
+
+          <div class="mt-2">
             <label for="email" class="mb-2 block text-sm font-medium">Email</label>
             <input
               id="email"

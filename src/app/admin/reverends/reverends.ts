@@ -15,7 +15,7 @@ import { ModalComponent } from '../../shared/components/modal/modal';
 import { PaginationComponent } from '../../shared/components/pagination/pagination';
 import { TitleComponent } from '../../shared/components/title/title';
 import { Reverends } from './services/reverends';
-import { Padre } from '../../core/models/reverend.model';
+import { PADRE_ROLE_LABELS, Padre, PadreRole } from '../../core/models/reverend.model';
 import { Mode, ReverendForm } from '../../shared/models/common.models';
 import { createPaginationState } from '../../shared/utils/pagination.util';
 import { createSearchState } from '../../shared/utils/search.util';
@@ -43,10 +43,17 @@ export class ReverendsComponent implements OnInit {
   protected readonly iconsService = inject(IconsService);
   private readonly sanitizer = inject(DomSanitizer);
 
+  protected readonly padreRoleLabels = PADRE_ROLE_LABELS;
+  protected readonly padreRoles: PadreRole[] = [
+    'presbitero',
+    'diacono_permanente',
+    'diacono_transitorio',
+  ];
+
   readonly confirmingToggle = signal(false);
   readonly targetReverend = signal<Padre | null>(null);
   readonly targetAction = signal<'activate' | 'deactivate' | null>(null);
-  readonly filters = signal<{ isActive?: boolean }>({});
+  readonly filters = signal<{ isActive?: boolean; role?: PadreRole }>({});
 
   selectedFile = signal<File | null>(null);
   selectedFileName = signal<string | null>(null);
@@ -59,6 +66,7 @@ export class ReverendsComponent implements OnInit {
     firstName: '',
     lastName: '',
     birthDate: '',
+    role: 'presbitero',
   });
 
   private readonly paginationState = createPaginationState(this.reverendsService.totalReverends, {
@@ -138,6 +146,7 @@ export class ReverendsComponent implements OnInit {
         firstName: this.searchName(),
         lastName: this.searchLastName(),
         isActive: this.filters().isActive,
+        role: this.filters().role,
       })
       .subscribe({
         next: () => {
@@ -160,6 +169,10 @@ export class ReverendsComponent implements OnInit {
       facebook: '',
       instagram: '',
       twitter: '',
+      role: 'presbitero',
+      ordinationDate: '',
+      phone: '',
+      assignedCommunity: '',
     });
   }
 
@@ -173,6 +186,10 @@ export class ReverendsComponent implements OnInit {
       facebook: row.facebook ?? '',
       instagram: row.instagram ?? '',
       twitter: row.twitter ?? '',
+      role: row.role,
+      ordinationDate: row.ordinationDate ?? '',
+      phone: row.phone ?? '',
+      assignedCommunity: row.assignedCommunity ?? '',
     });
 
     this.targetReverend.set(row);
@@ -209,8 +226,19 @@ export class ReverendsComponent implements OnInit {
       return;
     }
 
-    const { firstName, lastName, birthDate, email, facebook, instagram, twitter } =
-      this.createForm();
+    const {
+      firstName,
+      lastName,
+      birthDate,
+      email,
+      facebook,
+      instagram,
+      twitter,
+      role,
+      ordinationDate,
+      phone,
+      assignedCommunity,
+    } = this.createForm();
 
     const file = this.selectedFile();
 
@@ -223,6 +251,13 @@ export class ReverendsComponent implements OnInit {
     formData.append('facebook', facebook ?? '');
     formData.append('instagram', instagram ?? '');
     formData.append('twitter', twitter ?? '');
+    formData.append('role', role);
+    formData.append(
+      'ordinationDate',
+      ordinationDate ? new Date(ordinationDate).toISOString().split('T')[0] : '',
+    );
+    formData.append('phone', phone ?? '');
+    formData.append('assignedCommunity', assignedCommunity ?? '');
 
     if (file !== null) formData.append('picture', file);
 
@@ -312,6 +347,15 @@ export class ReverendsComponent implements OnInit {
     this.loadReverends();
   }
 
+  updateFilterRole(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    const role = (select.value || undefined) as PadreRole | undefined;
+
+    this.filters.update((f) => ({ ...f, role }));
+    this.paginationState.resetToFirstPage();
+    this.loadReverends();
+  }
+
   onPhotoUpload(event: Event) {
     event.preventDefault(); // Prevenir el comportamiento predeterminado
     event.stopPropagation(); // Prevenir la propagación del evento
@@ -346,6 +390,10 @@ export class ReverendsComponent implements OnInit {
       facebook: '',
       instagram: '',
       twitter: '',
+      role: 'presbitero',
+      ordinationDate: '',
+      phone: '',
+      assignedCommunity: '',
     });
   }
 }
