@@ -135,7 +135,7 @@ describe('Layout (admin) — filtro de moduleAccess en el sidebar', () => {
     expect(labels()).toContain('ISMA');
   });
 
-  it('los 11 modulos generales solo los ven admin y super', () => {
+  it('los 12 modulos generales solo los ven admin y super', () => {
     authStub.user.set(fakeUser({ role: 'user', moduleAccess: ['isma'] }));
     fixture.detectChanges();
     expect(labels()).not.toContain('Usuarios');
@@ -155,6 +155,7 @@ describe('Layout (admin) — filtro de moduleAccess en el sidebar', () => {
       'Documentos',
       'Páginas',
       'Descargas',
+      'Multimedia',
     ]) {
       expect(labels()).toContain(label);
     }

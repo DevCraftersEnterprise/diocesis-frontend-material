@@ -56,6 +56,7 @@ export class Layout implements OnInit {
     { label: 'Documentos', to: '/dashboard/documents', icon: this.iconsService.documents },
     { label: 'Páginas', to: '/dashboard/paginas', icon: this.iconsService.pages },
     { label: 'Descargas', to: '/dashboard/downloads', icon: this.iconsService.download },
+    { label: 'Multimedia', to: '/dashboard/multimedia', icon: this.iconsService.tv },
     {
       label: 'Instituto Bíblico',
       icon: this.iconsService.institute,

@@ -67,6 +67,11 @@ export const routes: Routes = [
           import('./admin/downloads/downloads').then((m) => m.DownloadsComponent),
       },
       {
+        path: 'multimedia',
+        loadComponent: () =>
+          import('./admin/multimedia/multimedia').then((m) => m.MultimediaComponent),
+      },
+      {
         path: 'paginas/:slug',
         loadComponent: () =>
           import('./admin/pages/pagina-contenido-edit').then(
@@ -292,12 +297,8 @@ export const routes: Routes = [
       },
       {
         path: 'multimedia/misas',
-        title: 'Misas · En construcción',
-        data: { label: 'Misas' },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
-          ),
+          import('./public/multimedia/multimedia').then((m) => m.MultimediaPublic),
       },
       {
         path: 'diezmo',

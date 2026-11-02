@@ -73,6 +73,12 @@ export interface DescargaForm {
   publishedAt: string;
 }
 
+export interface MultimediaForm {
+  title: string;
+  description: string;
+  url: string;
+}
+
 export interface TrainingForm {
   name: string;
   description: string;
