@@ -67,6 +67,12 @@ export interface DocumentForm {
   type: DocumentType;
 }
 
+export interface DescargaForm {
+  title: string;
+  description: string;
+  publishedAt: string;
+}
+
 export interface TrainingForm {
   name: string;
   description: string;

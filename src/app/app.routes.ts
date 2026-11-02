@@ -62,6 +62,11 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'downloads',
+        loadComponent: () =>
+          import('./admin/downloads/downloads').then((m) => m.DownloadsComponent),
+      },
+      {
         path: 'paginas/:slug',
         loadComponent: () =>
           import('./admin/pages/pagina-contenido-edit').then(
@@ -282,12 +287,8 @@ export const routes: Routes = [
       },
       {
         path: 'descargas',
-        title: 'Descargas · En construcción',
-        data: { label: 'Descargas' },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
-          ),
+          import('./public/downloads/downloads').then((m) => m.DownloadsPublic),
       },
       {
         path: 'multimedia/misas',
