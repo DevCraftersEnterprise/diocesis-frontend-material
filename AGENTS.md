@@ -32,6 +32,16 @@ repo. Para convenciones de código Angular/TypeScript, ver
 Mensajes de commit y cuerpos de PR en español, describiendo la causa del problema
 cuando es un fix, no solo el síntoma.
 
+## CI y dependencias
+
+`.github/workflows/ci.yml` corre en cada PR hacia `dev`/`main` y en cada push a `dev`:
+pruebas (`ng test --watch=false --browsers=ChromeHeadless`) y build. No hay `lint`
+configurado en este repo (ni script ni ESLint), a diferencia del backend. El check se
+llama `test` y es obligatorio en las reglas de rama de `dev`/`main` (igual que en
+`diocesis-web-api`). `.github/dependabot.yml` abre PRs semanales de actualizaciones de
+npm y de GitHub Actions contra `dev` — se revisan y aprueban como cualquier otro PR,
+nunca se auto-mergean.
+
 ## Despliegue
 
 `main` se despliega solo a Hostinger vía GitHub Actions
