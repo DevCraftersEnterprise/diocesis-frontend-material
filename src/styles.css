@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'tailwindcss';
+@import 'quill/dist/quill.snow.css';
 @plugin '@midudev/tailwind-animations';
 
 @font-face {

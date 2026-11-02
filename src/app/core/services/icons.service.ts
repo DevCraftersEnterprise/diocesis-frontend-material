@@ -6,6 +6,8 @@ import {
   Building,
   Calendar,
   Calendar1,
+  ChevronDown,
+  ChevronUp,
   Church,
   CircleUserRound,
   Clock,
@@ -18,6 +20,7 @@ import {
   File,
   FileImage,
   FilePlusCorner,
+  FileText,
   Folder,
   Gavel,
   Globe,
@@ -120,4 +123,7 @@ export class IconsService {
   readonly clock = Clock;
   readonly phone = Phone;
   readonly construction = Construction;
+  readonly pages = FileText;
+  readonly moveUp = ChevronUp;
+  readonly moveDown = ChevronDown;
 }
