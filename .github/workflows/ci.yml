@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - main
+  push:
+    branches:
+      - dev
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22.23.4
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+        id: chrome
+
+      - name: Chrome sin sandbox (runner de CI)
+        run: |
+          echo "CHROME_PATH=${{ steps.chrome.outputs.chrome-path }}" >> "$GITHUB_ENV"
+          echo "#!/bin/sh" > "$RUNNER_TEMP/chrome-nosandbox"
+          echo 'exec "$CHROME_PATH" --no-sandbox "$@"' >> "$RUNNER_TEMP/chrome-nosandbox"
+          chmod +x "$RUNNER_TEMP/chrome-nosandbox"
+          echo "CHROME_BIN=$RUNNER_TEMP/chrome-nosandbox" >> "$GITHUB_ENV"
+
+      - name: Run tests
+        run: npx ng test --watch=false --browsers=ChromeHeadless
+
+      - name: Build
+        run: npm run build
