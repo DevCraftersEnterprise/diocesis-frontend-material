@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { LucideAngularModule } from 'lucide-angular';
 import { Reverends } from '../../admin/reverends/services/reverends';
-import { Padre } from '../../core/models/reverend.model';
+import { PADRE_ROLE_LABELS, Padre, PadreRole } from '../../core/models/reverend.model';
 import { IconsService } from '../../core/services/icons.service';
 import { CleanUrlPipe } from '../../core/pipes/clean-url.pipe';
 
@@ -23,6 +23,11 @@ export class ReverendDetails implements OnInit {
 
   reverend = signal<Padre | null>(null);
   currentUrl = signal<string>('');
+  protected readonly padreRoleLabels = PADRE_ROLE_LABELS;
+
+  protected roleShortLabel(role: PadreRole): string {
+    return role === 'presbitero' ? 'Pbro.' : 'Diác.';
+  }
 
   ngOnInit(): void {
     const param = this.route.snapshot.paramMap.get('id');

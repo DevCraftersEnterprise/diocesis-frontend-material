@@ -255,21 +255,25 @@ export const routes: Routes = [
       },
       {
         path: 'directorio/diaconos/permanentes',
-        title: 'Diáconos Permanentes · En construcción',
-        data: { label: 'Diáconos Permanentes' },
+        title: 'Diáconos Permanentes · Diócesis de Ciudad Obregón',
+        data: {
+          role: 'diacono_permanente',
+          title: 'Diáconos Permanentes',
+          subtitle: 'Conoce a los diáconos permanentes de nuestra diócesis',
+        },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
-          ),
+          import('./public/deacon-search/deacon-search').then((m) => m.DeaconSearch),
       },
       {
         path: 'directorio/diaconos/transitorios',
-        title: 'Diáconos Transitorios · En construcción',
-        data: { label: 'Diáconos Transitorios' },
+        title: 'Diáconos Transitorios · Diócesis de Ciudad Obregón',
+        data: {
+          role: 'diacono_transitorio',
+          title: 'Diáconos Transitorios',
+          subtitle: 'Conoce a los diáconos transitorios de nuestra diócesis',
+        },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
-          ),
+          import('./public/deacon-search/deacon-search').then((m) => m.DeaconSearch),
       },
       {
         path: 'seminario',

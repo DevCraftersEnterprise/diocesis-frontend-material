@@ -77,12 +77,18 @@
               INFORMACIÓN GENERAL
             </h2>
             <p class="text-custom-brown text-lg">
-              Pbro. {{ padre.firstName }} {{ padre.lastName }}
+              {{ roleShortLabel(padre.role) }} {{ padre.firstName }} {{ padre.lastName }}
             </p>
             @if (padre.birthDate) {
               <div class="text-custom-brown/70 mt-4 flex items-center gap-2">
                 <lucide-angular [img]="iconsService.calendar" [size]="20" />
                 <span>Fecha de nacimiento: {{ padre.birthDate | date: 'dd/MM/yyyy' }}</span>
+              </div>
+            }
+            @if (padre.phone) {
+              <div class="text-custom-brown/70 mt-2 flex items-center gap-2">
+                <lucide-angular [img]="iconsService.phone" [size]="20" />
+                <span>Teléfono: {{ padre.phone }}</span>
               </div>
             }
           </div>
@@ -93,8 +99,13 @@
               CARGOS
             </h2>
             <ul class="text-custom-brown list-inside list-disc space-y-2">
-              <!-- Aquí se mostrarían los cargos/parroquias si los tuviéramos en el modelo -->
-              <li>Información de cargo próximamente disponible</li>
+              <li>{{ padreRoleLabels[padre.role] }}</li>
+              @if (padre.assignedCommunity) {
+                <li>Parroquia / comunidad asignada: {{ padre.assignedCommunity }}</li>
+              }
+              @if (padre.ordinationDate) {
+                <li>Fecha de ordenación: {{ padre.ordinationDate | date: 'dd/MM/yyyy' }}</li>
+              }
             </ul>
           </div>
         </div>

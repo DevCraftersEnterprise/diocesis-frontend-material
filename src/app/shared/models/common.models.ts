@@ -2,6 +2,7 @@ import { DocumentType } from '../../core/models/document.model';
 import { EventoType } from '../../core/models/institute-event.model';
 import { InstituteModality } from '../../core/models/institute-training.model';
 import { AppModuleName, UserRole } from '../../core/models/user.model';
+import { PadreRole } from '../../core/models/reverend.model';
 
 export type Mode = 'create' | 'edit' | null;
 
@@ -29,6 +30,10 @@ export interface ReverendForm {
   facebook?: string;
   twitter?: string;
   instagram?: string;
+  role: PadreRole;
+  ordinationDate?: string;
+  phone?: string;
+  assignedCommunity?: string;
 }
 
 export interface NewspaperForm {
