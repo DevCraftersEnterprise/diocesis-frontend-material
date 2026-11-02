@@ -269,11 +269,9 @@ export const routes: Routes = [
       },
       {
         path: 'archivo/documentos',
-        title: 'Documentos · En construcción',
-        data: { label: 'Documentos' },
         loadComponent: () =>
-          import('./public/under-construction/under-construction').then(
-            (m) => m.UnderConstruction,
+          import('./public/archive-documents/archive-documents').then(
+            (m) => m.ArchiveDocuments,
           ),
       },
       {
