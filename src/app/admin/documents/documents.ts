@@ -16,7 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 import { IconsService } from '../../core/services/icons.service';
 import { Document } from './services/document';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Documento, DocumentType } from '../../core/models/document.model';
+import { DOCUMENT_TYPE_LABELS, Documento, DocumentType } from '../../core/models/document.model';
 import { DocumentForm, Mode } from '../../shared/models/common.models';
 import { createPaginationState } from '../../shared/utils/pagination.util';
 import { createSearchState } from '../../shared/utils/search.util';
@@ -336,19 +336,7 @@ export class DocumentsComponent implements OnInit {
   }
 
   documentTypeTransformation(type: DocumentType): string {
-    const typeMap: Record<DocumentType, string> = {
-      carta: 'Carta',
-      circular: 'Circular',
-      comunicado: 'Comunicado',
-      prensa: 'Prensa',
-      decreto: 'Decreto',
-      instruccion: 'Instrucción',
-      mensaje: 'Mensaje',
-      dominical: 'Dominical',
-      rescripto: 'Rescripto',
-    };
-
-    return typeMap[type] || type;
+    return DOCUMENT_TYPE_LABELS[type] || type;
   }
 
   private resetCreateForm() {
