@@ -44,12 +44,8 @@
                   <div>
                     <p>{{ parroquia.address }}</p>
                     @if (parroquia.town || parroquia.zipCode) {
-                      <p>
-                        {{ parroquia.town }}
-                        @if (parroquia.zipCode) {
-                          , C.P. {{ parroquia.zipCode }}
-                        }
-                      </p>
+                      <p>{{ parroquia.town
+                        }}{{ parroquia.zipCode ? ', C.P. ' + parroquia.zipCode : '' }}</p>
                     }
                   </div>
                 </div>

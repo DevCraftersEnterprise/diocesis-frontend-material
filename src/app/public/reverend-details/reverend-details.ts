@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { LucideAngularModule } from 'lucide-angular';
 import { Reverends } from '../../admin/reverends/services/reverends';
@@ -10,7 +10,7 @@ import { CleanUrlPipe } from '../../core/pipes/clean-url.pipe';
 
 @Component({
   selector: 'app-reverend-details',
-  imports: [CommonModule, LucideAngularModule, CleanUrlPipe, RouterLink],
+  imports: [CommonModule, LucideAngularModule, CleanUrlPipe],
   templateUrl: './reverend-details.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -27,6 +27,22 @@ export class ReverendDetails implements OnInit {
 
   protected roleShortLabel(role: PadreRole): string {
     return role === 'presbitero' ? 'Pbro.' : 'Diác.';
+  }
+
+  /** Vuelve a la pagina anterior (lista de Presbiteros o de Diaconos, segun de donde
+   * vino la visita); si no hay historial de la SPA, cae a la lista segun el rol. */
+  protected goBack(): void {
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+    this.router.navigate([this.directoryRouteForRole(this.reverend()?.role)]);
+  }
+
+  private directoryRouteForRole(role: PadreRole | undefined): string {
+    if (role === 'diacono_permanente') return '/directorio/diaconos/permanentes';
+    if (role === 'diacono_transitorio') return '/directorio/diaconos/transitorios';
+    return '/directorio/padres';
   }
 
   ngOnInit(): void {
