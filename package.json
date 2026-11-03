@@ -20,7 +20,7 @@
     "@fullcalendar/angular": "^6.1.22",
     "@fullcalendar/core": "^6.1.22",
     "@fullcalendar/daygrid": "^6.1.22",
-    "@midudev/tailwind-animations": "^0.2.0",
+    "@midudev/tailwind-animations": "^1.0.2",
     "@tailwindcss/postcss": "^4.3.3",
     "jwt-decode": "^4.0.0",
     "lucide-angular": "^0.562.0",
