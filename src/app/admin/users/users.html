@@ -89,17 +89,17 @@
     <div class="table-container">
       <table class="min-w-200 table-fixed">
         <thead class="bg-neutral-50 text-neutral-600">
-          <tr>
+          <tr class="bg-neutral-50">
             <th class="w-1/4 px-4 py-3 text-left font-bold">Email</th>
             <th class="w-1/5 px-4 py-3 text-left font-bold">Nombre</th>
             <th class="w-28 px-4 py-3 text-left font-bold">Estado</th>
-            <th class="px-4 py-3 text-right font-bold">Acciones</th>
+            <th class="col-sticky-actions px-4 py-3 text-right font-bold">Acciones</th>
           </tr>
         </thead>
         <tbody>
           @for (row of usersService.users(); track row.id) {
             <tr
-              class="animate-fade-in animate-duration-300 hover:bg-custom-yellow/50 border-t border-black/5 transition-all"
+              class="animate-fade-in animate-duration-300 hover:bg-custom-yellow/50 bg-white border-t border-black/5 transition-all"
             >
               <td class="w-1/4 truncate px-4 py-3" [title]="row.email">{{ row.email }}</td>
               <td class="w-1/4 truncate px-4 py-3" [title]="row.username">{{ row.username }}</td>
@@ -118,7 +118,7 @@
                   </span>
                 </div>
               </td>
-              <td class="py3 px-4">
+              <td class="col-sticky-actions py3 px-4">
                 <div class="flex flex-wrap items-center justify-end gap-2">
                   <button class="btn-table-warning" (click)="openEditUser(row)">
                     <div class="flex items-center justify-center gap-1">

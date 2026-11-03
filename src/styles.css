@@ -179,8 +179,39 @@
     @apply w-full rounded-xl border border-black/10 px-3 py-2 md:w-auto;
   }
 
+  /* Scrollbar horizontal siempre visible (no solo al hover): en tablet/desktop las
+     tablas admin suelen ser mas anchas que su contenedor y la columna "Acciones"
+     quedaba fuera de vista sin ninguna pista de que hay mas contenido a la derecha. */
   .table-container {
     @apply overflow-hidden overflow-x-auto rounded-2xl border border-black/10 bg-white shadow-sm;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+  }
+
+  .table-container::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .table-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .table-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.25);
+    border-radius: 999px;
+  }
+
+  .table-container::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  /* Columna "Acciones" fija: en las tablas admin mas anchas (muchas columnas con
+     contenido real) no cabe todo en tablet/mobile sin scroll horizontal. En vez de
+     dejar los botones de editar/eliminar fuera de vista, esta columna se queda fija
+     a la derecha para que siempre esten alcanzables sin tener que desplazarse. */
+  .col-sticky-actions {
+    @apply sticky right-0 z-10 bg-inherit;
+    box-shadow: -6px 0 6px -6px rgba(0, 0, 0, 0.15);
   }
 
   .btn-table {
@@ -204,7 +235,7 @@
   }
 
   .btn-table-info {
-    @apply hover:animate-scale w-12 cursor-pointer rounded-lg border border-purple-200 bg-purple-100 px-2 py-1 text-purple-800 transition-all hover:bg-purple-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:animate-none;
+    @apply hover:animate-scale w-12 cursor-pointer rounded-lg border border-purple-200 bg-purple-100 px-2 py-1 text-purple-800 transition-all hover:bg-purple-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:animate-none 2xl:w-28;
   }
 
   .btn-table-pink {
