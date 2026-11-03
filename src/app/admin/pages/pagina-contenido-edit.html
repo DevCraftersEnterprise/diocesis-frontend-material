@@ -1,6 +1,12 @@
 <div class="section-spacing">
   <div class="page-header">
-    <a routerLink="/dashboard/paginas" class="text-sm underline">← Volver a Páginas</a>
+    <a
+      routerLink="/dashboard/paginas"
+      class="hover:animate-scale inline-flex w-fit items-center gap-1.5 rounded-xl border border-black/10 px-4 py-2 text-sm transition-all hover:bg-black/5"
+    >
+      <lucide-icon [img]="iconsService.previous" size="16" aria-hidden="true" />
+      Volver a Páginas
+    </a>
   </div>
 
   @if (loading()) {
