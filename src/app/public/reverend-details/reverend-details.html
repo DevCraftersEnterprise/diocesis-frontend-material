@@ -114,13 +114,14 @@
 
     <!-- Botón volver -->
     <div class="mt-8">
-      <a
-        routerLink="/padres"
+      <button
+        type="button"
+        (click)="goBack()"
         class="bg-custom-brown hover:bg-custom-brown/80 inline-flex items-center gap-2 rounded-lg px-6 py-3 text-white transition-colors"
       >
         <lucide-angular [img]="iconsService.previous" [size]="20" />
         <span>Volver al buscador</span>
-      </a>
+      </button>
     </div>
   </article>
 } @else {

@@ -36,7 +36,7 @@
             <video [src]="file.url" controls class="w-full rounded-lg shadow-md"></video>
           }
           <button
-            class="absolute top-2 right-2 rounded bg-red-500 px-2 py-1 text-sm text-white opacity-0 transition-opacity group-hover:opacity-100"
+            class="absolute top-2 right-2 rounded bg-red-500 px-2 py-1 text-sm text-white shadow-md transition-colors hover:bg-red-600"
             (click)="openDeleteModal(file.id)"
             aria-label="Eliminar archivo"
           >

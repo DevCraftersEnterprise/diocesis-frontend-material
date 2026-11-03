@@ -36,6 +36,7 @@
     "@angular/build": "^21.2.27",
     "@angular/cli": "^21.2.27",
     "@angular/compiler-cli": "^21.2.25",
+    "@tailwindcss/typography": "^0.5.19",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",

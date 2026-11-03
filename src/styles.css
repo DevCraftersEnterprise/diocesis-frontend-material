@@ -2,6 +2,7 @@
 @import 'tailwindcss';
 @import 'quill/dist/quill.snow.css';
 @plugin '@midudev/tailwind-animations';
+@plugin '@tailwindcss/typography';
 
 @font-face {
   font-family: 'CaviarDreams';
