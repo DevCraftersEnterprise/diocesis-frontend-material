@@ -85,12 +85,16 @@
                     />
                     <button
                       type="button"
-                      class="btn-table-info"
+                      class="btn-table-info w-auto px-3 whitespace-nowrap"
                       (click)="saveCaption(image.id)"
                     >
                       Guardar
                     </button>
-                    <button type="button" class="btn-table-neutral" (click)="cancelEditCaption()">
+                    <button
+                      type="button"
+                      class="btn-table-neutral w-auto px-3 whitespace-nowrap"
+                      (click)="cancelEditCaption()"
+                    >
                       Cancelar
                     </button>
                   </div>
