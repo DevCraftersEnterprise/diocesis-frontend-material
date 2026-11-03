@@ -65,28 +65,28 @@
     <div class="table-container overflow-x-auto">
       <table class="min-w-full table-auto">
         <thead class="bg-neutral-50 text-neutral-600">
-          <tr>
-            <th class="w-1/6 border-b border-neutral-300 px-6 py-4 text-center font-bold">Foto</th>
-            <th class="w-1/4 border-b border-neutral-300 px-6 py-4 text-left font-bold">Nombre</th>
-            <th class="w-1/4 border-b border-neutral-300 px-6 py-4 text-left font-bold">
+          <tr class="bg-neutral-50">
+            <th class="border-b border-neutral-300 px-6 py-4 text-center font-bold">Foto</th>
+            <th class="border-b border-neutral-300 px-6 py-4 text-left font-bold">Nombre</th>
+            <th class="border-b border-neutral-300 px-6 py-4 text-left font-bold">
               Dirección
             </th>
-            <th class="w-1/4 border-b border-neutral-300 px-6 py-4 text-left font-bold">
+            <th class="border-b border-neutral-300 px-6 py-4 text-left font-bold">
               Responsable
             </th>
-            <th class="w-1/4 border-b border-neutral-300 px-6 py-4 text-left font-bold">
+            <th class="border-b border-neutral-300 px-6 py-4 text-left font-bold">
               Decanato
             </th>
-            <th class="w-1/6 border-b border-neutral-300 px-6 py-4 text-left font-bold">Estado</th>
-            <th class="w-1/6 border-b border-neutral-300 px-6 py-4 text-right font-bold">
+            <th class="border-b border-neutral-300 px-6 py-4 text-left font-bold">Estado</th>
+            <th class="col-sticky-actions border-b border-neutral-300 px-6 py-4 text-right font-bold">
               Acciones
             </th>
           </tr>
         </thead>
         <tbody>
           @for (row of parishesService.parishes(); track row.id) {
-            <tr class="hover:bg-neutral-100">
-              <td class="w-1/6 border-b border-neutral-300 px-6 py-4 text-center">
+            <tr class="bg-white hover:bg-neutral-100">
+              <td class="border-b border-neutral-300 px-6 py-4 text-center">
                 @if (row.picture) {
                   <img
                     [src]="row.picture | cleanUrl"
@@ -103,17 +103,17 @@
                   />
                 }
               </td>
-              <td class="w-1/4 truncate border-b border-neutral-300 px-6 py-4">{{ row.name }}</td>
-              <td class="w-1/4 border-b border-neutral-300 px-6 py-4">
+              <td class="truncate border-b border-neutral-300 px-6 py-4">{{ row.name }}</td>
+              <td class="border-b border-neutral-300 px-6 py-4">
                 {{ row.address }}, {{ chargeColonyRowInfo(row.coloniaId) }}, {{ row.town }}
               </td>
-              <td class="w-1/4 border-b border-neutral-300 px-6 py-4">
+              <td class="border-b border-neutral-300 px-6 py-4">
                 {{ chargeReverendRowInfo(row.padreId) }}
               </td>
-              <td class="w-1/4 border-b border-neutral-300 px-6 py-4">
+              <td class="border-b border-neutral-300 px-6 py-4">
                 {{ chargeDecantRowInfo(row.decanatoId) }}
               </td>
-              <td class="w-1/6 border-b border-neutral-300 px-6 py-4">
+              <td class="border-b border-neutral-300 px-6 py-4">
                 <div
                   [class]="row.isActive ? 'badge-active' : 'badge-inactive'"
                 >
@@ -128,7 +128,7 @@
                   </span>
                 </div>
               </td>
-              <td class="w-1/6 border-b border-neutral-300 px-6 py-4">
+              <td class="col-sticky-actions border-b border-neutral-300 px-6 py-4">
                 <div class="flex flex-wrap items-center justify-end gap-2">
                   <!-- Editar -->
                   <button class="btn-table-warning" (click)="openEditParish(row)">
